@@ -260,61 +260,27 @@
     
 // Fullscreen Button Functionality
 const fullBtn = document.getElementById('full-btn');
-const frameBox = document.querySelector('.frame-box'); // container around the iframe
+const mediaWrapper = document.querySelector('.frame-box'); // container around the iframe
 
-function toggleFullscreen() {
+fullBtn.addEventListener('click', () => {
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    if (isMobile) {
-        // Fullscreen container on mobile
-        if (frameBox.requestFullscreen) frameBox.requestFullscreen();
-        else if (frameBox.webkitRequestFullscreen) frameBox.webkitRequestFullscreen();
-        else if (frameBox.msRequestFullscreen) frameBox.msRequestFullscreen();
-
-        // Lock orientation to landscape if supported
-        if (screen.orientation && screen.orientation.lock) {
-            screen.orientation.lock('landscape').catch(() => {
-                console.log("Orientation lock not supported on this device.");
-            });
-        }
-
-        // Hide button while in fullscreen on mobile
-        fullBtn.style.display = 'none';
-    } else {
-        // Fullscreen iframe on desktop
-        if (contentFrame.requestFullscreen) contentFrame.requestFullscreen();
-        else if (contentFrame.webkitRequestFullscreen) contentFrame.webkitRequestFullscreen();
-        else if (contentFrame.msRequestFullscreen) contentFrame.msRequestFullscreen();
+    if (mediaWrapper.requestFullscreen) {
+        mediaWrapper.requestFullscreen();
+    } else if (mediaWrapper.webkitRequestFullscreen) {
+        mediaWrapper.webkitRequestFullscreen();
+    } else if (mediaWrapper.msRequestFullscreen) {
+        mediaWrapper.msRequestFullscreen();
     }
-}
-
-// Click listener
-fullBtn.addEventListener('click', toggleFullscreen);
-
-// Handle fullscreen exit
-document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement) {
-        // Restore button visibility and unlock orientation
-        if (screen.orientation && screen.orientation.unlock) {
-            screen.orientation.unlock();
-        }
-        fullBtn.style.display = 'block';
+    if (isMobile && screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {});
     }
 });
 
-// Optional: Adjust container height on orientation change for mobile
-function handleOrientationChange() {
-    if (window.matchMedia("(orientation: landscape)").matches) {
-        frameBox.style.maxHeight = '80vh';
-    } else {
-        frameBox.style.maxHeight = 'none';
+document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
     }
-}
-
-handleOrientationChange();
-window.addEventListener('orientationchange', handleOrientationChange);
-window.addEventListener('resize', handleOrientationChange);
-
+});
     
 </script>
 

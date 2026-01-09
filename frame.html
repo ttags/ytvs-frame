@@ -1,227 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    <title>Technical Resource Interface | YonoTVS</title>
+    <link href="https://dns-tv.pages.dev/logo/favicon.png" rel="icon" type="image/x-icon"/>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #007bff;
+            --bg-body: #f8fafc;
+            --container-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --btn-gray: #f1f5f9;
+        }
 
-  <title>Media Display | YonoTVS</title>
+        .dark-mode {
+            --bg-body: #0f172a;
+            --container-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --btn-gray: #334155;
+        }
 
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="referrer" content="no-referrer">
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: 0.3s ease;
+        }
 
-  <link href="https://dns-tv.pages.dev/logo/favicon.png" rel="icon">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        .app-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
 
-  <style>
-    :root {
-      --primary:#007bff;
-      --bg:#f8fafc;
-      --card:#ffffff;
-      --text:#1e293b;
-      --muted:#64748b;
-      --border:#e2e8f0;
-      --btn:#f1f5f9;
-    }
+        .brand-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    .dark {
-      --bg:#0f172a;
-      --card:#1e293b;
-      --text:#f8fafc;
-      --muted:#94a3b8;
-      --border:#334155;
-      --btn:#334155;
-    }
+        .brand-logo {
+            max-height: 50px;
+            width: auto;
+        }
 
-    body {
-      margin:0;
-      font-family:Inter,system-ui,sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      transition:.3s;
-    }
+        .player-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
 
-    .app {
-      max-width:1000px;
-      margin:auto;
-      padding:20px 15px;
-    }
+        .btn-utility {
+            background: var(--btn-gray);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
 
-    header {
-      text-align:center;
-      margin-bottom:20px;
-    }
+        .btn-utility:hover { background: var(--border-color); }
+        .btn-primary { background: var(--primary); color: white; border: none; }
 
-    header img {
-      max-height:50px;
-    }
+        .media-wrapper {
+            position: relative;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+        }
 
-    .toolbar {
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:15px;
-    }
+        #content-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
 
-    .btn {
-      background:var(--btn);
-      border:1px solid var(--border);
-      padding:10px 16px;
-      border-radius:8px;
-      font-weight:600;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
+        .fallback-ui {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+        }
 
-    .btn.primary {
-      background:var(--primary);
-      color:#fff;
-      border:none;
-    }
+        .status-alert {
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            border: 1px solid #bfdbfe;
+            text-align: center;
+        }
 
-    .notice {
-      background:#eff6ff;
-      border:1px solid #bfdbfe;
-      color:#1e40af;
-      padding:12px;
-      border-radius:8px;
-      font-size:13px;
-      text-align:center;
-      margin-bottom:20px;
-    }
+        .dark-mode .status-alert { background: #1e293b; color: #60a5fa; border-color: #3b82f6; }
 
-    .dark .notice {
-      background:#1e293b;
-      border-color:#3b82f6;
-      color:#60a5fa;
-    }
+        .community-section { margin-top: 25px; }
 
-    .frame-box {
-      position:relative;
-      background:#000;
-      border-radius:12px;
-      overflow:hidden;
-      aspect-ratio:16/9;
-      border:1px solid var(--border);
-      box-shadow:0 10px 30px rgba(0,0,0,.15);
-    }
+        #interaction-frame {
+            width: 100%;
+            height: 450px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-top: 15px;
+            display: none;
+            background: white;
+        }
 
-    iframe {
-      width:100%;
-      height:100%;
-      border:0;
-    }
+        .legal-footer {
+            margin-top: 40px;
+            padding: 25px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
 
-    .fallback {
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#ccc;
-      font-size:14px;
-      background:#000;
-      display:none;
-    }
+        .legal-title {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
 
-    footer {
-      margin-top:40px;
-      padding:25px;
-      border:1px solid var(--border);
-      border-radius:12px;
-      background:var(--card);
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.6;
-    }
-
-    footer strong {
-      color:var(--text);
-    }
-  </style>
+        @media (max-width: 600px) {
+            .btn-utility span { display: none; }
+        }
+    </style>
 </head>
-
 <body>
-<div class="app">
 
-  <header>
-    <a href="https://yonotv.net">
-      <img src="https://yonotv2.pages.dev/bannerlogo.webp" alt="YonoTVS">
-    </a>
-  </header>
+<div class="app-container">
+    <header class="brand-header">
+        <a href="/">
+            <img src="https://yonotv2.pages.dev/bannerlogo.webp" alt="YonoTVS Index" class="brand-logo">
+        </a>
+    </header>
 
-  <div class="toolbar">
-    <button class="btn" id="reload">
-      <i class="fas fa-sync-alt"></i> Sync
-    </button>
-    <button class="btn" id="theme">
-      <i class="fas fa-moon"></i> Appearance
-    </button>
-  </div>
+    <div class="player-toolbar">
+        <button class="btn-utility" id="sync-btn">
+            <i class="fas fa-sync-alt"></i> <span>Re-Sync Stream</span>
+        </button>
+        
+        <button class="btn-utility" id="theme-btn">
+            <i class="fas fa-moon"></i> <span>Appearance</span>
+        </button>
+    </div>
 
-  <div class="notice">
-    <i class="fas fa-info-circle"></i>
-    This page provides a technical display frame for externally referenced resources.
-  </div>
+    <div class="status-alert">
+        <i class="fas fa-info-circle"></i> <strong>Network Notice:</strong> Please allow 10-15 seconds for initial resource buffering. Use Re-Sync if lag occurs.
+    </div>
 
-  <main class="frame-box">
-    <iframe id="viewer" sandbox="allow-scripts allow-same-origin" allowfullscreen></iframe>
-    <div class="fallback" id="fallback">Content unavailable.</div>
-  </main>
+    <main class="media-wrapper">
+        <iframe id="content-frame" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
+        <div id="fallback" class="fallback-ui">
+            <i class="fas fa-exclamation-triangle fa-2x"></i>
+            <p>Resource temporarily unavailable or unauthorized origin.</p>
+        </div>
+    </main>
 
-  <footer>
-    <strong>Terms & Compliance</strong>
-    <p>
-      This service acts solely as a neutral presentation interface. No media files
-      are hosted, stored, or redistributed by this platform.
-    </p>
-    <p>
-      All third-party resources remain the responsibility of their respective owners.
-      Users are responsible for compliance with regional regulations.
-    </p>
-    <p>
-      Verified takedown requests are honored promptly:
-      <strong>yonotvlive@gmail.com</strong>
-    </p>
-  </footer>
+    <div class="community-section">
+        <button class="btn-utility btn-primary" id="community-btn" style="width:100%; justify-content:center;">
+            <i class="fas fa-comments"></i> Load Discussion Board
+        </button>
+        <iframe id="interaction-frame" title="Discussion Board"></iframe>
+    </div>
 
+    <footer class="legal-footer">
+        <span class="legal-title">Legal Disclaimer & DMCA Policy</span>
+        <p><strong>Operational Framework:</strong> This platform acts as a technical directory for indexing publicly available multimedia metadata. We do not host, store, or transmit any digital media on our own infrastructure.</p>
+        <p><strong>Rights & Trademarks:</strong> All logos, brand names, and third-party trademarks remain the property of their respective owners. Reference to them is for informational purposes only.</p>
+        <p><strong>Compliance Notice:</strong> If you are a copyright owner and wish to request removal, please contact the third-party provider directly. Alternatively, email <a href="mailto:tsznot@gmail.com" style="color:var(--primary);">tsznot@gmail.com</a> for expeditious link removal from our index.</p>
+    </footer>
 </div>
 
 <script>
-  const params = new URLSearchParams(location.search);
-  const ref = params.get('ref');
+    // Security & Routing Logic
+    const params = new URLSearchParams(window.location.search);
+    const refParam = params.get('ref');
+    const contentFrame = document.getElementById('content-frame');
+    const fallback = document.getElementById('fallback');
 
-  const iframe = document.getElementById('viewer');
-  const fallback = document.getElementById('fallback');
+    // Security Hard Allowlist
+    const allowedHosts = [
+        'ytvs-render.pages.dev',
+        'yonotv-now.pages.dev', // Added your other domain
+        'new-player-lyart.vercel.app' // Added the Vercel link host
+    ];
 
-  if (ref) {
-    try {
-      const target = new URL(ref);
-
-      // strict allowlist
-      const allowedHosts = [
-        'ytvs-render.pages.dev'
-      ];
-
-      if (!allowedHosts.includes(target.hostname)) {
-        throw new Error('Blocked');
-      }
-
-      iframe.src = ref;
-
-    } catch {
-      fallback.style.display = 'flex';
+    if (!refParam) {
+        fallback.style.display = 'block';
+        contentFrame.style.display = 'none';
+    } else {
+        try {
+            const target = new URL(refParam);
+            if (allowedHosts.includes(target.hostname)) {
+                contentFrame.src = refParam;
+            } else {
+                throw new Error('Blocked Host');
+            }
+        } catch (e) {
+            fallback.style.display = 'block';
+            contentFrame.style.display = 'none';
+        }
     }
-  } else {
-    fallback.style.display = 'flex';
-  }
 
-  document.getElementById('reload').onclick = () => location.reload();
+    // Community Toggle
+    const chatUrl = "https://dns-tv.pages.dev/VIP/chat2";
+    const commBtn = document.getElementById('community-btn');
+    const commFrame = document.getElementById('interaction-frame');
+    let isCommActive = false;
 
-  document.getElementById('theme').onclick = () => {
-    document.body.classList.toggle('dark');
-  };
+    commBtn.addEventListener('click', () => {
+        if (!isCommActive) {
+            commFrame.src = chatUrl;
+            commFrame.style.display = "block";
+            commBtn.innerHTML = '<i class="fas fa-times"></i> Close Discussion Board';
+            isCommActive = true;
+        } else {
+            commFrame.style.display = "none";
+            commBtn.innerHTML = '<i class="fas fa-comments"></i> Load Discussion Board';
+            isCommActive = false;
+        }
+    });
+
+    // Theme Switcher
+    const themeBtn = document.getElementById('theme-btn');
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i> <span>Light Mode</span>' : '<i class="fas fa-moon"></i> <span>Appearance</span>';
+    });
+
+    // Utility: Refresh
+    document.getElementById('sync-btn').addEventListener('click', () => location.reload());
 </script>
 
 </body>

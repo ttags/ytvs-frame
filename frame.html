@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="robots" content="noindex, nofollow">
     <meta name="referrer" content="no-referrer">
-    <title>Technical Resource Interface | YonoTVS</title>
+    <title>Information Sources | YonoTVs</title>
     <link href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjTMZUW020Uhv6WeeF6v61lYNBjtoknv_lG7aZXsDyRrUCOlQiyd_DMcRVHLMIwOEEfl26kGwrLhyphenhyphenxKmp_26X8rcyIepfuJXbiLwx7_1zHEHA4f4JeyHoJTQpbcYRHphXIhoyL_I0JSscHywHRRXDBOFumKHCxUpr59hFnxG9kQRVtz1D322yBM462BzyKW/s16000/Ytvs%20-final%20logo.jpg" rel="icon" type="image/x-icon"/>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -55,7 +55,7 @@
             width: auto;
         }
 
-        .player-toolbar {
+        .toolbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -81,7 +81,7 @@
         .btn-utility:hover { background: var(--border-color); }
         .btn-primary { background: var(--primary); color: white; border: none; }
 
-        .media-wrapper {
+        .frame-box {
             position: relative;
             background: #000;
             border-radius: 12px;
@@ -152,7 +152,7 @@
             text-transform: uppercase;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 300px) {
             .btn-utility span { display: none; }
         }
     </style>
@@ -166,25 +166,28 @@
         </a>
     </header>
 
-    <div class="player-toolbar">
-        <button class="btn-utility" id="sync-btn">
-            <i class="fas fa-sync-alt"></i> <span>Re-Sync Stream</span>
-        </button>
-        
-        <button class="btn-utility" id="theme-btn">
-            <i class="fas fa-moon"></i> <span>Appearance</span>
-        </button>
-    </div>
 
     <div class="status-alert">
-        <i class="fas fa-info-circle"></i> <strong>Network Notice:</strong> Please allow 10-15 seconds for initial resource buffering. Use Re-Sync if lag occurs.
+        <i class="fas fa-info-circle"></i> This page provides a technical display frame for externally referenced resources.
     </div>
 
-    <main class="media-wrapper">
+    <div class="toolbar">
+        <button class="btn-utility" id="sync-btn">
+            <i class="fas fa-sync-alt"></i> <span>Sync</span>
+        </button>
+         <button class="btn-utility" id="full-btn">
+            <i class="fas fa-expand"></i><span>Fullscreen</span>
+        </button>
+        <button class="btn-utility" id="theme-btn">
+            <i class="fas fa-moon"></i> <span>Dark</span>
+        </button>
+    </div>
+
+    <main class="frame-box">
         <iframe id="content-frame" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
         <div id="fallback" class="fallback-ui">
             <i class="fas fa-exclamation-triangle fa-2x"></i>
-            <p>Resource temporarily unavailable or unauthorized origin.</p>
+            <p>Resource temporarily unavailable.</p>
         </div>
     </main>
 
@@ -197,9 +200,9 @@
 
     <footer class="legal-footer">
         <span class="legal-title">Legal Disclaimer & DMCA Policy</span>
-        <p><strong>Operational Framework:</strong> This platform acts as a technical directory for indexing publicly available multimedia metadata. We do not host, store, or transmit any digital media on our own infrastructure.</p>
-        <p><strong>Rights & Trademarks:</strong> All logos, brand names, and third-party trademarks remain the property of their respective owners. Reference to them is for informational purposes only.</p>
-        <p><strong>Compliance Notice:</strong> If you are a copyright owner and wish to request removal, please contact the third-party provider directly. Alternatively, email <a href="mailto:tsznot@gmail.com" style="color:var(--primary);">tsznot@gmail.com</a> for expeditious link removal from our index.</p>
+        <p><strong>Operational Framework:</strong> This service acts solely as a neutral presentation interface. We do not host, store, or transmit any digital media on our own infrastructure.</p>
+        <p><strong>Rights & Trademarks:</strong> All logos, brand names, and third-party trademarks remain the property of their respective owners. Users are responsible for compliance with regional regulations.</p>
+        <p><strong>Compliance Notice:</strong> Verified takedown requests are honored promptly: email tsznot@gmail.com.</p>
     </footer>
 </div>
 
@@ -210,24 +213,15 @@
     const contentFrame = document.getElementById('content-frame');
     const fallback = document.getElementById('fallback');
 
-    // Security Hard Allowlist
-    const allowedHosts = [
-        'ytvs-render.pages.dev',
-        'yonotv-now.pages.dev', // Added your other domain
-        'new-player-lyart.vercel.app' // Added the Vercel link host
-    ];
-
     if (!refParam) {
         fallback.style.display = 'block';
         contentFrame.style.display = 'none';
     } else {
         try {
-            const target = new URL(refParam);
-            if (allowedHosts.includes(target.hostname)) {
-                contentFrame.src = refParam;
-            } else {
-                throw new Error('Blocked Host');
-            }
+      // Just validate it's a proper URL
+      const target = new URL(refParam);
+      // Load anything
+      contentFrame.src = target.href;
         } catch (e) {
             fallback.style.display = 'block';
             contentFrame.style.display = 'none';
@@ -258,11 +252,46 @@
     themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
-        themeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i> <span>Light Mode</span>' : '<i class="fas fa-moon"></i> <span>Appearance</span>';
+        themeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i> <span>Light</span>' : '<i class="fas fa-moon"></i> <span>Dark</span>';
     });
 
     // Utility: Refresh
     document.getElementById('sync-btn').addEventListener('click', () => location.reload());
+    
+    // fullscreen button 
+    // Fullscreen Functionality
+const fullBtn = document.getElementById('full-btn');
+const frameBox = document.querySelector('.frame-box');
+
+fullBtn.addEventListener('click', () => {
+    // Check if mobile
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (frameBox.requestFullscreen) {
+        frameBox.requestFullscreen();
+    } else if (frameBox.webkitRequestFullscreen) { /* Safari */
+        frameBox.webkitRequestFullscreen();
+    } else if (frameBox.msRequestFullscreen) { /* IE11 */
+        frameBox.msRequestFullscreen();
+    }
+
+    // Pro Feature: Auto-Rotate to Landscape for Mobile
+    if (isMobile && screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {
+            console.log("Orientation lock not supported on this device.");
+        });
+    }
+});
+
+// Re-show button and unlock screen when exiting fullscreen
+document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) {
+        if (screen.orientation && screen.orientation.unlock) {
+            screen.orientation.unlock();
+        }
+    }
+});
+    
 </script>
 
 </body>

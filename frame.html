@@ -57,10 +57,10 @@
 
         .toolbar {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-bottom: 15px;
-            gap: 10px;
+            gap: 20px;
         }
 
         .btn-utility {
@@ -82,14 +82,15 @@
         .btn-primary { background: var(--primary); color: white; border: none; }
 
         .frame-box {
-            position: relative;
-            background: #000;
-            border-radius: 12px;
-            overflow: hidden;
-            aspect-ratio: 16 / 9;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 1px solid var(--border-color);
+        position: relative;
+        background: #000;
+        border-radius: 12px;
+        overflow: hidden;
+        aspect-ratio: 16 / 9;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: 1px solid var(--border-color);
         }
+
 
         #content-frame {
             width: 100%;
@@ -155,6 +156,15 @@
         @media (max-width: 300px) {
             .btn-utility span { display: none; }
         }
+
+        @media (max-width: 600px) {
+        .frame-box {
+        height: 500px; 
+        aspect-ratio: auto;
+        }
+        }
+
+        
     </style>
 </head>
 <body>
@@ -174,9 +184,6 @@
     <div class="toolbar">
         <button class="btn-utility" id="sync-btn">
             <i class="fas fa-sync-alt"></i> <span>Sync</span>
-        </button>
-         <button class="btn-utility" id="full-btn">
-            <i class="fas fa-expand"></i><span>Fullscreen</span>
         </button>
         <button class="btn-utility" id="theme-btn">
             <i class="fas fa-moon"></i> <span>Dark</span>
@@ -258,29 +265,6 @@
     // Utility: Refresh
     document.getElementById('sync-btn').addEventListener('click', () => location.reload());
     
-// Fullscreen Button Functionality
-const fullBtn = document.getElementById('full-btn');
-const mediaWrapper = document.querySelector('.frame-box'); // container around the iframe
-
-fullBtn.addEventListener('click', () => {
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (mediaWrapper.requestFullscreen) {
-        mediaWrapper.requestFullscreen();
-    } else if (mediaWrapper.webkitRequestFullscreen) {
-        mediaWrapper.webkitRequestFullscreen();
-    } else if (mediaWrapper.msRequestFullscreen) {
-        mediaWrapper.msRequestFullscreen();
-    }
-    if (isMobile && screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('landscape').catch(() => {});
-    }
-});
-
-document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement && screen.orientation && screen.orientation.unlock) {
-        screen.orientation.unlock();
-    }
-});
     
 </script>
 

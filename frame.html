@@ -1,65 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Content Viewer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<meta name="robots" content="noindex, nofollow">
-<meta name="referrer" content="no-referrer">
+  <title>Media Display | YonoTVS</title>
 
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    overflow: hidden;
-  }
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
 
-  #content-frame {
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
+  <link href="https://dns-tv.pages.dev/logo/favicon.png" rel="icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  .fallback {
-    color: #ccc;
-    font-family: system-ui, sans-serif;
-    text-align: center;
-    padding-top: 20%;
-    display: none;
-  }
-</style>
+  <style>
+    :root {
+      --primary:#007bff;
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --text:#1e293b;
+      --muted:#64748b;
+      --border:#e2e8f0;
+      --btn:#f1f5f9;
+    }
+
+    .dark {
+      --bg:#0f172a;
+      --card:#1e293b;
+      --text:#f8fafc;
+      --muted:#94a3b8;
+      --border:#334155;
+      --btn:#334155;
+    }
+
+    body {
+      margin:0;
+      font-family:Inter,system-ui,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      transition:.3s;
+    }
+
+    .app {
+      max-width:1000px;
+      margin:auto;
+      padding:20px 15px;
+    }
+
+    header {
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    header img {
+      max-height:50px;
+    }
+
+    .toolbar {
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:15px;
+    }
+
+    .btn {
+      background:var(--btn);
+      border:1px solid var(--border);
+      padding:10px 16px;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .btn.primary {
+      background:var(--primary);
+      color:#fff;
+      border:none;
+    }
+
+    .notice {
+      background:#eff6ff;
+      border:1px solid #bfdbfe;
+      color:#1e40af;
+      padding:12px;
+      border-radius:8px;
+      font-size:13px;
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    .dark .notice {
+      background:#1e293b;
+      border-color:#3b82f6;
+      color:#60a5fa;
+    }
+
+    .frame-box {
+      position:relative;
+      background:#000;
+      border-radius:12px;
+      overflow:hidden;
+      aspect-ratio:16/9;
+      border:1px solid var(--border);
+      box-shadow:0 10px 30px rgba(0,0,0,.15);
+    }
+
+    iframe {
+      width:100%;
+      height:100%;
+      border:0;
+    }
+
+    .fallback {
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#ccc;
+      font-size:14px;
+      background:#000;
+      display:none;
+    }
+
+    footer {
+      margin-top:40px;
+      padding:25px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--card);
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    footer strong {
+      color:var(--text);
+    }
+  </style>
 </head>
 
 <body>
+<div class="app">
 
-<iframe
-  id="content-frame"
-  allow="autoplay; fullscreen; encrypted-media"
-  allowfullscreen>
-</iframe>
+  <header>
+    <a href="https://yonotv.net">
+      <img src="https://yonotv2.pages.dev/bannerlogo.webp" alt="YonoTVS">
+    </a>
+  </header>
 
-<div id="fallback" class="fallback">
-  Content unavailable.
+  <div class="toolbar">
+    <button class="btn" id="reload">
+      <i class="fas fa-sync-alt"></i> Sync
+    </button>
+    <button class="btn" id="theme">
+      <i class="fas fa-moon"></i> Appearance
+    </button>
+  </div>
+
+  <div class="notice">
+    <i class="fas fa-info-circle"></i>
+    This page provides a technical display frame for externally referenced resources.
+  </div>
+
+  <main class="frame-box">
+    <iframe id="viewer" sandbox="allow-scripts allow-same-origin" allowfullscreen></iframe>
+    <div class="fallback" id="fallback">Content unavailable.</div>
+  </main>
+
+  <footer>
+    <strong>Terms & Compliance</strong>
+    <p>
+      This service acts solely as a neutral presentation interface. No media files
+      are hosted, stored, or redistributed by this platform.
+    </p>
+    <p>
+      All third-party resources remain the responsibility of their respective owners.
+      Users are responsible for compliance with regional regulations.
+    </p>
+    <p>
+      Verified takedown requests are honored promptly:
+      <strong>yonotvlive@gmail.com</strong>
+    </p>
+  </footer>
+
 </div>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const refParam = params.get('ref');
+  const params = new URLSearchParams(location.search);
+  const ref = params.get('ref');
 
-  const contentFrame = document.getElementById('content-frame');
+  const iframe = document.getElementById('viewer');
   const fallback = document.getElementById('fallback');
 
-  if (!refParam) {
-    fallback.style.display = 'block';
-  } else {
+  if (ref) {
     try {
-      const target = new URL(refParam);
+      const target = new URL(ref);
 
-      // hard allowlist (important)
+      // strict allowlist
       const allowedHosts = [
         'ytvs-render.pages.dev'
       ];
@@ -68,11 +208,20 @@
         throw new Error('Blocked');
       }
 
-      contentFrame.src = refParam;
-    } catch (e) {
-      fallback.style.display = 'block';
+      iframe.src = ref;
+
+    } catch {
+      fallback.style.display = 'flex';
     }
+  } else {
+    fallback.style.display = 'flex';
   }
+
+  document.getElementById('reload').onclick = () => location.reload();
+
+  document.getElementById('theme').onclick = () => {
+    document.body.classList.toggle('dark');
+  };
 </script>
 
 </body>

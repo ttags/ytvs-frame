@@ -47,11 +47,11 @@
 
         .brand-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .brand-logo {
-            max-height: 100px;
+            max-height: 50px;
             width: auto;
         }
 
@@ -59,8 +59,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 15px;
-            gap: 20px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            gap: 12px;
+            flex-wrap: wrap;  
         }
 
         .btn-utility {
@@ -78,7 +80,6 @@
             transition: 0.2s;
         }
 
-        .btn-utility:hover { background: var(--border-color); }
         .btn-primary { background: var(--primary); color: white; border: none; }
 
         .frame-box {
@@ -114,7 +115,7 @@
             padding: 12px;
             border-radius: 8px;
             font-size: 13px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             border: 1px solid #bfdbfe;
             text-align: center;
         }
@@ -159,7 +160,7 @@
 
         @media (max-width: 600px) {
         .frame-box {
-        height: 500px; 
+        height: 300px; 
         aspect-ratio: auto;
         }
         }
@@ -172,23 +173,17 @@
 <div class="app-container">
     <header class="brand-header">
         <a href="/">
-            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgID5j0jD15XJSl7f9-TQE8SPD_OfsqnjD2U5E9lz7Y2l5BKu_YDz1RfNDy-zX178JR0FlhEMPM_2FhsDmHPSQPyFr_NEiJpEWxvOXW4aOMzVbOJvvFG69xBNOMb4GtWgOZGTY_0znKbBLxaBjFA9OUHP7v5haUGd_Nq2R-bSWxIsnI5sBN_XsvlNQ_LOK5/s1600/YTVS%20ALT%20logo-PNG.png" alt="YonoTVS Index" class="brand-logo">
+
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjTMZUW020Uhv6WeeF6v61lYNBjtoknv_lG7aZXsDyRrUCOlQiyd_DMcRVHLMIwOEEfl26kGwrLhyphenhyphenxKmp_26X8rcyIepfuJXbiLwx7_1zHEHA4f4JeyHoJTQpbcYRHphXIhoyL_I0JSscHywHRRXDBOFumKHCxUpr59hFnxG9kQRVtz1D322yBM462BzyKW/s16000/Ytvs%20-final%20logo.jpg" alt="YonoTVS Index" class="brand-logo">
         </a>
     </header>
 
 
-    <div class="status-alert">
-        <i class="fas fa-info-circle"></i> This page provides a technical display frame for externally referenced resources.
+
+       <div class="status-alert">
+        <i class="fas fa-info-circle"></i> <b>YonoTVs.com:</b> This page provides a technical display frame for externally referenced resources.
     </div>
 
-    <div class="toolbar">
-        <button class="btn-utility" id="sync-btn">
-            <i class="fas fa-sync-alt"></i> <span>Sync</span>
-        </button>
-        <button class="btn-utility" id="theme-btn">
-            <i class="fas fa-moon"></i> <span>Dark</span>
-        </button>
-    </div>
 
     <main class="frame-box">
         <iframe id="content-frame" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
@@ -197,14 +192,24 @@
             <p>Resource temporarily unavailable.</p>
         </div>
     </main>
-
-    <div class="community-section">
-        <button class="btn-utility btn-primary" id="community-btn" style="width:100%; justify-content:center;">
-            <i class="fas fa-comments"></i> Load Discussion Board
+    <div class="toolbar">
+        <button class="btn-utility" id="sync-btn">
+            <i class="fas fa-sync-alt"></i> <span>Sync</span>
         </button>
+        <button class="btn-utility btn-primary" id="community-btn">
+        <i class="fas fa-comments"></i> <span>Chat</span>
+        </button>
+        <button class="btn-utility" id="theme-btn">
+            <i class="fas fa-moon"></i> <span>Dark</span>
+        </button>
+    </div>
+    
+    <div class="community-section">
         <iframe id="interaction-frame" title="Discussion Board"></iframe>
     </div>
 
+
+    
     <footer class="legal-footer">
         <span class="legal-title">Legal Disclaimer & DMCA Policy</span>
         <p><strong>Operational Framework:</strong> This service acts solely as a neutral presentation interface. We do not host, store, or transmit any digital media on our own infrastructure.</p>
@@ -245,11 +250,11 @@
         if (!isCommActive) {
             commFrame.src = chatUrl;
             commFrame.style.display = "block";
-            commBtn.innerHTML = '<i class="fas fa-times"></i> Close Discussion Board';
+            commBtn.innerHTML = '<i class="fas fa-times"></i> Close Chat';
             isCommActive = true;
         } else {
             commFrame.style.display = "none";
-            commBtn.innerHTML = '<i class="fas fa-comments"></i> Load Discussion Board';
+            commBtn.innerHTML = '<i class="fas fa-comments"></i> Chat';
             isCommActive = false;
         }
     });

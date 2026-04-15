@@ -101,8 +101,6 @@
             z-index: 1;
         }
 
-        /* ── Soft Click Interceptor Overlay ─────────────────────────────────── */
-        /* Sits above the iframe, transparent — blocks clicks reaching iframe   */
         #click-shield {
             position: absolute;
             inset: 0;
@@ -262,24 +260,14 @@
 
     <main class="frame-box">
 
-        <!-- The actual stream iframe — sandboxed, no top-navigation allowed -->
+        <!-- iframe — sandboxed -->
         <iframe
             id="content-frame"
             allow="autoplay; fullscreen; encrypted-media"
             allowfullscreen
-            >
+            sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
         </iframe>
 
-        <!--
-            CLICK SHIELD OVERLAY
-            ─────────────────────────────────────────────────────────────────────
-            Transparent div sitting above the iframe (z-index: 5).
-            Intercepts all mouse/touch events so the iframe never receives clicks
-            that could trigger ad redirects or popups.
-
-            When user wants to interact (e.g. play/pause), the shield temporarily
-            passes events through via pointer-events toggle below.
-        -->
         <div id="click-shield"></div>
 
         <!-- Unmute button — shown by default, hides after one click -->
@@ -328,12 +316,8 @@
 </div>
 
 <script>
-    // ── 1. BLOCK REDIRECTS & POPUPS ──────────────────────────────────────────
-    // Prevent iframe from opening new tabs/windows
     window.open = () => null;
 
-    // Prevent iframe from navigating the parent page away
-    // (backup — sandbox already handles this, belt-and-suspenders)
     window.addEventListener('beforeunload', (e) => {
         e.preventDefault();
         e.returnValue = '';
@@ -395,22 +379,7 @@
 
     route();
 
-    // ── 3. CLICK SHIELD LOGIC ────────────────────────────────────────────────
-    //
-    // The shield sits transparently above the iframe and blocks all clicks.
-    // We give the user a short passthrough window (300ms) when they click
-    // somewhere that isn't the unmute button, so legitimate play/pause
-    // interactions can still reach the player.
-    //
-    // Flow:
-    //   User clicks on player area
-    //     → shield catches it
-    //     → shield briefly becomes pointer-events:none (pass-through)
-    //     → click lands on iframe (play/pause etc.)
-    //     → shield re-activates after 300ms
-    //
-    // This means ad scripts get ~300ms max to fire — not enough to redirect.
-    // But the sandbox already blocks top-navigation, so this is extra safety.
+
 
     const shield = document.getElementById('click-shield');
 

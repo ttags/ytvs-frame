@@ -7,9 +7,8 @@
     <meta name="referrer" content="no-referrer">
     <title>Information Sources | YonoTVs</title>
     <link href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjTMZUW020Uhv6WeeF6v61lYNBjtoknv_lG7aZXsDyRrUCOlQiyd_DMcRVHLMIwOEEfl26kGwrLhyphenhyphenxKmp_26X8rcyIepfuJXbiLwx7_1zHEHA4f4JeyHoJTQpbcYRHphXIhoyL_I0JSscHywHRRXDBOFumKHCxUpr59hFnxG9kQRVtz1D322yBM462BzyKW/s16000/Ytvs%20-final%20logo.jpg" rel="icon" type="image/x-icon"/>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         :root {
             --primary: #007bff;
@@ -62,7 +61,7 @@
             margin-top: 5px;
             margin-bottom: 10px;
             gap: 12px;
-            flex-wrap: wrap;  
+            flex-wrap: wrap;
         }
 
         .btn-utility {
@@ -82,13 +81,14 @@
 
         .btn-primary { background: var(--primary); color: white; border: none; }
 
+        /* ── Player Box ─────────────────────────────────────────────────────── */
         .frame-box {
             position: relative;
             background: #000;
             border-radius: 12px;
             overflow: hidden;
             aspect-ratio: 16 / 9;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             border: 1px solid var(--border-color);
         }
 
@@ -96,9 +96,58 @@
             width: 100%;
             height: 100%;
             border: none;
+            display: block;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Loading state shown while manifest is being fetched */
+        /* ── Soft Click Interceptor Overlay ─────────────────────────────────── */
+        /* Sits above the iframe, transparent — blocks clicks reaching iframe   */
+        #click-shield {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            background: transparent;
+            cursor: default;
+        }
+
+        /* ── Unmute Button ───────────────────────────────────────────────────── */
+        #unmute-wrap {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 10;
+            transition: opacity 0.4s ease;
+        }
+
+        #unmute-wrap.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #unmuteBtn {
+            background: rgba(0, 0, 0, 0.72);
+            color: #fff;
+            border: 1.5px solid rgba(255, 255, 255, 0.45);
+            padding: 9px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(6px);
+            animation: pulse 1.8s ease-in-out infinite;
+            letter-spacing: 0.3px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255,255,255,0.15); }
+            50%       { transform: scale(1.04); box-shadow: 0 0 0 6px rgba(255,255,255,0);  }
+        }
+
+        /* ── Loading UI ──────────────────────────────────────────────────────── */
         #loading-ui {
             display: none;
             position: absolute;
@@ -110,6 +159,7 @@
             gap: 12px;
             color: rgba(255,255,255,0.7);
             font-size: 14px;
+            z-index: 20;
         }
 
         #loading-ui.show { display: flex; }
@@ -125,6 +175,7 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* ── Fallback ────────────────────────────────────────────────────────── */
         .fallback-ui {
             display: none;
             position: absolute;
@@ -133,8 +184,10 @@
             transform: translate(-50%, -50%);
             text-align: center;
             color: white;
+            z-index: 20;
         }
 
+        /* ── Status Alert ────────────────────────────────────────────────────── */
         .status-alert {
             background: #eff6ff;
             color: #1e40af;
@@ -148,6 +201,7 @@
 
         .dark-mode .status-alert { background: #1e293b; color: #60a5fa; border-color: #3b82f6; }
 
+        /* ── Community ───────────────────────────────────────────────────────── */
         .community-section { margin-top: 25px; }
 
         #interaction-frame {
@@ -160,6 +214,7 @@
             background: white;
         }
 
+        /* ── Footer ──────────────────────────────────────────────────────────── */
         .legal-footer {
             margin-top: 40px;
             padding: 25px;
@@ -186,7 +241,7 @@
 
         @media (max-width: 600px) {
             .frame-box {
-                height: 350px; 
+                height: 220px;
                 aspect-ratio: auto;
             }
         }
@@ -206,18 +261,46 @@
     </div>
 
     <main class="frame-box">
-        <iframe id="content-frame" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
 
-        <!-- Shown while resolving a manifest key for direct type -->
+        <!-- The actual stream iframe — sandboxed, no top-navigation allowed -->
+        <iframe
+            id="content-frame"
+            allow="autoplay; fullscreen; encrypted-media"
+            allowfullscreen
+            sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
+        </iframe>
+
+        <!--
+            CLICK SHIELD OVERLAY
+            ─────────────────────────────────────────────────────────────────────
+            Transparent div sitting above the iframe (z-index: 5).
+            Intercepts all mouse/touch events so the iframe never receives clicks
+            that could trigger ad redirects or popups.
+
+            When user wants to interact (e.g. play/pause), the shield temporarily
+            passes events through via pointer-events toggle below.
+        -->
+        <div id="click-shield"></div>
+
+        <!-- Unmute button — shown by default, hides after one click -->
+        <div id="unmute-wrap">
+            <button id="unmuteBtn">
+                <i class="fas fa-volume-mute"></i> Tap to Unmute
+            </button>
+        </div>
+
+        <!-- Loading spinner shown while manifest resolves -->
         <div id="loading-ui">
             <div class="spinner"></div>
             <span>Resolving stream…</span>
         </div>
 
+        <!-- Fallback error state -->
         <div id="fallback" class="fallback-ui">
             <i class="fas fa-exclamation-triangle fa-2x"></i>
             <p>Resource temporarily unavailable.</p>
         </div>
+
     </main>
 
     <div class="toolbar">
@@ -231,7 +314,7 @@
             <i class="fas fa-moon"></i> <span>Dark</span>
         </button>
     </div>
-    
+
     <div class="community-section">
         <iframe id="interaction-frame" title="Discussion Board"></iframe>
     </div>
@@ -245,99 +328,153 @@
 </div>
 
 <script>
-    const MANIFEST_URL = "https://ytvs-db.pages.dev/manifest.json";
+    // ── 1. BLOCK REDIRECTS & POPUPS ──────────────────────────────────────────
+    // Prevent iframe from opening new tabs/windows
+    window.open = () => null;
 
-    const params       = new URLSearchParams(window.location.search);
-    const refParam     = params.get('ref');
-    const contentFrame = document.getElementById('content-frame');
-    const fallback     = document.getElementById('fallback');
-    const loadingUI    = document.getElementById('loading-ui');
+    // Prevent iframe from navigating the parent page away
+    // (backup — sandbox already handles this, belt-and-suspenders)
+    window.addEventListener('beforeunload', (e) => {
+        e.preventDefault();
+        e.returnValue = '';
+    });
 
-    // ── Helper: show fallback error ──────────────────────────────────────────
+    // ── 2. MANIFEST + ROUTING ────────────────────────────────────────────────
+    const MANIFEST_URL  = "https://ytvs-db.pages.dev/manifest.json";
+    const params        = new URLSearchParams(window.location.search);
+    const refParam      = params.get('ref');
+    const contentFrame  = document.getElementById('content-frame');
+    const fallback      = document.getElementById('fallback');
+    const loadingUI     = document.getElementById('loading-ui');
+
     function showFallback() {
         loadingUI.classList.remove('show');
         contentFrame.style.display = 'none';
-        fallback.style.display = 'block';
+        fallback.style.display     = 'block';
     }
 
-    // ── Helper: load a URL into the iframe ───────────────────────────────────
     function loadIntoFrame(url) {
         loadingUI.classList.remove('show');
         contentFrame.src = url;
     }
 
-    // ── Main routing logic ───────────────────────────────────────────────────
     async function route() {
         if (!refParam) { showFallback(); return; }
 
-        // Check if refParam looks like a URL (has a scheme / contains a dot after scheme)
         let isUrl = false;
         try {
             const u = new URL(refParam);
-            // new URL() succeeds even for bare keys if they happen to look like paths,
-            // so we only trust it when scheme is http(s)
             isUrl = u.protocol === 'http:' || u.protocol === 'https:';
         } catch (_) { isUrl = false; }
 
         if (isUrl) {
-            // ── Existing behaviour: ref is a full URL ────────────────────────
-            // e.g. frame?ref=https://ytvs-render.pages.dev/shaka?ref=ipl1
-            // or   frame?ref=frame?ref=ipl2  <- after our admin change this
-            //      becomes frame?ref=https://ytvs-frame.pages.dev/frame?ref=ipl2
             loadIntoFrame(refParam);
             return;
         }
 
-        // ── NEW: ref is a bare manifest key (e.g. "ipl2") ───────────────────
-        // Fetch manifest, resolve the key, expect type === "direct"
         loadingUI.classList.add('show');
 
         try {
-            const res = await fetch(MANIFEST_URL, { cache: 'no-store' });
+            const res      = await fetch(MANIFEST_URL, { cache: 'no-store' });
             if (!res.ok) throw new Error('Manifest fetch failed');
-
             const manifest = await res.json();
             const entry    = manifest[refParam];
-
-            if (!entry) throw new Error(`Key "${refParam}" not found in manifest`);
+            if (!entry) throw new Error(`Key "${refParam}" not found`);
 
             if (entry.type === 'direct') {
-                // Wrap the real URL in an iframe — just load it directly as the src
                 loadIntoFrame(entry.url);
             } else {
-                // Key exists but it's hls/dash — those go through the shaka page, not here
-                // Shouldn't happen in normal flow, but handle gracefully
-                console.warn(`Manifest key "${refParam}" is type "${entry.type}", expected "direct"`);
+                console.warn(`Key "${refParam}" is type "${entry.type}", expected "direct"`);
                 showFallback();
             }
         } catch (e) {
-            console.error('Frame manifest resolution failed:', e);
+            console.error('Manifest resolution failed:', e);
             showFallback();
         }
     }
 
     route();
 
-    // ── Community Toggle ─────────────────────────────────────────────────────
-    const chatUrl  = "https://ytvs-frame.pages.dev/discuss";
-    const commBtn  = document.getElementById('community-btn');
-    const commFrame= document.getElementById('interaction-frame');
-    let isCommActive = false;
+    // ── 3. CLICK SHIELD LOGIC ────────────────────────────────────────────────
+    //
+    // The shield sits transparently above the iframe and blocks all clicks.
+    // We give the user a short passthrough window (300ms) when they click
+    // somewhere that isn't the unmute button, so legitimate play/pause
+    // interactions can still reach the player.
+    //
+    // Flow:
+    //   User clicks on player area
+    //     → shield catches it
+    //     → shield briefly becomes pointer-events:none (pass-through)
+    //     → click lands on iframe (play/pause etc.)
+    //     → shield re-activates after 300ms
+    //
+    // This means ad scripts get ~300ms max to fire — not enough to redirect.
+    // But the sandbox already blocks top-navigation, so this is extra safety.
+
+    const shield = document.getElementById('click-shield');
+
+    shield.addEventListener('click', () => {
+        // Briefly let the click pass through to iframe
+        shield.style.pointerEvents = 'none';
+        setTimeout(() => {
+            shield.style.pointerEvents = 'auto';
+        }, 300);
+    });
+
+    // Touch support (mobile)
+    shield.addEventListener('touchstart', () => {
+        shield.style.pointerEvents = 'none';
+        setTimeout(() => {
+            shield.style.pointerEvents = 'auto';
+        }, 300);
+    }, { passive: true });
+
+    // ── 4. UNMUTE BUTTON ─────────────────────────────────────────────────────
+    const unmuteWrap = document.getElementById('unmute-wrap');
+    const unmuteBtn  = document.getElementById('unmuteBtn');
+
+    unmuteBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // don't let this trigger the shield passthrough
+
+        const frame = document.getElementById('content-frame');
+
+        // Try all common player postMessage formats
+        // Different players listen to different message shapes
+        try {
+            frame.contentWindow?.postMessage({ muted: false },         '*');
+            frame.contentWindow?.postMessage({ type: 'unmute' },       '*');
+            frame.contentWindow?.postMessage({ volume: 1 },            '*');
+            frame.contentWindow?.postMessage({ command: 'unmute' },    '*');
+            frame.contentWindow?.postMessage({ type: 'volume', value: 1 }, '*');
+            frame.contentWindow?.postMessage('unmute',                 '*');
+        } catch (_) {}
+
+        // Hide button with fade
+        unmuteWrap.classList.add('hidden');
+        setTimeout(() => { unmuteWrap.style.display = 'none'; }, 400);
+    });
+
+    // ── 5. COMMUNITY TOGGLE ──────────────────────────────────────────────────
+    const chatUrl     = "https://ytvs-frame.pages.dev/discuss";
+    const commBtn     = document.getElementById('community-btn');
+    const commFrame   = document.getElementById('interaction-frame');
+    let isCommActive  = false;
 
     commBtn.addEventListener('click', () => {
         if (!isCommActive) {
-            commFrame.src = chatUrl;
+            commFrame.src          = chatUrl;
             commFrame.style.display = "block";
-            commBtn.innerHTML = '<i class="fas fa-times"></i> Close Chat';
-            isCommActive = true;
+            commBtn.innerHTML      = '<i class="fas fa-times"></i> Close Chat';
+            isCommActive           = true;
         } else {
             commFrame.style.display = "none";
-            commBtn.innerHTML = '<i class="fas fa-comments"></i> Chat';
-            isCommActive = false;
+            commBtn.innerHTML       = '<i class="fas fa-comments"></i> Chat';
+            isCommActive            = false;
         }
     });
 
-    // ── Theme Switcher ───────────────────────────────────────────────────────
+    // ── 6. THEME SWITCHER ────────────────────────────────────────────────────
     const themeBtn = document.getElementById('theme-btn');
     themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
@@ -347,7 +484,7 @@
             : '<i class="fas fa-moon"></i> <span>Dark</span>';
     });
 
-    // ── Refresh ──────────────────────────────────────────────────────────────
+    // ── 7. REFRESH ───────────────────────────────────────────────────────────
     document.getElementById('sync-btn').addEventListener('click', () => location.reload());
 </script>
 

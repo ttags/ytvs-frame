@@ -243,34 +243,34 @@
                 aspect-ratio: auto;
             }
         }
-        /* ── Interaction Hint Overlay ────────────────────────────────────────── */
-#interaction-hint {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.9);
-    background: rgba(0, 0, 0, 0.75);
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 600;
-    pointer-events: none; /* Crucial: lets the second click pass through the text */
-    opacity: 0;
-    transition: all 0.25s ease;
-    z-index: 15;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
 
-#interaction-hint.show-hint {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-}
-        
+        /* ── Interaction Hint Overlay ────────────────────────────────────────── */
+        #interaction-hint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            pointer-events: none; /* Crucial: lets the second click pass through the text */
+            opacity: 0;
+            transition: all 0.25s ease;
+            z-index: 15;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #interaction-hint.show-hint {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
     </style>
 </head>
 <body>
@@ -287,47 +287,33 @@
     </div>
 
     <main class="frame-box">
-
-        <!-- iframe — sandboxed -->
-        <!--<iframe
-            id="content-frame"
-            allow="autoplay; fullscreen; encrypted-media"
-            allowfullscreen
-            sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
-        </iframe> -->
-
-       <!-- iframe — no sandbox -->
         <iframe
             id="content-frame"
             allow="autoplay; fullscreen; encrypted-media"
-            allowfullscreen
+            allowfullscreen>
         </iframe>
 
         <div id="click-shield"></div>
 
         <div id="interaction-hint">
-    <i class="fas fa-hand-pointer"></i> Double-tap to access controls
-</div>
+            <i class="fas fa-hand-pointer"></i> Double-tap to access controls
+        </div>
             
-        <!-- Unmute button — shown by default, hides after one click -->
         <div id="unmute-wrap">
             <button id="unmuteBtn">
                 <i class="fas fa-volume-mute"></i> Tap to Unmute
             </button>
         </div>
 
-        <!-- Loading spinner shown while manifest resolves -->
         <div id="loading-ui">
             <div class="spinner"></div>
             <span>Resolving stream…</span>
         </div>
 
-        <!-- Fallback error state -->
         <div id="fallback" class="fallback-ui">
             <i class="fas fa-exclamation-triangle fa-2x"></i>
             <p>Resource temporarily unavailable.</p>
         </div>
-
     </main>
 
     <div class="toolbar">
@@ -362,7 +348,7 @@
         e.returnValue = '';
     });
 
-    // ── 2. MANIFEST + ROUTING ────────────────────────────────────────────────
+    // ── 1. CONFIGURATION & SELECTORS ─────────────────────────────────────────
     const MANIFEST_URL  = "https://ytvs-db.pages.dev/manifest.json";
     const params        = new URLSearchParams(window.location.search);
     const refParam      = params.get('ref');
@@ -370,6 +356,12 @@
     const fallback      = document.getElementById('fallback');
     const loadingUI     = document.getElementById('loading-ui');
 
+    // ── NEW SELECTORS ────────────────────────────────────────────────────────────
+    const shield = document.getElementById('click-shield');
+    const interactionHint = document.getElementById('interaction-hint');
+    let shieldTimeout;
+
+    // ── 2. FRAME HELPERS ─────────────────────────────────────────────────────
     function showFallback() {
         loadingUI.classList.remove('show');
         contentFrame.style.display = 'none';
@@ -381,6 +373,18 @@
         contentFrame.src = url;
     }
 
+    // Helper to check URL type before loading
+    function checkAndLoad(url) {
+        // If it's your clean render link, disable the click interceptor entirely
+        if (url.includes('render') || url.includes('shaka')) {
+            shield.style.display = 'none';
+        } else {
+            shield.style.display = 'block'; // Ensure it's active for standard embeds
+        }
+        loadIntoFrame(url);
+    }
+
+    // ── 3. DYNAMIC ROUTING & SHIELD TOGGLE ──────────────────────────────────────
     async function route() {
         if (!refParam) { showFallback(); return; }
 
@@ -391,7 +395,7 @@
         } catch (_) { isUrl = false; }
 
         if (isUrl) {
-            loadIntoFrame(refParam);
+            checkAndLoad(refParam);
             return;
         }
 
@@ -405,7 +409,7 @@
             if (!entry) throw new Error(`Key "${refParam}" not found`);
 
             if (entry.type === 'direct') {
-                loadIntoFrame(entry.url);
+                checkAndLoad(entry.url);
             } else {
                 console.warn(`Key "${refParam}" is type "${entry.type}", expected "direct"`);
                 showFallback();
@@ -416,27 +420,29 @@
         }
     }
 
+    // ── UPGRADED SHIELD INTERCEPTOR ──────────────────────────────────────────
+    function handleShieldInteraction(e) {
+        e.preventDefault(); // Stop default behavior
+
+        // 1. Show the helpful UI hint
+        interactionHint.classList.add('show-hint');
+        
+        // 2. Drop the shield to let the next click through
+        shield.style.pointerEvents = 'none';
+
+        // 3. Reset after 1.2 seconds
+        clearTimeout(shieldTimeout);
+        shieldTimeout = setTimeout(() => {
+            shield.style.pointerEvents = 'auto'; // Raise shield again
+            interactionHint.classList.remove('show-hint'); // Hide hint
+        }, 1200); // 1.2s is enough time to read and double-tap, but fast enough to block automated popups
+    }
+
+    shield.addEventListener('click', handleShieldInteraction);
+    shield.addEventListener('touchstart', handleShieldInteraction, { passive: false });
+
+    // Initialize application routing
     route();
-
-
-
-    const shield = document.getElementById('click-shield');
-
-    shield.addEventListener('click', () => {
-        // Briefly let the click pass through to iframe
-        shield.style.pointerEvents = 'none';
-        setTimeout(() => {
-            shield.style.pointerEvents = 'auto';
-        }, 300);
-    });
-
-    // Touch support (mobile)
-    shield.addEventListener('touchstart', () => {
-        shield.style.pointerEvents = 'none';
-        setTimeout(() => {
-            shield.style.pointerEvents = 'auto';
-        }, 300);
-    }, { passive: true });
 
     // ── 4. UNMUTE BUTTON ─────────────────────────────────────────────────────
     const unmuteWrap = document.getElementById('unmute-wrap');
@@ -448,7 +454,6 @@
         const frame = document.getElementById('content-frame');
 
         // Try all common player postMessage formats
-        // Different players listen to different message shapes
         try {
             frame.contentWindow?.postMessage({ muted: false },         '*');
             frame.contentWindow?.postMessage({ type: 'unmute' },       '*');

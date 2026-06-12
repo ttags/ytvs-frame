@@ -435,7 +435,7 @@
         shieldTimeout = setTimeout(() => {
             shield.style.pointerEvents = 'auto'; // Raise shield again
             interactionHint.classList.remove('show-hint'); // Hide hint
-        }, 1200); // 1.2s is enough time to read and double-tap, but fast enough to block automated popups
+        }, 320); // 1.2s is enough time to read and double-tap, but fast enough to block automated popups
     }
 
     shield.addEventListener('click', handleShieldInteraction);

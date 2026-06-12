@@ -243,6 +243,34 @@
                 aspect-ratio: auto;
             }
         }
+        /* ── Interaction Hint Overlay ────────────────────────────────────────── */
+#interaction-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none; /* Crucial: lets the second click pass through the text */
+    opacity: 0;
+    transition: all 0.25s ease;
+    z-index: 15;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#interaction-hint.show-hint {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+        
     </style>
 </head>
 <body>
@@ -261,22 +289,26 @@
     <main class="frame-box">
 
         <!-- iframe — sandboxed -->
-        <iframe
-            id="content-frame"
-            allow="autoplay; fullscreen; encrypted-media"
-            allowfullscreen
-            sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
-        </iframe>
-
-       <!-- iframe — no sandbox -->
         <!--<iframe
             id="content-frame"
             allow="autoplay; fullscreen; encrypted-media"
             allowfullscreen
-        </iframe>-->
+            sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
+        </iframe> -->
+
+       <!-- iframe — no sandbox -->
+        <iframe
+            id="content-frame"
+            allow="autoplay; fullscreen; encrypted-media"
+            allowfullscreen
+        </iframe>
 
         <div id="click-shield"></div>
 
+        <div id="interaction-hint">
+    <i class="fas fa-hand-pointer"></i> Double-tap to access controls
+</div>
+            
         <!-- Unmute button — shown by default, hides after one click -->
         <div id="unmute-wrap">
             <button id="unmuteBtn">

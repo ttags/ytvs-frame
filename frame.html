@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="robots" content="noindex, nofollow">
     <meta name="referrer" content="no-referrer">
-    <title>Information Sources | YonoTVs</title>
-    <link href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjTMZUW020Uhv6WeeF6v61lYNBjtoknv_lG7aZXsDyRrUCOlQiyd_DMcRVHLMIwOEEfl26kGwrLhyphenhyphenxKmp_26X8rcyIepfuJXbiLwx7_1zHEHA4f4JeyHoJTQpbcYRHphXIhoyL_I0JSscHywHRRXDBOFumKHCxUpr59hFnxG9kQRVtz1D322yBM462BzyKW/s16000/Ytvs%20-final%20logo.jpg" rel="icon" type="image/x-icon"/>
+    <title>Information Sources | ONO Tv</title>
+    <link href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipwFyueknjbWXtmnGkGVk_HOX3FhyrlrbzdRJmdvF7PCKYbOVYqYov1mCPchehq6dq1giBlDIPABNAxDmjkLfn5fLf4xhtdlHMsPmB2A27zQaR2-rHsu3BS0vYrkCkG2TrUtr-YkF-JTHh7JmDNuhIEbijStkJoVxOVBx2fjibrDlTfssDMiKPCouVUHI/s1600/ONOtv.png" rel="icon" type="image/x-icon"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -44,15 +44,8 @@
             padding: 20px 15px;
         }
 
-        .brand-header {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .brand-logo {
-            max-height: 50px;
-            width: auto;
-        }
+        .brand-header { text-align: center; margin-bottom: 10px; }
+        .brand-logo { max-height: 50px; border-radius: 8px; width: auto; }
 
         .toolbar {
             display: flex;
@@ -81,7 +74,7 @@
 
         .btn-primary { background: var(--primary); color: white; border: none; }
 
-        /* ── Player Box ─────────────────────────────────────────────────────── */
+        /* ── Player Box Layout ──────────────────────────────────────────────── */
         .frame-box {
             position: relative;
             background: #000;
@@ -90,6 +83,19 @@
             aspect-ratio: 16 / 9;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             border: 1px solid var(--border-color);
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        /* Subtle glowing activation boundary when the sandboxed frame absorbs a tap */
+        .frame-box.interaction-flash {
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.6);
+            border-color: #007bff;
+        }
+
+        .frame-box:fullscreen {
+            border-radius: 0;
+            border: none;
+            aspect-ratio: auto;
         }
 
         #content-frame {
@@ -99,53 +105,10 @@
             display: block;
             position: relative;
             z-index: 1;
+            background: #000;
         }
 
-        #click-shield {
-            position: absolute;
-            inset: 0;
-            z-index: 5;
-            background: transparent;
-            cursor: default;
-        }
-
-        /* ── Unmute Button ───────────────────────────────────────────────────── */
-        #unmute-wrap {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            z-index: 10;
-            transition: opacity 0.4s ease;
-        }
-
-        #unmute-wrap.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        #unmuteBtn {
-            background: rgba(0, 0, 0, 0.72);
-            color: #fff;
-            border: 1.5px solid rgba(255, 255, 255, 0.45);
-            padding: 9px 18px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            backdrop-filter: blur(6px);
-            animation: pulse 1.8s ease-in-out infinite;
-            letter-spacing: 0.3px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255,255,255,0.15); }
-            50%       { transform: scale(1.04); box-shadow: 0 0 0 6px rgba(255,255,255,0);  }
-        }
-
-        /* ── Loading UI ──────────────────────────────────────────────────────── */
+        /* ── Loading Interface ───────────────────────────────────────────────── */
         #loading-ui {
             display: none;
             position: absolute;
@@ -173,19 +136,18 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ── Fallback ────────────────────────────────────────────────────────── */
+        /* ── Error Fallbacks ─────────────────────────────────────────────────── */
         .fallback-ui {
             display: none;
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
             color: white;
             z-index: 20;
         }
 
-        /* ── Status Alert ────────────────────────────────────────────────────── */
+        /* ── Interface Notification Alerts ───────────────────────────────────── */
         .status-alert {
             background: #eff6ff;
             color: #1e40af;
@@ -199,58 +161,43 @@
 
         .dark-mode .status-alert { background: #1e293b; color: #60a5fa; border-color: #3b82f6; }
 
-        /* ── Community ───────────────────────────────────────────────────────── */
+        /* ── Integrated Interactive Chat Modules ─────────────────────────────── */
         .community-section { margin-top: 25px; }
 
         #interaction-frame {
-            width: 100%;
-            height: 450px;
+            width: 100%; height: 450px;
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            margin-top: 15px;
-            display: none;
-            background: white;
+            border-radius: 12px; margin-top: 15px;
+            display: none; background: white;
         }
 
-        /* ── Footer ──────────────────────────────────────────────────────────── */
+        /* ── Footer Elements ─────────────────────────────────────────────────── */
         .legal-footer {
-            margin-top: 40px;
-            padding: 25px;
+            margin-top: 40px; padding: 25px;
             background: var(--container-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 12px;
-            color: var(--text-muted);
-            line-height: 1.6;
+            border-radius: 12px; font-size: 12px;
+            color: var(--text-muted); line-height: 1.6;
         }
 
         .legal-title {
-            display: block;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 12px;
-            text-transform: uppercase;
+            display: block; font-size: 14px; font-weight: 700;
+            color: var(--text-main); margin-bottom: 12px; text-transform: uppercase;
         }
 
-        @media (max-width: 300px) {
-            .btn-utility span { display: none; }
-        }
-
+        @media (max-width: 300px) { .btn-utility span { display: none; } }
         @media (max-width: 600px) {
-            .frame-box {
-                height: 220px;
-                aspect-ratio: auto;
-            }
+            .frame-box { height: 220px; aspect-ratio: auto; }
+            .frame-box:fullscreen { height: 100vh; }
         }
     </style>
 </head>
-<body>
+<body class="dark-mode">
 
 <div class="app-container">
     <header class="brand-header">
         <a href="/">
-            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjTMZUW020Uhv6WeeF6v61lYNBjtoknv_lG7aZXsDyRrUCOlQiyd_DMcRVHLMIwOEEfl26kGwrLhyphenhyphenxKmp_26X8rcyIepfuJXbiLwx7_1zHEHA4f4JeyHoJTQpbcYRHphXIhoyL_I0JSscHywHRRXDBOFumKHCxUpr59hFnxG9kQRVtz1D322yBM462BzyKW/s16000/Ytvs%20-final%20logo.jpg" alt="YonoTVS Index" class="brand-logo">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipwFyueknjbWXtmnGkGVk_HOX3FhyrlrbzdRJmdvF7PCKYbOVYqYov1mCPchehq6dq1giBlDIPABNAxDmjkLfn5fLf4xhtdlHMsPmB2A27zQaR2-rHsu3BS0vYrkCkG2TrUtr-YkF-JTHh7JmDNuhIEbijStkJoVxOVBx2fjibrDlTfssDMiKPCouVUHI/s1600/ONOtv.png" alt="YonoTVS Index" class="brand-logo">
         </a>
     </header>
 
@@ -258,9 +205,7 @@
         <i class="fas fa-info-circle"></i> <b>YonoTVs.com:</b> This page provides a technical display frame for externally referenced resources.
     </div>
 
-    <main class="frame-box">
-
-        <!-- iframe — sandboxed -->
+    <main class="frame-box" id="player-container">
         <iframe
             id="content-frame"
             allow="autoplay; fullscreen; encrypted-media"
@@ -268,45 +213,28 @@
             sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
         </iframe>
 
-       <!-- iframe — no sandbox -->
-        <!--<iframe
-            id="content-frame"
-            allow="autoplay; fullscreen; encrypted-media"
-            allowfullscreen
-        </iframe>-->
-
-        <div id="click-shield"></div>
-
-        <!-- Unmute button — shown by default, hides after one click -->
-        <div id="unmute-wrap">
-            <button id="unmuteBtn">
-                <i class="fas fa-volume-mute"></i> Tap to Unmute
-            </button>
-        </div>
-
-        <!-- Loading spinner shown while manifest resolves -->
         <div id="loading-ui">
             <div class="spinner"></div>
             <span>Resolving stream…</span>
         </div>
-
-        <!-- Fallback error state -->
         <div id="fallback" class="fallback-ui">
             <i class="fas fa-exclamation-triangle fa-2x"></i>
             <p>Resource temporarily unavailable.</p>
         </div>
-
     </main>
 
     <div class="toolbar">
+        <button class="btn-utility" id="fullscreen-btn">
+            <i class="fas fa-expand"></i> <span>Fullscreen</span>
+        </button>
         <button class="btn-utility" id="sync-btn">
             <i class="fas fa-sync-alt"></i> <span>Sync</span>
         </button>
+        <button class="btn-utility" id="theme-btn">
+            <i class="fas fa-sun"></i> <span>Light</span>
+        </button>
         <button class="btn-utility btn-primary" id="community-btn">
             <i class="fas fa-comments"></i> <span>Chat</span>
-        </button>
-        <button class="btn-utility" id="theme-btn">
-            <i class="fas fa-moon"></i> <span>Dark</span>
         </button>
     </div>
 
@@ -323,14 +251,7 @@
 </div>
 
 <script>
-    window.open = () => null;
-
-    window.addEventListener('beforeunload', (e) => {
-        e.preventDefault();
-        e.returnValue = '';
-    });
-
-    // ── 2. MANIFEST + ROUTING ────────────────────────────────────────────────
+    // ── 1. MANIFEST RESOLUTION ENGINE ────────────────────────────────────────
     const MANIFEST_URL  = "https://ytvs-db.pages.dev/manifest.json";
     const params        = new URLSearchParams(window.location.search);
     const refParam      = params.get('ref');
@@ -386,52 +307,70 @@
 
     route();
 
-
-
-    const shield = document.getElementById('click-shield');
-
-    shield.addEventListener('click', () => {
-        // Briefly let the click pass through to iframe
-        shield.style.pointerEvents = 'none';
+    // ── 2. BLUR INTERACTION DETECTOR (BORDER GLOW GLITCH CORRECTION) ──────────
+    window.addEventListener('blur', () => {
         setTimeout(() => {
-            shield.style.pointerEvents = 'auto';
-        }, 300);
+            if (document.activeElement === contentFrame) {
+                const playerContainer = document.getElementById('player-container');
+                playerContainer.classList.add('interaction-flash');
+                setTimeout(() => playerContainer.classList.remove('interaction-flash'), 400);
+            }
+        }, 50);
     });
 
-    // Touch support (mobile)
-    shield.addEventListener('touchstart', () => {
-        shield.style.pointerEvents = 'none';
-        setTimeout(() => {
-            shield.style.pointerEvents = 'auto';
-        }, 300);
-    }, { passive: true });
+    // ── 3. FULLSCREEN & ORIENTATION CONTROL ARCHITECTURE ─────────────────────
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const playerContainer = document.getElementById('player-container');
 
-    // ── 4. UNMUTE BUTTON ─────────────────────────────────────────────────────
-    const unmuteWrap = document.getElementById('unmute-wrap');
-    const unmuteBtn  = document.getElementById('unmuteBtn');
-
-    unmuteBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // don't let this trigger the shield passthrough
-
-        const frame = document.getElementById('content-frame');
-
-        // Try all common player postMessage formats
-        // Different players listen to different message shapes
-        try {
-            frame.contentWindow?.postMessage({ muted: false },         '*');
-            frame.contentWindow?.postMessage({ type: 'unmute' },       '*');
-            frame.contentWindow?.postMessage({ volume: 1 },            '*');
-            frame.contentWindow?.postMessage({ command: 'unmute' },    '*');
-            frame.contentWindow?.postMessage({ type: 'volume', value: 1 }, '*');
-            frame.contentWindow?.postMessage('unmute',                 '*');
-        } catch (_) {}
-
-        // Hide button with fade
-        unmuteWrap.classList.add('hidden');
-        setTimeout(() => { unmuteWrap.style.display = 'none'; }, 400);
+    fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            // Enter Fullscreen
+            if (playerContainer.requestFullscreen) {
+                playerContainer.requestFullscreen();
+            } else if (playerContainer.webkitRequestFullscreen) { /* Safari / iOS Legacy */
+                playerContainer.webkitRequestFullscreen();
+            } else if (playerContainer.msRequestFullscreen) { /* IE11 */
+                playerContainer.msRequestFullscreen();
+            }
+        } else {
+            // Exit Fullscreen
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
     });
 
-    // ── 5. COMMUNITY TOGGLE ──────────────────────────────────────────────────
+    // Listen for when fullscreen actually begins or ends
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            // UI Update
+            fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i> <span>Exit Fullscreen</span>';
+            
+            // MAGIC: Attempt to force Landscape orientation on mobile devices
+            try {
+                if (screen.orientation && screen.orientation.lock) {
+                    // We wrap in a catch because desktops and iOS will reject this
+                    screen.orientation.lock('landscape').catch((err) => {
+                        console.warn('Orientation lock not supported or denied:', err);
+                    });
+                }
+            } catch (e) {}
+            
+        } else {
+            // UI Update
+            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i> <span>Fullscreen</span>';
+            
+            // MAGIC: Unlock the orientation when leaving fullscreen
+            try {
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            } catch (e) {}
+        }
+    });
+    
+    
+    // ── 4. CHAT CONTROL PANEL ────────────────────────────────────────────────
     const chatUrl     = "https://ytvs-frame.pages.dev/discuss";
     const commBtn     = document.getElementById('community-btn');
     const commFrame   = document.getElementById('interaction-frame');
@@ -450,7 +389,7 @@
         }
     });
 
-    // ── 6. THEME SWITCHER ────────────────────────────────────────────────────
+    // ── 5. THEME SWAP MECHANISM ──────────────────────────────────────────────
     const themeBtn = document.getElementById('theme-btn');
     themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
@@ -460,7 +399,7 @@
             : '<i class="fas fa-moon"></i> <span>Dark</span>';
     });
 
-    // ── 7. REFRESH ───────────────────────────────────────────────────────────
+    // ── 6. SYNC / FORCE REFRESH ──────────────────────────────────────────────
     document.getElementById('sync-btn').addEventListener('click', () => location.reload());
 </script>
 

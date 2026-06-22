@@ -171,6 +171,77 @@
             display: none; background: white;
         }
 
+        /* ── Share Modal ──────────────────────────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: var(--container-bg);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-box h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .modal-box p {
+            margin: 0 0 14px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        #share-link-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-size: 13px;
+            box-sizing: border-box;
+            margin-bottom: 14px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-actions button {
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--btn-gray);
+            color: var(--text-main);
+        }
+
+        .modal-actions button.primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
         /* ── Footer Elements ─────────────────────────────────────────────────── */
         .legal-footer {
             margin-top: 40px; padding: 25px;
@@ -196,13 +267,14 @@
 
 <div class="app-container">
     <header class="brand-header">
-        <a href="/">
+
+        <a href="https://www.onotv.me" id="header-logo-link">
             <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipwFyueknjbWXtmnGkGVk_HOX3FhyrlrbzdRJmdvF7PCKYbOVYqYov1mCPchehq6dq1giBlDIPABNAxDmjkLfn5fLf4xhtdlHMsPmB2A27zQaR2-rHsu3BS0vYrkCkG2TrUtr-YkF-JTHh7JmDNuhIEbijStkJoVxOVBx2fjibrDlTfssDMiKPCouVUHI/s1600/ONOtv.png" alt="ONO TV Index" class="brand-logo">
         </a>
     </header>
 
     <div class="status-alert">
-        <i class="fas fa-info-circle"></i> <b>ONO TV:</b> This page provides a technical display frame for externally referenced resources.
+        <i class="fas fa-info-circle"></i> <b>Ono TV:</b> This page provides a technical display frame for externally referenced resources.
     </div>
 
     <main class="frame-box" id="player-container">
@@ -215,7 +287,7 @@
 
         <div id="loading-ui">
             <div class="spinner"></div>
-            <span>Resolving stream…</span>
+            <span>Resolving resource…</span>
         </div>
         <div id="fallback" class="fallback-ui">
             <i class="fas fa-exclamation-triangle fa-2x"></i>
@@ -232,6 +304,9 @@
         </button>
         <button class="btn-utility" id="theme-btn">
             <i class="fas fa-sun"></i> <span>Light</span>
+        </button>
+        <button class="btn-utility" id="share-btn">
+            <i class="fas fa-share-nodes"></i> <span>Share</span>
         </button>
         <button class="btn-utility btn-primary" id="community-btn">
             <i class="fas fa-comments"></i> <span>Chat</span>
@@ -250,8 +325,20 @@
     </footer>
 </div>
 
+<!-- ── Share Modal Markup ───────────────────────────────────────────────── -->
+<div class="modal-overlay" id="share-modal">
+    <div class="modal-box">
+        <h3>Share with family & friends</h3>
+        <p>You can copy this link and send to your friends.</p>
+        <input type="text" id="share-link-input" readonly />
+        <div class="modal-actions">
+            <button id="close-share-btn">Close</button>
+            <button class="primary" id="copy-share-btn">Copy Link</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    // ── 1. MANIFEST RESOLUTION ENGINE ────────────────────────────────────────
     const MANIFEST_URL  = "https://ytvs-db.pages.dev/manifest.json";
     const params        = new URLSearchParams(window.location.search);
     const refParam      = params.get('ref');
@@ -307,7 +394,6 @@
 
     route();
 
-    // ── 2. BLUR INTERACTION DETECTOR (BORDER GLOW GLITCH CORRECTION) ──────────
     window.addEventListener('blur', () => {
         setTimeout(() => {
             if (document.activeElement === contentFrame) {
@@ -317,8 +403,7 @@
             }
         }, 50);
     });
-
-    // ── 3. FULLSCREEN & ORIENTATION CONTROL ARCHITECTURE ─────────────────────
+    
     const fullscreenBtn = document.getElementById('fullscreen-btn');
     const playerContainer = document.getElementById('player-container');
 
@@ -327,23 +412,20 @@
             // Enter Fullscreen
             if (playerContainer.requestFullscreen) {
                 playerContainer.requestFullscreen();
-            } else if (playerContainer.webkitRequestFullscreen) { /* Safari / iOS Legacy */
+            } else if (playerContainer.webkitRequestFullscreen) {
                 playerContainer.webkitRequestFullscreen();
-            } else if (playerContainer.msRequestFullscreen) { /* IE11 */
+            } else if (playerContainer.msRequestFullscreen) { 
                 playerContainer.msRequestFullscreen();
             }
         } else {
-            // Exit Fullscreen
             if (document.exitFullscreen) {
                 document.exitFullscreen();
             }
         }
     });
 
-    // Listen for when fullscreen actually begins or ends
     document.addEventListener('fullscreenchange', () => {
         if (document.fullscreenElement) {
-            // UI Update
             fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i> <span>Exit Fullscreen</span>';
             
             // MAGIC: Attempt to force Landscape orientation on mobile devices
@@ -401,6 +483,52 @@
 
     // ── 6. SYNC / FORCE REFRESH ──────────────────────────────────────────────
     document.getElementById('sync-btn').addEventListener('click', () => location.reload());
+
+    // ── 7. SHARE WITH FAMILY & FRIENDS ───────────────────────────────────────
+    const shareBtn       = document.getElementById('share-btn');
+    const shareModal      = document.getElementById('share-modal');
+    const shareLinkInput  = document.getElementById('share-link-input');
+    const closeShareBtn   = document.getElementById('close-share-btn');
+    const copyShareBtn    = document.getElementById('copy-share-btn');
+
+    // Build the link from known page parts (origin + pathname + ref) instead
+    // of trusting window.location.href verbatim. This keeps the shared link
+    // clean and predictable no matter what's sitting in the address bar,
+    // and it always lands the recipient back on this same content.
+    function buildShareLink() {
+        const base = window.location.origin + window.location.pathname;
+        return refParam ? `${base}?ref=${encodeURIComponent(refParam)}` : base;
+    }
+
+    function openShareModal() {
+        shareLinkInput.value = buildShareLink();
+        shareModal.classList.add('active');
+        shareLinkInput.focus();
+        shareLinkInput.select();
+    }
+
+    function closeShareModal() {
+        shareModal.classList.remove('active');
+    }
+
+    shareBtn.addEventListener('click', openShareModal);
+    closeShareBtn.addEventListener('click', closeShareModal);
+
+    shareModal.addEventListener('click', (e) => {
+        if (e.target === shareModal) closeShareModal();
+    });
+
+    copyShareBtn.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(shareLinkInput.value);
+        } catch (err) {
+            shareLinkInput.select();
+            document.execCommand('copy');
+        }
+        const original = copyShareBtn.textContent;
+        copyShareBtn.textContent = 'Copied!';
+        setTimeout(() => { copyShareBtn.textContent = original; }, 1500);
+    });
 </script>
 
 </body>

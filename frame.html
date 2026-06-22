@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="robots" content="noindex, nofollow">
     <meta name="referrer" content="no-referrer">
-    <title>Information Sources | ONO TV</title>
+    <title>Information Sources | Ono TV</title>
     <link href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipwFyueknjbWXtmnGkGVk_HOX3FhyrlrbzdRJmdvF7PCKYbOVYqYov1mCPchehq6dq1giBlDIPABNAxDmjkLfn5fLf4xhtdlHMsPmB2A27zQaR2-rHsu3BS0vYrkCkG2TrUtr-YkF-JTHh7JmDNuhIEbijStkJoVxOVBx2fjibrDlTfssDMiKPCouVUHI/s1600/ONOtv.png" rel="icon" type="image/x-icon"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -485,23 +485,15 @@
     document.getElementById('sync-btn').addEventListener('click', () => location.reload());
 
     // ── 7. SHARE WITH FAMILY & FRIENDS ───────────────────────────────────────
+    const SHARE_LINK = "https://www.onotv.me";
     const shareBtn       = document.getElementById('share-btn');
     const shareModal      = document.getElementById('share-modal');
     const shareLinkInput  = document.getElementById('share-link-input');
     const closeShareBtn   = document.getElementById('close-share-btn');
     const copyShareBtn    = document.getElementById('copy-share-btn');
 
-    // Build the link from known page parts (origin + pathname + ref) instead
-    // of trusting window.location.href verbatim. This keeps the shared link
-    // clean and predictable no matter what's sitting in the address bar,
-    // and it always lands the recipient back on this same content.
-    function buildShareLink() {
-        const base = window.location.origin + window.location.pathname;
-        return refParam ? `${base}?ref=${encodeURIComponent(refParam)}` : base;
-    }
-
     function openShareModal() {
-        shareLinkInput.value = buildShareLink();
+        shareLinkInput.value = SHARE_LINK;
         shareModal.classList.add('active');
         shareLinkInput.focus();
         shareLinkInput.select();

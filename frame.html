@@ -557,9 +557,10 @@
 
     // ── Change Link button ────────────────────────
 changeLinkBtn.addEventListener('click', function() {
-    if (window.opener && !window.opener.closed) {
-        window.opener.focus();      // bring domain A's tab to front
-        window.close();             // optionally close this B tab
+    const params = new URLSearchParams(window.location.search);
+    const returnUrl = params.get('return');
+    if (returnUrl) {
+        window.location.href = decodeURIComponent(returnUrl);
     } else {
         window.location.href = "https://www.onotv.me";
     }

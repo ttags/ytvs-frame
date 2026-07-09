@@ -42,6 +42,7 @@
             max-width: 1000px;
             margin: 0 auto;
             padding: 20px 15px;
+            padding-bottom: 90px;
         }
 
         .brand-header { text-align: center; margin-bottom: 10px; }
@@ -149,6 +150,7 @@
 
         /* ── Interface Notification Alerts ───────────────────────────────────── */
         .status-alert {
+            display:none;
             background: #eff6ff;
             color: #1e40af;
             padding: 12px;
@@ -158,7 +160,6 @@
             border: 1px solid #bfdbfe;
             text-align: center;
         }
-
         .dark-mode .status-alert { background: #1e293b; color: #60a5fa; border-color: #3b82f6; }
 
         /* ── Integrated Interactive Chat Modules ─────────────────────────────── */
@@ -285,6 +286,7 @@
             sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
         </iframe>
 
+
         <div id="loading-ui">
             <div class="spinner"></div>
             <span>Resolving resource…</span>
@@ -302,8 +304,8 @@
         <button class="btn-utility" id="sync-btn">
             <i class="fas fa-sync-alt"></i> <span>Refresh</span>
         </button>
-        <button class="btn-utility" id="theme-btn">
-            <i class="fas fa-sun"></i> <span>Light</span>
+        <button class="btn-utility" id="change-link-btn">
+        <i class="fas fa-exchange-alt"></i> <span>Change Link</span>
         </button>
         <button class="btn-utility" id="share-btn">
             <i class="fas fa-share-nodes"></i> <span>Share</span>
@@ -337,6 +339,76 @@
         </div>
     </div>
 </div>
+
+<!-- ── Sticky Footer Promotion Bar ────────────────────────────────────── -->
+<div id="ono-promo-footer" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #0f0f0f;
+    color: #ffffff;
+    z-index: 9998;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    box-sizing: border-box;
+">
+    <a id="ono-promo-link" href="https://onotv.net" target="_blank" rel="noopener" style="
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content:space-between;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        width: 100%;
+        max-width: 500px;
+        margin:0 auto;
+    ">
+        <span style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="display: flex; align-items: center; gap: 4px; ">
+            <span style="font-size: 1.1rem;">❌</span>
+            <span style="color:#9ca3af;font-weight:600;font-size:0.9rem;">Yono TV</span>
+            <span style="color: #ff3b30; font-weight: bold; font-size: 0.8rem;">has ADS</span>
+        </span>
+        
+        <span style="display: flex; align-items: center; gap: 4px;">
+            <span style="color: #34c759; font-weight: bold; font-size: 1rem;">✔</span>
+            <span style="color: #ffffff; font-weight: 700; font-size: 1rem;">ONO TV</span>
+            <span style="background: #34c759; color: #000; font-size: 0.65rem; font-weight: bold; padding: 2px 6px; border-radius: 4px;">NO ADS, 4K</span>
+        </span>
+        
+                </span>
+
+        
+        <span style="
+            background: #00e5ff;
+            color: #000;
+            font-weight: bold;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        ">GO➔</span>
+    </a>
+    
+<button id="close-promo-btn" onclick="document.getElementById('ono-promo-footer').style.display='none';" style="
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+">✕</button>
+</div>        
 
 <script>
     const MANIFEST_URL  = "https://ytvs-db.pages.dev/manifest.json";
@@ -470,6 +542,16 @@
             isCommActive            = false;
         }
     });
+    
+    // ── Change Link button (instead of light mode) ────────────────────────
+    const changeLinkBtn = document.getElementById('change-link-btn');
+    changeLinkBtn.addEventListener('click', function() {
+    if (document.referrer && document.referrer.includes(window.location.host)) {
+        window.location.href = document.referrer;
+    } else {
+        window.location.href = "https://www.onotv.me";
+    }
+    });
 
     // ── 5. THEME SWAP MECHANISM ──────────────────────────────────────────────
     const themeBtn = document.getElementById('theme-btn');
@@ -510,6 +592,7 @@
         if (e.target === shareModal) closeShareModal();
     });
 
+
     copyShareBtn.addEventListener('click', async () => {
         try {
             await navigator.clipboard.writeText(shareLinkInput.value);
@@ -521,6 +604,7 @@
         copyShareBtn.textContent = 'Copied!';
         setTimeout(() => { copyShareBtn.textContent = original; }, 1500);
     });
+    
 </script>
 
 </body>

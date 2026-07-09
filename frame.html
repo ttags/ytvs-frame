@@ -556,10 +556,10 @@
     });
 
     // ── Change Link button ────────────────────────
-const changeLinkBtn = document.getElementById('change-link-btn');
 changeLinkBtn.addEventListener('click', function() {
-    if (document.referrer) {
-        window.location.href = document.referrer;
+    if (window.opener && !window.opener.closed) {
+        window.opener.focus();      // bring domain A's tab to front
+        window.close();             // optionally close this B tab
     } else {
         window.location.href = "https://www.onotv.me";
     }

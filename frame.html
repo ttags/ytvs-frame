@@ -556,6 +556,7 @@
     });
 
     // ── Change Link button ────────────────────────
+const changeLinkBtn = document.getElementById('change-link-btn');
 changeLinkBtn.addEventListener('click', function() {
     const params = new URLSearchParams(window.location.search);
     const returnUrl = params.get('return');
@@ -567,7 +568,8 @@ changeLinkBtn.addEventListener('click', function() {
 });
 
     // ── 5. THEME SWAP MECHANISM ──────────────────────────────────────────────
-    const themeBtn = document.getElementById('theme-btn');
+const themeBtn = document.getElementById('theme-btn');
+if (themeBtn) {
     themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
@@ -575,6 +577,7 @@ changeLinkBtn.addEventListener('click', function() {
             ? '<i class="fas fa-sun"></i> <span>Light</span>'
             : '<i class="fas fa-moon"></i> <span>Dark</span>';
     });
+}
 
     // ── 6. SYNC / FORCE REFRESH ──────────────────────────────────────────────
     document.getElementById('sync-btn').addEventListener('click', () => location.reload());

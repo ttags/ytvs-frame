@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    <title>Information Sources | Ono TV</title>
+    <link href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipwFyueknjbWXtmnGkGVk_HOX3FhyrlrbzdRJmdvF7PCKYbOVYqYov1mCPchehq6dq1giBlDIPABNAxDmjkLfn5fLf4xhtdlHMsPmB2A27zQaR2-rHsu3BS0vYrkCkG2TrUtr-YkF-JTHh7JmDNuhIEbijStkJoVxOVBx2fjibrDlTfssDMiKPCouVUHI/s1600/ONOtv.png" rel="icon" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #007bff;
+            --bg-body: #f8fafc;
+            --container-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --btn-gray: #f1f5f9;
+        }
+
+        .dark-mode {
+            --bg-body: #0f172a;
+            --container-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --btn-gray: #334155;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: 0.3s ease;
+        }
+
+        .app-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px 15px;
+            padding-bottom: 90px;
+        }
+
+        .brand-header { text-align: center; margin-bottom: 10px; }
+        .brand-logo { max-height: 50px; border-radius: 8px; width: auto; }
+
+        .toolbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-utility {
+            background: var(--btn-gray);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-primary { background: var(--primary); color: white; border: none; }
+
+        /* ── Player Box Layout ──────────────────────────────────────────────── */
+        .frame-box {
+            position: relative;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid var(--border-color);
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        /* Subtle glowing activation boundary when the sandboxed frame absorbs a tap */
+        .frame-box.interaction-flash {
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.6);
+            border-color: #007bff;
+        }
+
+        .frame-box:fullscreen {
+            border-radius: 0;
+            border: none;
+            aspect-ratio: auto;
+        }
+
+        #content-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            position: relative;
+            z-index: 1;
+            background: #000;
+        }
+
+        /* ── Loading Interface ───────────────────────────────────────────────── */
+        #loading-ui {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: #000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            z-index: 20;
+        }
+
+        #loading-ui.show { display: flex; }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(255,255,255,0.15);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Error Fallbacks ─────────────────────────────────────────────────── */
+        .fallback-ui {
+            display: none;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 20;
+        }
+
+        /* ── Interface Notification Alerts ───────────────────────────────────── */
+        .status-alert {
+            display:none;
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            border: 1px solid #bfdbfe;
+            text-align: center;
+        }
+        .dark-mode .status-alert { background: #1e293b; color: #60a5fa; border-color: #3b82f6; }
+
+        /* ── Integrated Interactive Chat Modules ─────────────────────────────── */
+        .community-section { margin-top: 25px; }
+
+        #interaction-frame {
+            width: 100%; height: 450px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px; margin-top: 15px;
+            display: none; background: white;
+        }
+
+        /* ── Share Modal ──────────────────────────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: var(--container-bg);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-box h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .modal-box p {
+            margin: 0 0 14px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        #share-link-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-size: 13px;
+            box-sizing: border-box;
+            margin-bottom: 14px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-actions button {
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--btn-gray);
+            color: var(--text-main);
+        }
+
+        .modal-actions button.primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        /* ── Footer Elements ─────────────────────────────────────────────────── */
+        .legal-footer {
+            margin-top: 40px; padding: 25px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px; font-size: 12px;
+            color: var(--text-muted); line-height: 1.6;
+        }
+
+        .legal-title {
+            display: block; font-size: 14px; font-weight: 700;
+            color: var(--text-main); margin-bottom: 12px; text-transform: uppercase;
+        }
+
+        @media (max-width: 300px) { .btn-utility span { display: none; } }
+        @media (max-width: 600px) {
+            .frame-box { height: 220px; aspect-ratio: auto; }
+            .frame-box:fullscreen { height: 100vh; }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+
+<div class="app-container">
+    <header class="brand-header">
+
+        <a href="https://www.onotv.me" id="header-logo-link">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipwFyueknjbWXtmnGkGVk_HOX3FhyrlrbzdRJmdvF7PCKYbOVYqYov1mCPchehq6dq1giBlDIPABNAxDmjkLfn5fLf4xhtdlHMsPmB2A27zQaR2-rHsu3BS0vYrkCkG2TrUtr-YkF-JTHh7JmDNuhIEbijStkJoVxOVBx2fjibrDlTfssDMiKPCouVUHI/s1600/ONOtv.png" alt="ONO TV Index" class="brand-logo">
+        </a>
+    </header>
+
+    <div class="status-alert">
+        <i class="fas fa-info-circle"></i> <b>Ono TV:</b> This page provides a technical display frame for externally referenced resources.
+    </div>
+
+    <main class="frame-box" id="player-container">
+        <iframe
+            id="content-frame"
+            allow="autoplay; fullscreen; encrypted-media"
+            allowfullscreen
+            sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
+        </iframe>
+
+
+        <div id="loading-ui">
+            <div class="spinner"></div>
+            <span>Resolving resource…</span>
+        </div>
+        <div id="fallback" class="fallback-ui">
+            <i class="fas fa-exclamation-triangle fa-2x"></i>
+            <p>Resource temporarily unavailable.</p>
+        </div>
+    </main>
+
+    <div class="toolbar">
+        <button class="btn-utility" id="fullscreen-btn">
+            <i class="fas fa-expand"></i> <span>Fullscreen</span>
+        </button>
+        <button class="btn-utility" id="change-link-btn">
+        <i class="fas fa-exchange-alt"></i> <span>Change Link</span>
+        </button>
+        <button class="btn-utility" id="sync-btn">
+            <i class="fas fa-sync-alt"></i> <span>Refresh</span>
+        </button>
+        <button class="btn-utility" id="share-btn">
+            <i class="fas fa-share-nodes"></i> <span>Share</span>
+        </button>
+        <button class="btn-utility btn-primary" id="community-btn">
+            <i class="fas fa-comments"></i> <span>Chat</span>
+        </button>
+    </div>
+
+    <div class="community-section">
+        <iframe id="interaction-frame" title="Discussion Board"></iframe>
+    </div>
+
+    <footer class="legal-footer">
+        <span class="legal-title">Legal Disclaimer & DMCA Policy</span>
+        <p><strong>Operational Framework:</strong> This service acts solely as a neutral presentation interface. We do not host, store, or transmit any digital media on our own infrastructure.</p>
+        <p><strong>Rights & Trademarks:</strong> All logos, brand names, and third-party trademarks remain the property of their respective owners. Users are responsible for compliance with regional regulations.</p>
+        <p><strong>Compliance Notice:</strong> Verified takedown requests are honored promptly: email contact@yonotvs.com</p>
+    </footer>
+</div>
+
+<!-- ── Share Modal Markup ───────────────────────────────────────────────── -->
+<div class="modal-overlay" id="share-modal">
+    <div class="modal-box">
+        <h3>Share with family & friends</h3>
+        <p>You can copy this link and send to your friends.</p>
+        <input type="text" id="share-link-input" readonly />
+        <div class="modal-actions">
+            <button id="close-share-btn">Close</button>
+            <button class="primary" id="copy-share-btn">Copy Link</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Sticky Footer Promotion Bar ────────────────────────────────────── -->
+<div id="ono-promo-footer" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #121214;
+    color: #ffffff;
+    z-index: 9998;
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 48px 12px 16px; /* Right padding protects the close button area */
+    box-sizing: border-box;
+    border-top: 1px solid #27272a;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+">
+    <a id="ono-promo-link" href="https://onotv.me" target="_blank" rel="noopener" style="
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+    ">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #a1a1aa;">
+                <span style="color: #ef4444; font-size: 0.9rem;">✕</span>
+                <span style="font-weight: 500;">Yono TV</span>
+                <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; font-size: 0.75rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Has Ads</span>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.95rem;">
+                <span style="color: #22c55e; font-size: 1rem;">✓</span>
+                <span style="font-weight: 700; color: #ffffff;">ONO TV</span>
+                <span style="background: #22c55e; color: #000000; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px;">NO ADS • 4K</span>
+            </div>
+        </div>
+        
+        <div style="
+            background: #00f0ff;
+            color: #0d0d11;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: transform 0.2s;
+        ">
+            GO <span style="font-size: 0.9rem;">➔</span>
+        </div>
+    </a>
+    
+    <button id="close-promo-btn" onclick="document.getElementById('ono-promo-footer').style.display='none';" style="
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #9ca3af;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 6px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    ">✕</button>
+</div>        
+
+<script>
+    const MANIFEST_URL  = "https://ytvs-db.pages.dev/manifest.json";
+    const params        = new URLSearchParams(window.location.search);
+    const refParam      = params.get('ref');
+    const contentFrame  = document.getElementById('content-frame');
+    const fallback      = document.getElementById('fallback');
+    const loadingUI     = document.getElementById('loading-ui');
+    const ENCRYPTION_KEY_HEX = "d2b4c0fbbf9358d0e188e4d86aaedb0ea70c630efaa9eaf684ed07e9b776d138";
+
+    function showFallback() {
+        loadingUI.classList.remove('show');
+        contentFrame.style.display = 'none';
+        fallback.style.display     = 'block';
+    }
+
+    function loadIntoFrame(url) {
+        loadingUI.classList.remove('show');
+        contentFrame.src = url;
+    }
+
+  function hexToBytes(hex) {
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < hex.length; i += 2) {
+        bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+    }
+    return bytes;
+  }
+
+  async function decryptManifest(base64Payload, hexKey) {
+    const raw = Uint8Array.from(atob(base64Payload), c => c.charCodeAt(0));
+    const nonce = raw.slice(0, 12);
+    const ciphertext = raw.slice(12);
+    const cryptoKey = await crypto.subtle.importKey(
+        "raw", hexToBytes(hexKey), "AES-GCM", false, ["decrypt"]
+    );
+    const plainBuf = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: nonce }, cryptoKey, ciphertext
+    );
+    return JSON.parse(new TextDecoder().decode(plainBuf));
+    }
+  
+    async function route() {
+        if (!refParam) { showFallback(); return; }
+
+        let isUrl = false;
+        try {
+            const u = new URL(refParam);
+            isUrl = u.protocol === 'http:' || u.protocol === 'https:';
+        } catch (_) { isUrl = false; }
+
+        if (isUrl) {
+            loadIntoFrame(refParam);
+            return;
+        }
+
+        loadingUI.classList.add('show');
+
+        try {
+            const res      = await fetch(MANIFEST_URL, { cache: 'no-store' });
+            if (!res.ok) throw new Error('Manifest fetch failed');
+            const encryptedText = await res.text();
+            const manifest = await decryptManifest(encryptedText, ENCRYPTION_KEY_HEX);
+            const entry    = manifest[refParam];
+            if (!entry) throw new Error(`Key "${refParam}" not found`);
+
+            if (entry.type === 'direct') {
+                loadIntoFrame(entry.url);
+            } else {
+                console.warn(`Key "${refParam}" is type "${entry.type}", expected "direct"`);
+                showFallback();
+            }
+        } catch (e) {
+            console.error('Manifest resolution failed:', e);
+            showFallback();
+        }
+    }
+
+    route();
+
+    window.addEventListener('blur', () => {
+        setTimeout(() => {
+            if (document.activeElement === contentFrame) {
+                const playerContainer = document.getElementById('player-container');
+                playerContainer.classList.add('interaction-flash');
+                setTimeout(() => playerContainer.classList.remove('interaction-flash'), 400);
+            }
+        }, 50);
+    });
+    
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const playerContainer = document.getElementById('player-container');
+
+    fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            // Enter Fullscreen
+            if (playerContainer.requestFullscreen) {
+                playerContainer.requestFullscreen();
+            } else if (playerContainer.webkitRequestFullscreen) {
+                playerContainer.webkitRequestFullscreen();
+            } else if (playerContainer.msRequestFullscreen) { 
+                playerContainer.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i> <span>Exit Fullscreen</span>';
+            
+            // MAGIC: Attempt to force Landscape orientation on mobile devices
+            try {
+                if (screen.orientation && screen.orientation.lock) {
+                    // We wrap in a catch because desktops and iOS will reject this
+                    screen.orientation.lock('landscape').catch((err) => {
+                        console.warn('Orientation lock not supported or denied:', err);
+                    });
+                }
+            } catch (e) {}
+            
+        } else {
+            // UI Update
+            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i> <span>Fullscreen</span>';
+            
+            // MAGIC: Unlock the orientation when leaving fullscreen
+            try {
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            } catch (e) {}
+        }
+    });
+    
+    
+    // ── 4. CHAT CONTROL PANEL ────────────────────────────────────────────────
+    const chatUrl     = "https://ytvs-frame.pages.dev/discuss";
+    const commBtn     = document.getElementById('community-btn');
+    const commFrame   = document.getElementById('interaction-frame');
+    let isCommActive  = false;
+
+    commBtn.addEventListener('click', () => {
+        if (!isCommActive) {
+            commFrame.src          = chatUrl;
+            commFrame.style.display = "block";
+            commBtn.innerHTML      = '<i class="fas fa-times"></i> Close Chat';
+            isCommActive           = true;
+        } else {
+            commFrame.style.display = "none";
+            commBtn.innerHTML       = '<i class="fas fa-comments"></i> Chat';
+            isCommActive            = false;
+        }
+    });
+
+    // ── Change Link button ────────────────────────
+const changeLinkBtn = document.getElementById('change-link-btn');
+changeLinkBtn.addEventListener('click', function() {
+    const params = new URLSearchParams(window.location.search);
+    const returnUrl = params.get('return');
+    if (returnUrl) {
+        window.location.href = decodeURIComponent(returnUrl);
+    } else {
+        window.location.href = "https://www.onotv.me";
+    }
+});
+
+    // ── 5. THEME SWAP MECHANISM ──────────────────────────────────────────────
+const themeBtn = document.getElementById('theme-btn');
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeBtn.innerHTML = isDark
+            ? '<i class="fas fa-sun"></i> <span>Light</span>'
+            : '<i class="fas fa-moon"></i> <span>Dark</span>';
+    });
+}
+
+    // ── 6. SYNC / FORCE REFRESH ──────────────────────────────────────────────
+    document.getElementById('sync-btn').addEventListener('click', () => location.reload());
+
+    // ── 7. SHARE WITH FAMILY & FRIENDS ───────────────────────────────────────
+    const SHARE_LINK = "https://www.yonotvs.com";
+    const shareBtn       = document.getElementById('share-btn');
+    const shareModal      = document.getElementById('share-modal');
+    const shareLinkInput  = document.getElementById('share-link-input');
+    const closeShareBtn   = document.getElementById('close-share-btn');
+    const copyShareBtn    = document.getElementById('copy-share-btn');
+
+    function openShareModal() {
+        shareLinkInput.value = SHARE_LINK;
+        shareModal.classList.add('active');
+        shareLinkInput.focus();
+        shareLinkInput.select();
+    }
+
+    function closeShareModal() {
+        shareModal.classList.remove('active');
+    }
+
+    shareBtn.addEventListener('click', openShareModal);
+    closeShareBtn.addEventListener('click', closeShareModal);
+
+    shareModal.addEventListener('click', (e) => {
+        if (e.target === shareModal) closeShareModal();
+    });
+
+
+    copyShareBtn.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(shareLinkInput.value);
+        } catch (err) {
+            shareLinkInput.select();
+            document.execCommand('copy');
+        }
+        const original = copyShareBtn.textContent;
+        copyShareBtn.textContent = 'Copied!';
+        setTimeout(() => { copyShareBtn.textContent = original; }, 1500);
+    });
+    
+</script>
+
+</body>
+</html>

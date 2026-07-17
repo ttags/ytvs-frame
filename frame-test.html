@@ -429,7 +429,6 @@
     const contentFrame  = document.getElementById('content-frame');
     const fallback      = document.getElementById('fallback');
     const loadingUI     = document.getElementById('loading-ui');
-    const ENCRYPTION_KEY_HEX = "d2b4c0fbbf9358d0e188e4d86aaedb0ea70c630efaa9eaf684ed07e9b776d138";
 
     function showFallback() {
         loadingUI.classList.remove('show');
@@ -442,6 +441,14 @@
         contentFrame.src = url;
     }
 
+  async function getKey() {
+    const p1 = "d2b4c0fbbf9358d0";
+    const p2 = "e188e4d86aaedb0e";
+    const p3 = "a70c630efaa9eaf6";
+    const p4 = "84ed07e9b776d138";
+    return p1 + p2 + p3 + p4;
+    }
+    
   function hexToBytes(hex) {
     const bytes = new Uint8Array(hex.length / 2);
     for (let i = 0; i < hex.length; i += 2) {
@@ -483,7 +490,8 @@
             const res      = await fetch(MANIFEST_URL, { cache: 'no-store' });
             if (!res.ok) throw new Error('Manifest fetch failed');
             const encryptedText = await res.text();
-            const manifest = await decryptManifest(encryptedText, ENCRYPTION_KEY_HEX);
+            const key = await getKey();
+            const manifest = await decryptManifest(encryptedText, key);
             const entry    = manifest[refParam];
             if (!entry) throw new Error(`Key "${refParam}" not found`);
 

@@ -12,8 +12,12 @@
         border: none;
         width: 100%;
         height: 100vh;
-        /* Inverts light UI into dark theme while preserving natural avatar/icon hues */
-        filter: invert(0.92) hue-rotate(180deg);
+        
+        /* 1. Force YouTube to render standard Light UI internally */
+        color-scheme: light; 
+        
+        /* 2. Invert pure light UI into crisp Dark UI with readable white text */
+        filter: invert(0.92) hue-rotate(180deg) contrast(1.15) brightness(1.05);
       }
     </style>
   </head>

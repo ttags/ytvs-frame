@@ -261,7 +261,7 @@
         @media (max-width: 600px) {
             .frame-box { height: 220px; aspect-ratio: auto; }
             .frame-box:fullscreen { height: 100vh; }
-        }
+        }        
     </style>
 </head>
 <body class="dark-mode">
@@ -286,6 +286,17 @@
             sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
         </iframe>
 
+<div id="click-shield">
+    <div class="shield-brand">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1YQTuxcQgr6q0XKRBCEsTzTDoEKiin9r3yvGgoWvAodXNjeU4QvhiYQw3TDwGmkgAx5nI0NfDuHvEn941gG5SgpHkmPfMfwJwNErA4Zidx3ykPm4Vn7ekB7o51HhqMIYM8fg7qnhlWQUHlVLSVuqjzne_uwd_aqhItqEr8-WJegszIESdLlz7K6BHU-bH/s1600/Yaki%20TV%201.png"
+             alt="Yaki TV">
+        <span class="shield-brand-live">● LIVE</span>
+    </div>
+    <button id="audio-toggle-btn" type="button" title="Start background audio">
+        <span class="audio-icon">▶︎</span>
+        <span class="audio-label">Play with sound</span>
+    </button>
+</div>
 
         <div id="loading-ui">
             <div class="spinner"></div>
@@ -326,6 +337,11 @@
         <p><strong>Compliance Notice:</strong> Verified takedown requests are honored promptly: email contact@yakitv.com</p>
     </footer>
 </div>
+
+<!-- ── Background beat (unlocked-mode ambience) ─────────────────────────── -->
+<audio id="bg-beat" loop preload="none" playsinline style="display:none;">
+    <source src="https://cdn.pixabay.com/audio/2022/03/13/audio_e584bba3a0.mp3" type="audio/mpeg">
+</audio>
 
 <!-- ── Share Modal Markup ───────────────────────────────────────────────── -->
 <div class="modal-overlay" id="share-modal">
@@ -546,6 +562,14 @@ async function getKey() {
         } catch (_) { isUrl = false; }
 
         if (isUrl) {
+            // Raw ?ref=https://… passthrough has no manifest entry to
+            // consult — always enforce the sandbox and never enter
+            // unlocked-mode, so this path can't be abused to bypass it.
+            contentFrame.setAttribute(
+                'sandbox',
+                'allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock'
+            );
+            document.body.classList.remove('unlocked-mode');
             loadIntoFrame(refParam);
             return;
         }
@@ -562,6 +586,19 @@ async function getKey() {
             if (!entry) throw new Error(`Key "${refParam}" not found`);
 
             if (entry.type === 'direct') {
+                const useSandbox = entry.sandboxed !== false;
+
+                if (useSandbox) {
+                    contentFrame.setAttribute(
+                        'sandbox',
+                        'allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock'
+                    );
+                    document.body.classList.remove('unlocked-mode');
+                } else {
+                    contentFrame.removeAttribute('sandbox');
+                    document.body.classList.add('unlocked-mode');
+                }
+
                 loadIntoFrame(entry.url);
             } else {
                 console.warn(`Key "${refParam}" is type "${entry.type}", expected "direct"`);
@@ -575,10 +612,8 @@ async function getKey() {
 
     route();
 
-</script>
-    
-    <script>    
-    window.addEventListener('blur', () => {
+
+window.addEventListener('blur', () => {
         setTimeout(() => {
             if (document.activeElement === contentFrame) {
                 const playerContainer = document.getElementById('player-container');
@@ -720,7 +755,106 @@ if (themeBtn) {
         copyShareBtn.textContent = 'Copied!';
         setTimeout(() => { copyShareBtn.textContent = original; }, 1500);
     });
-    
+
+// ── Shield + audio control (styles injected at runtime) ──────────────
+(function initShield() {
+    const beat = document.getElementById('bg-beat');
+    const shield = document.getElementById('click-shield');
+    const btn = document.getElementById('audio-toggle-btn');
+    if (!beat || !shield || !btn) return;
+
+    (function _injectStyles() {
+        const css = [
+            '#click-shield{display:none;position:absolute;inset:0;z-index:5;',
+            'background:rgba(0,0,0,.72);cursor:default;',
+            'transition:background .4s ease}',
+            'body.unlocked-mode #click-shield{display:flex;align-items:center;',
+            'justify-content:center}',
+            'body.unlocked-mode.audio-on #click-shield{background:transparent}',
+
+            '.shield-brand{position:absolute;top:0;left:0;right:0;',
+            'display:flex;align-items:center;justify-content:center;gap:10px;',
+            'padding:12px 18px;pointer-events:none;',
+            'background:linear-gradient(180deg,rgba(0,0,0,.75),rgba(0,0,0,0));',
+            'opacity:1;transition:opacity .35s ease}',
+            '.shield-brand img{height:26px;width:auto;border-radius:999px;',
+            'filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}',
+            '.shield-brand-live{font-size:11px;font-weight:800;',
+            'letter-spacing:1.5px;color:#ff4a4a;',
+            'text-shadow:0 0 8px rgba(255,74,74,.6)}',
+            '',
+
+            '#audio-toggle-btn{background:rgba(0,0,0,.78);color:#fff;',
+            'border:2px solid rgba(255,255,255,.22);padding:14px 26px;',
+            'border-radius:999px;font-size:14px;font-weight:700;',
+            "font-family:inherit;cursor:pointer;display:flex;",
+            'align-items:center;gap:10px;letter-spacing:.3px;',
+            'transition:all .25s ease;backdrop-filter:blur(10px);',
+            '-webkit-backdrop-filter:blur(10px)}',
+            '#audio-toggle-btn:hover{border-color:rgba(255,255,255,.45);',
+            'transform:scale(1.05)}',
+            '#audio-toggle-btn:active{transform:scale(.98)}',
+
+            'body.unlocked-mode.audio-on #audio-toggle-btn{position:absolute;',
+            'top:12px;right:12px;padding:8px 14px;font-size:12px;',
+            'background:rgba(0,0,0,.55);border-width:1px;',
+            'backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}',
+        ].join('');
+
+        const tag = document.createElement('style');
+        tag.id = 'ytvs-shield-styles';
+        tag.textContent = css;
+        document.head.appendChild(tag);
+    })();
+
+    // ── Wire the audio toggle ────────────────────────────────────────
+    const icon  = btn.querySelector('.audio-icon');
+    const label = btn.querySelector('.audio-label');
+    let audioOn = false;
+
+    function applyState(on) {
+        audioOn = on;
+        if (on) {
+            document.body.classList.add('audio-on');
+            beat.play().catch(() => {});
+            if (icon)  icon.textContent  = '🔇';
+            if (label) label.textContent = 'Mute';
+            btn.title = 'Pause background audio';
+        } else {
+            document.body.classList.remove('audio-on');
+            beat.pause();
+            try { beat.currentTime = 0; } catch (e) {}
+            if (icon)  icon.textContent  = '🔊';
+            if (label) label.textContent = 'Play with sound';
+            btn.title = 'Start background audio';
+        }
+    }
+
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        applyState(!audioOn);
+    });
+
+    // If the beat fails to load (bad URL, wrong MIME), reflect it in the
+    // button instead of silently showing "playing" with no sound.
+    beat.addEventListener('error', () => {
+        if (audioOn) applyState(false);
+        btn.disabled = true;
+        btn.title = 'Background audio unavailable';
+    });
+
+    applyState(false);
+})();
+
+    // ── Navigation guard for no-sandbox iframes ──────────────────────────
+    window.addEventListener('beforeunload', (e) => {
+        if (!document.body.classList.contains('unlocked-mode')) return;
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+    });
+
 </script>
 
 </body>

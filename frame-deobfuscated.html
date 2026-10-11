@@ -290,7 +290,7 @@
     <div class="shield-brand">
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1YQTuxcQgr6q0XKRBCEsTzTDoEKiin9r3yvGgoWvAodXNjeU4QvhiYQw3TDwGmkgAx5nI0NfDuHvEn941gG5SgpHkmPfMfwJwNErA4Zidx3ykPm4Vn7ekB7o51HhqMIYM8fg7qnhlWQUHlVLSVuqjzne_uwd_aqhItqEr8-WJegszIESdLlz7K6BHU-bH/s1600/Yaki%20TV%201.png"
              alt="Yaki TV">
-        <span class="shield-brand-live">● LIVE</span>
+        <span class="shield-brand-live">● Yaki TV</span>
     </div>
     <button id="audio-toggle-btn" type="button" title="Start background audio">
         <span class="audio-icon">▶︎</span>
@@ -338,9 +338,9 @@
     </footer>
 </div>
 
-<!-- ── Background beat (unlocked-mode ambience) ─────────────────────────── -->
+
 <audio id="bg-beat" loop preload="none" playsinline style="display:none;">
-    <source src="https://cdn.pixabay.com/audio/2022/03/13/audio_e584bba3a0.mp3" type="audio/mpeg">
+    <source src="https://cdn.pixabay.com/audio/2026/01/29/audio_7866a4ba81.mp3" type="audio/mpeg">
 </audio>
 
 <!-- ── Share Modal Markup ───────────────────────────────────────────────── -->
@@ -766,21 +766,23 @@ if (themeBtn) {
     (function _injectStyles() {
         const css = [
             '#click-shield{display:none;position:absolute;inset:0;z-index:5;',
-            'background:rgba(0,0,0,.72);cursor:default;',
+            'background:rgba(0,0,0,.90);cursor:default;',
             'transition:background .4s ease}',
             'body.unlocked-mode #click-shield{display:flex;align-items:center;',
             'justify-content:center}',
             'body.unlocked-mode.audio-on #click-shield{background:transparent}',
-
+            
             '.shield-brand{position:absolute;top:0;left:0;right:0;',
-            'display:flex;align-items:center;justify-content:center;gap:10px;',
-            'padding:12px 18px;pointer-events:none;',
-            'background:linear-gradient(180deg,rgba(0,0,0,.75),rgba(0,0,0,0));',
-            'opacity:1;transition:opacity .35s ease}',
+			'display:flex;align-items:center;justify-content:center;gap:10px;',
+			'padding:14px 18px;pointer-events:none;min-height:45px;box-sizing:border-box;',
+			'background:rgba(0,0,0,.94);',
+			'border-bottom:1px solid rgba(255,255,255,.06);',
+			'opacity:1;transition:opacity .35s ease}',
+            
             '.shield-brand img{height:26px;width:auto;border-radius:999px;',
             'filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}',
-            '.shield-brand-live{font-size:11px;font-weight:800;',
-            'letter-spacing:1.5px;color:#ff4a4a;',
+            '.shield-brand-live{font-size:12px;font-weight:800;',
+            'letter-spacing:1.5px;color:#FFF;',
             'text-shadow:0 0 8px rgba(255,74,74,.6)}',
             '',
 
@@ -795,10 +797,13 @@ if (themeBtn) {
             'transform:scale(1.05)}',
             '#audio-toggle-btn:active{transform:scale(.98)}',
 
-            'body.unlocked-mode.audio-on #audio-toggle-btn{position:absolute;',
-            'top:12px;right:12px;padding:8px 14px;font-size:12px;',
-            'background:rgba(0,0,0,.55);border-width:1px;',
-            'backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}',
+'body.unlocked-mode.audio-on #audio-toggle-btn{position:absolute;',
+'top:14px;right:14px;padding:6px 10px;font-size:14px;',
+'background:rgba(0,0,0,.4);border-width:1px;border-color:transparent;',
+'width:32px;height:32px;display:flex;align-items:center;justify-content:center;}',
+'body.unlocked-mode.audio-on #audio-toggle-btn .audio-label{display:none}',
+            
+            
         ].join('');
 
         const tag = document.createElement('style');

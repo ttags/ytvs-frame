@@ -339,7 +339,7 @@
 </div>
 
 
-<audio id="bg-beat" loop preload="none" playsinline style="display:none;">
+<audio id="bg-beat" preload="none" playsinline style="display:none;">
     <source src="https://cdn.pixabay.com/audio/2026/01/29/audio_7866a4ba81.mp3" type="audio/mpeg">
 </audio>
 
@@ -762,6 +762,13 @@ if (themeBtn) {
     const shield = document.getElementById('click-shield');
     const btn = document.getElementById('audio-toggle-btn');
     if (!beat || !shield || !btn) return;
+
+	// - loop with first 3 seconds skip for seamless transition
+    const skipTime = 3;
+    beat.addEventListener('ended', () => {
+        beat.currentTime = skipTime;
+        beat.play().catch(() => {});
+    });
 
     (function _injectStyles() {
         const css = [

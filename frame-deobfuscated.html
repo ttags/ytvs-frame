@@ -339,9 +339,7 @@
 </div>
 
 
-<audio id="bg-beat" preload="none" playsinline style="display:none;">
-    <source src="https://cdn.pixabay.com/audio/2026/01/29/audio_7866a4ba81.mp3" type="audio/mpeg">
-</audio>
+<audio id="bg-beat" playsinline style="display:none;"></audio>
 
 <!-- ── Share Modal Markup ───────────────────────────────────────────────── -->
 <div class="modal-overlay" id="share-modal">
@@ -763,12 +761,46 @@ if (themeBtn) {
     const btn = document.getElementById('audio-toggle-btn');
     if (!beat || !shield || !btn) return;
 
-	// - loop with first 3 seconds skip for seamless transition
-    const skipTime = 3;
-    beat.addEventListener('ended', () => {
-        beat.currentTime = skipTime;
-        beat.play().catch(() => {});
+// ── Crossfade loop (2 layers, one audible at a time) ─────────────
+const URL_SRC = "https://cdn.pixabay.com/audio/2026/01/29/audio_7866a4ba81.mp3";	
+const VOL = 0.6, FADE = 5;
+const beat2 = new Audio();            // no src yet = no download
+beat2.playsInline = true;
+const layers = [beat, beat2];
+let cur = 0, timer = null;
+
+function tick() {
+    const x = layers[cur], y = layers[1 - cur];
+    const left = x.duration - x.currentTime;
+    if (!(left <= FADE)) return;      // not near the end (or still loading)
+
+    if (y.paused) { y.currentTime = 0; y.volume = 0; y.play().catch(() => {}); }
+
+    const p = 1 - left / FADE;        // 0 -> 1 during the fade
+    x.volume = VOL * Math.cos(p * Math.PI / 2);
+    y.volume = VOL * Math.sin(p * Math.PI / 2);
+
+    if (p >= 1 || x.ended) { x.pause(); y.volume = VOL; cur = 1 - cur; }
+}
+
+function startLoop() {
+	layers.forEach(el => {            // load both on demand, first time only
+        if (!el.src) { el.preload = 'auto'; el.src = URL_SRC; }
     });
+    cur = 0;
+    try { beat.currentTime = 0; } catch (e) {}
+    beat.volume = VOL;
+    beat.play().catch(() => {});
+    timer = setInterval(tick, 50);
+}
+
+function stopLoop() {
+    clearInterval(timer); timer = null;
+    layers.forEach(el => {
+        el.pause();
+        try { el.currentTime = 0; } catch (e) {}
+    });
+}
 
     (function _injectStyles() {
         const css = [
@@ -828,13 +860,13 @@ if (themeBtn) {
         audioOn = on;
         if (on) {
             document.body.classList.add('audio-on');
-            beat.play().catch(() => {});
+            startLoop(); 
             if (icon)  icon.textContent  = '🔇';
             if (label) label.textContent = 'Mute';
             btn.title = 'Pause background audio';
         } else {
             document.body.classList.remove('audio-on');
-            beat.pause();
+            stopLoop();
             try { beat.currentTime = 0; } catch (e) {}
             if (icon)  icon.textContent  = '🔊';
             if (label) label.textContent = 'Play with sound';
@@ -848,13 +880,11 @@ if (themeBtn) {
         applyState(!audioOn);
     });
 
-    // If the beat fails to load (bad URL, wrong MIME), reflect it in the
-    // button instead of silently showing "playing" with no sound.
-    beat.addEventListener('error', () => {
-        if (audioOn) applyState(false);
-        btn.disabled = true;
-        btn.title = 'Background audio unavailable';
-    });
+[beat, beat2].forEach(el => el.addEventListener('error', () => {
+    if (audioOn) applyState(false);
+    btn.disabled = true;
+    btn.title = 'Background audio unavailable';
+}));
 
     applyState(false);
 })();

@@ -1,1127 +1,933 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="robots" content="noindex, nofollow">
-<meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#000000">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Yaki TV — Stream</title>
-<link href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1YQTuxcQgr6q0XKRBCEsTzTDoEKiin9r3yvGgoWvAodXNjeU4QvhiYQw3TDwGmkgAx5nI0NfDuHvEn941gG5SgpHkmPfMfwJwNErA4Zidx3ykPm4Vn7ekB7o51HhqMIYM8fg7qnhlWQUHlVLSVuqjzne_uwd_aqhItqEr8-WJegszIESdLlz7K6BHU-bH/s1600/Yaki%20TV%201.png" rel="icon" type="image/x-icon">
-<style>
-/* ═══════════════════════════════════════════════════════════
-   TOKENS — Apple system palette
-   ═══════════════════════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; }
-* { margin: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Information Sources | Yaki TV</title>
+    <link href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1YQTuxcQgr6q0XKRBCEsTzTDoEKiin9r3yvGgoWvAodXNjeU4QvhiYQw3TDwGmkgAx5nI0NfDuHvEn941gG5SgpHkmPfMfwJwNErA4Zidx3ykPm4Vn7ekB7o51HhqMIYM8fg7qnhlWQUHlVLSVuqjzne_uwd_aqhItqEr8-WJegszIESdLlz7K6BHU-bH/s1600/Yaki%20TV%201.png" rel="icon" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-:root {
-  --accent: #7C5CFF;
-  --accent-hover: #8E72FF;
-  --accent-active: #6B4BEB;
+    <style>
+        :root {
+            --primary: #007bff;
+            --bg-body: #f8fafc;
+            --container-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --btn-gray: #f1f5f9;
+        }
 
-  /* Dark (default) */
-  --bg: #000;
-  --surface-1: #1C1C1E;
-  --surface-2: #2C2C2E;
-  --surface-3: #3A3A3C;
-  --glass: rgba(28, 28, 30, .72);
-  --glass-border: rgba(255, 255, 255, .12);
+        .dark-mode {
+            --bg-body: #0f172a;
+            --container-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --btn-gray: #334155;
+        }
 
-  --text-1: #FFFFFF;
-  --text-2: rgba(255, 255, 255, .64);
-  --text-3: rgba(255, 255, 255, .4);
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: 0.3s ease;
+        }
 
-  --border: rgba(255, 255, 255, .08);
-  --border-strong: rgba(255, 255, 255, .16);
+        .app-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px 15px;
+            padding-bottom: 90px;
+        }
 
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, .4);
-  --shadow-lg: 0 24px 60px rgba(0, 0, 0, .55);
+        .brand-header { text-align: center; margin-bottom: 10px; }
+        .brand-logo { max-height: 60px; border-radius: 999px; width: auto; }
 
-  --r-sm: 8px;  --r-md: 12px;  --r-lg: 18px;
-  --r-xl: 24px; --r-2xl: 32px; --r-pill: 999px;
+        .toolbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
 
-  --ease: cubic-bezier(.32, .72, 0, 1);
-  --ease-out: cubic-bezier(.22, .61, .36, 1);
-}
+        .btn-utility {
+            background: var(--btn-gray);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
 
-body.light-mode {
-  --bg: #F5F5F7;
-  --surface-1: #FFFFFF;
-  --surface-2: #F2F2F7;
-  --surface-3: #E5E5EA;
-  --glass: rgba(255, 255, 255, .72);
-  --glass-border: rgba(0, 0, 0, .08);
+        .btn-primary { background: var(--primary); color: white; border: none; }
 
-  --text-1: #1D1D1F;
-  --text-2: rgba(29, 29, 31, .64);
-  --text-3: rgba(29, 29, 31, .4);
+        /* Player overlay controls (glass) */
+        .player-ctrl {
+            position: absolute;
+            top: 12px; right: 12px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: rgba(20, 20, 22, .65);
+            -webkit-backdrop-filter: blur(16px) saturate(140%);
+            backdrop-filter: blur(16px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, .14);
+            color: #fff;
+            display: grid; place-items: center;
+            z-index: 15;
+            transition: background-color .2s, transform .15s;
+            cursor: pointer;
+        }
+        .player-ctrl:hover  { background: rgba(20, 20, 22, .85); }
+        .player-ctrl:active { transform: scale(.9); }
+        .frame-box:fullscreen .player-ctrl {
+            top: 14px; right: 14px;
+            width: 44px; height: 44px;
+        }
 
-  --border: rgba(0, 0, 0, .08);
-  --border-strong: rgba(0, 0, 0, .16);
+        /* ── Player Box Layout ──────────────────────────────────────────────── */
+        .frame-box {
+            position: relative;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid var(--border-color);
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
 
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, .08);
-  --shadow-lg: 0 24px 60px rgba(0, 0, 0, .12);
-}
+        /* Subtle glowing activation boundary when the sandboxed frame absorbs a tap */
+        .frame-box.interaction-flash {
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.6);
+            border-color: #007bff;
+        }
 
-html { -webkit-text-size-adjust: 100%; }
+        .frame-box:fullscreen {
+            border-radius: 0;
+            border: none;
+            aspect-ratio: auto;
+        }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text-1);
-  min-height: 100dvh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -.01em;
-  overflow-x: hidden;
-  transition: background-color .4s var(--ease-out), color .4s var(--ease-out);
-}
+        #content-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            position: relative;
+            z-index: 1;
+            background: #000;
+        }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(ellipse 90% 55% at 50% -12%, rgba(124, 92, 255, .09), transparent 65%);
-}
-body.light-mode::before {
-  background: radial-gradient(ellipse 90% 55% at 50% -12%, rgba(124, 92, 255, .10), transparent 65%);
-}
+        /* ── Loading Interface ───────────────────────────────────────────────── */
+        #loading-ui {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: #000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            z-index: 20;
+        }
 
-button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; padding: 0; -webkit-tap-highlight-color: transparent; }
-a { color: inherit; text-decoration: none; }
+        #loading-ui.show { display: flex; }
 
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(255,255,255,0.15);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
 
-.hidden { display: none !important; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ═══════════════════════════════════════════════════════════
-   SHELL
-   ═══════════════════════════════════════════════════════════ */
-.app {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 0 20px 100px;
-  padding-top: env(safe-area-inset-top, 0);
-}
-@media (max-width: 640px) { .app { padding: 0 16px 88px; } }
+        /* ── Error Fallbacks ─────────────────────────────────────────────────── */
+        .fallback-ui {
+            display: none;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 20;
+        }
 
-/* ── Top bar ─────────────────────────────────────────────── */
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 18px 0 22px;
-}
+        /* ── Interface Notification Alerts ───────────────────────────────────── */
+        .status-alert {
+            display:none;
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            border: 1px solid #bfdbfe;
+            text-align: center;
+        }
+        .dark-mode .status-alert { background: #1e293b; color: #60a5fa; border-color: #3b82f6; }
 
-.back-btn {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  display: grid; place-items: center;
-  color: var(--text-1);
-  flex-shrink: 0;
-  transition: background-color .2s var(--ease-out), transform .15s var(--ease-out);
-}
-.back-btn:hover  { background: var(--surface-2); }
-.back-btn:active { transform: scale(.92); }
+        /* ── Chat FAB + DRAWER ───────────────────────────────────────────────── */
+        .chat-fab {
+            position: fixed;
+            bottom: 24px; right: 24px;
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: grid; place-items: center;
+            box-shadow: 0 8px 28px -6px rgba(0, 123, 255, .6), 0 4px 16px rgba(0,0,0,.4);
+            z-index: 50;
+            font-size: 22px;
+            border: none;
+            cursor: pointer;
+            transition: transform .35s var(--ease-out, cubic-bezier(.22,.61,.36,1)), box-shadow .3s, background-color .2s;
+        }
+        .chat-fab:hover {
+            background: #0069d9;
+            transform: translateY(-2px);
+        }
+        .chat-fab:active { transform: scale(.9); }
+        .chat-fab.is-closed { transform: scale(0); pointer-events: none; }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  flex: 1;
-  min-width: 0;
-  border-radius: var(--r-md);
-}
-.brand-logo {
-  width: 36px; height: 36px;
-  border-radius: 10px;
-  object-fit: cover;
-  box-shadow: 0 0 0 1px var(--border);
-  flex-shrink: 0;
-}
-.brand-name {
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -.02em;
-  color: var(--text-1);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+        .chat-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0, 0, 0, .5);
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+            z-index: 60;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s ease;
+        }
+        .chat-overlay.open { opacity: 1; pointer-events: auto; }
 
-.topbar-actions { display: flex; gap: 4px; flex-shrink: 0; }
+        .chat-drawer {
+            position: fixed;
+            top: 0; right: 0; bottom: 0;
+            width: 420px;
+            max-width: 100vw;
+            background: var(--container-bg);
+            z-index: 70;
+            transform: translateX(100%);
+            transition: transform .45s cubic-bezier(.32,.72,0,1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: -20px 0 60px rgba(0, 0, 0, .5);
+            border-left: 1px solid var(--border-color);
+        }
+        .chat-drawer.open { transform: translateX(0); }
 
-.icon-btn {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  display: grid; place-items: center;
-  color: var(--text-2);
-  transition: background-color .2s var(--ease-out), color .2s var(--ease-out), transform .15s var(--ease-out);
-}
-.icon-btn:hover  { background: var(--surface-2); color: var(--text-1); }
-.icon-btn:active { transform: scale(.92); }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            background: var(--container-bg);
+        }
+        .chat-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .chat-close {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: grid; place-items: center;
+            color: var(--text-muted);
+            background: var(--bg-body);
+            border: none;
+            cursor: pointer;
+            transition: background-color .2s;
+        }
+        .chat-close:hover { background: var(--border-color); color: var(--text-main); }
 
-/* ═══════════════════════════════════════════════════════════
-   PLAYER
-   ═══════════════════════════════════════════════════════════ */
-.player {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--r-xl);
-  overflow: hidden;
-  background: #000;
-  box-shadow: var(--shadow-lg);
-  transition: box-shadow .4s var(--ease-out);
-}
-.player:hover { box-shadow: 0 32px 80px rgba(0, 0, 0, .65); }
+        #chat-frame {
+            flex: 1;
+            min-height: 0;
+            width: 100%;
+            border: none;
+            background: var(--container-bg);
+        }
 
-@media (max-width: 640px) {
-  .player { aspect-ratio: 16 / 10; border-radius: var(--r-lg); }
-}
+        @media (max-width: 600px) {
+            .chat-fab { bottom: 20px; right: 20px; width: 52px; height: 52px; }
+            .chat-drawer {
+                top: auto; left: 0; right: 0; bottom: 0;
+                width: 100%;
+                height: 82vh;
+                max-height: 82dvh;
+                transform: translateY(100%);
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+                border-radius: 24px 24px 0 0;
+                box-shadow: 0 -20px 60px rgba(0, 0, 0, .5);
+            }
+            .chat-drawer.open { transform: translateY(0); }
+            .chat-header { position: relative; padding-top: 24px; }
+            .chat-header::before {
+                content: '';
+                position: absolute;
+                top: 8px; left: 50%;
+                transform: translateX(-50%);
+                width: 36px; height: 4px;
+                border-radius: 2px;
+                background: var(--border-color);
+            }
+        }
 
-.player:fullscreen {
-  border-radius: 0;
-  aspect-ratio: auto;
-  width: 100vw; height: 100vh;
-  box-shadow: none;
-}
+        /* ── Share Modal ──────────────────────────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-#content-frame {
-  width: 100%; height: 100%;
-  border: none;
-  display: block;
-  background: #000;
-}
+        .modal-overlay.active { display: flex; }
 
-/* Player overlay controls (glass) */
-.player-ctrl {
-  position: absolute;
-  top: 12px; right: 12px;
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: rgba(20, 20, 22, .65);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  backdrop-filter: blur(16px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, .14);
-  color: #fff;
-  display: grid; place-items: center;
-  z-index: 15;
-  transition: background-color .2s, transform .15s var(--ease-out);
-}
-.player-ctrl:hover  { background: rgba(20, 20, 22, .85); }
-.player-ctrl:active { transform: scale(.9); }
-.player:fullscreen .player-ctrl {
-  top: calc(14px + env(safe-area-inset-top, 0));
-  right: calc(14px + env(safe-area-inset-right, 0));
-  width: 44px; height: 44px;
-}
+        .modal-box {
+            background: var(--container-bg);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+            border: 1px solid var(--border-color);
+        }
 
-.sound-pill {
-  position: absolute;
-  left: 12px; bottom: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  background: rgba(20, 20, 22, .65);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  backdrop-filter: blur(16px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, .14);
-  border-radius: var(--r-pill);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: -.01em;
-  z-index: 15;
-  transition: opacity .5s var(--ease-out), transform .3s var(--ease-out), background-color .2s;
-}
-.sound-pill:hover  { background: rgba(20, 20, 22, .85); }
-.sound-pill:active { transform: scale(.95); }
-.sound-pill.is-hidden { opacity: 0; pointer-events: none; transform: translateY(4px); }
-.sound-pill svg { width: 11px; height: 11px; }
+        .modal-box h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            color: var(--text-main);
+        }
 
-/* Loading */
-.loading {
-  position: absolute; inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 16px;
-  background: #000;
-  z-index: 20;
-  color: rgba(255, 255, 255, .7);
-  font-size: 13px;
-  font-weight: 500;
-}
-.loading.show { display: flex; animation: fadeIn .35s var(--ease-out) both; }
+        .modal-box p {
+            margin: 0 0 14px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
 
-.spinner {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0deg, transparent 60deg, #fff 360deg);
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 0);
-  mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 0);
-  animation: spin 1s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #share-link-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-size: 13px;
+            box-sizing: border-box;
+            margin-bottom: 14px;
+        }
 
-/* Fallback */
-.fallback {
-  position: absolute; inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  padding: 24px;
-  background: #000;
-  z-index: 20;
-  color: #fff;
-}
-.fallback.show { display: flex; animation: fadeIn .35s var(--ease-out) both; }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
 
-.fallback-icon {
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .08);
-  display: grid; place-items: center;
-  margin-bottom: 20px;
-  color: rgba(255, 255, 255, .6);
-}
-.fallback-title {
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -.02em;
-  margin-bottom: 6px;
-}
-.fallback-sub {
-  font-size: 13px;
-  color: rgba(255, 255, 255, .55);
-  max-width: 340px;
-  line-height: 1.5;
-  margin-bottom: 22px;
-}
-.fallback-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
+        .modal-actions button {
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--btn-gray);
+            color: var(--text-main);
+        }
 
-.btn-secondary, .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 18px;
-  border-radius: var(--r-pill);
-  font-size: 13px;
-  font-weight: 600;
-  transition: background-color .2s var(--ease-out), transform .15s var(--ease-out);
-}
-.btn-secondary {
-  background: rgba(255, 255, 255, .1);
-  border: 1px solid rgba(255, 255, 255, .15);
-  color: #fff;
-}
-.btn-secondary:hover  { background: rgba(255, 255, 255, .18); }
-.btn-secondary:active { transform: scale(.96); }
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-}
-.btn-primary:hover  { background: var(--accent-hover); }
-.btn-primary:active { transform: scale(.96); background: var(--accent-active); }
+        .modal-actions button.primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
 
-/* ═══════════════════════════════════════════════════════════
-   FOOTER
-   ═══════════════════════════════════════════════════════════ */
-.footer {
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-  font-size: 11.5px;
-  line-height: 1.6;
-  color: var(--text-3);
-}
-.footer-title {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--text-2);
-  margin-bottom: 10px;
-}
-.footer p { margin-bottom: 8px; }
-.footer p:last-child { margin-bottom: 0; }
-.footer strong { color: var(--text-2); font-weight: 600; }
-.footer a { color: var(--accent); }
-.footer a:hover { text-decoration: underline; }
+        /* ── Footer Elements ─────────────────────────────────────────────────── */
+        .legal-footer {
+            margin-top: 40px; padding: 25px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px; font-size: 12px;
+            color: var(--text-muted); line-height: 1.6;
+        }
 
-/* ═══════════════════════════════════════════════════════════
-   CHAT FAB + DRAWER
-   ═══════════════════════════════════════════════════════════ */
-.chat-fab {
-  position: fixed;
-  bottom: 24px; right: 24px;
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  display: grid; place-items: center;
-  box-shadow: 0 8px 28px -6px rgba(124, 92, 255, .6), var(--shadow-md);
-  z-index: 50;
-  transition: transform .35s var(--ease), box-shadow .3s var(--ease-out), background-color .2s;
-}
-.chat-fab:hover {
-  background: var(--accent-hover);
-  box-shadow: 0 12px 36px -6px rgba(124, 92, 255, .75), var(--shadow-md);
-  transform: translateY(-1px);
-}
-.chat-fab:active { transform: scale(.9); }
-.chat-fab.is-closed { transform: scale(0); pointer-events: none; }
+        .legal-title {
+            display: block; font-size: 14px; font-weight: 700;
+            color: var(--text-main); margin-bottom: 12px; text-transform: uppercase;
+        }
 
-@media (max-width: 640px) {
-  .chat-fab {
-    bottom: calc(20px + env(safe-area-inset-bottom, 0));
-    right: 20px;
-    width: 52px; height: 52px;
-  }
-}
-
-.chat-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0, 0, 0, .5);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  z-index: 60;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .3s var(--ease-out);
-}
-.chat-overlay.open { opacity: 1; pointer-events: auto; }
-
-.chat-drawer {
-  position: fixed;
-  top: 0; right: 0; bottom: 0;
-  width: 420px;
-  max-width: 100vw;
-  background: var(--surface-1);
-  z-index: 70;
-  transform: translateX(100%);
-  transition: transform .45s var(--ease);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: -20px 0 60px rgba(0, 0, 0, .5);
-  border-left: 1px solid var(--border);
-}
-.chat-drawer.open { transform: translateX(0); }
-
-.chat-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.chat-title {
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -.02em;
-}
-.chat-close {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  display: grid; place-items: center;
-  color: var(--text-2);
-  background: var(--surface-2);
-  transition: background-color .2s var(--ease-out), color .2s var(--ease-out);
-}
-.chat-close:hover { background: var(--surface-3); color: var(--text-1); }
-
-#chat-frame {
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  border: none;
-  background: var(--surface-1);
-}
-
-@media (max-width: 640px) {
-  .chat-drawer {
-    top: auto; left: 0; right: 0; bottom: 0;
-    width: 100%;
-    height: 82vh;
-    max-height: 82dvh;
-    transform: translateY(100%);
-    border-left: none;
-    border-top: 1px solid var(--border);
-    border-radius: var(--r-2xl) var(--r-2xl) 0 0;
-    box-shadow: 0 -20px 60px rgba(0, 0, 0, .5);
-  }
-  .chat-drawer.open { transform: translateY(0); }
-  .chat-header { position: relative; padding-top: 22px; }
-  .chat-header::before {
-    content: '';
-    position: absolute;
-    top: 8px; left: 50%;
-    transform: translateX(-50%);
-    width: 36px; height: 4px;
-    border-radius: 2px;
-    background: var(--border-strong);
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   SHARE MODAL
-   ═══════════════════════════════════════════════════════════ */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0, 0, 0, .5);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  z-index: 80;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.modal-overlay.open { display: flex; }
-
-.modal {
-  background: var(--surface-1);
-  border-radius: var(--r-xl);
-  padding: 28px;
-  width: 100%;
-  max-width: 400px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
-  animation: modalIn .35s var(--ease) both;
-}
-@keyframes modalIn {
-  from { opacity: 0; transform: translateY(12px) scale(.96); }
-  to   { opacity: 1; transform: none; }
-}
-.modal-title {
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -.02em;
-  margin-bottom: 6px;
-}
-.modal-desc {
-  font-size: 13px;
-  color: var(--text-2);
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-.modal-input {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: var(--r-md);
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-  color: var(--text-1);
-  font-size: 13px;
-  font-family: inherit;
-  margin-bottom: 20px;
-  transition: border-color .2s var(--ease-out), box-shadow .2s var(--ease-out);
-}
-.modal-input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(124, 92, 255, .2);
-}
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-}
-.btn-text {
-  padding: 10px 16px;
-  border-radius: var(--r-md);
-  color: var(--text-2);
-  font-size: 14px;
-  font-weight: 600;
-  transition: background-color .2s var(--ease-out), color .2s var(--ease-out);
-}
-.btn-text:hover { background: var(--surface-2); color: var(--text-1); }
-.btn-solid {
-  padding: 10px 20px;
-  border-radius: var(--r-md);
-  background: var(--accent);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  transition: background-color .2s var(--ease-out), transform .15s var(--ease-out);
-}
-.btn-solid:hover  { background: var(--accent-hover); }
-.btn-solid:active { transform: scale(.97); }
-
-/* ═══════════════════════════════════════════════════════════
-   TOAST
-   ═══════════════════════════════════════════════════════════ */
-.toast-host {
-  position: fixed;
-  bottom: 96px; left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  pointer-events: none;
-  width: max-content;
-  max-width: calc(100vw - 40px);
-}
-.toast {
-  padding: 10px 18px;
-  border-radius: var(--r-pill);
-  background: rgba(40, 40, 42, .95);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid rgba(255, 255, 255, .1);
-  opacity: 0;
-  transform: translateY(12px) scale(.94);
-  transition: opacity .3s var(--ease-out), transform .3s var(--ease-out);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.toast.show { opacity: 1; transform: none; }
-
-/* ═══════════════════════════════════════════════════════════
-   REDUCED MOTION
-   ═══════════════════════════════════════════════════════════ */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-</style>
+        @media (max-width: 300px) { .btn-utility span { display: none; } }
+        @media (max-width: 600px) {
+            .frame-box { height: 220px; aspect-ratio: auto; }
+            .frame-box:fullscreen { height: 100vh; }
+        }        
+    </style>
 </head>
+<body class="dark-mode">
 
-<body>
+<div class="app-container">
+    <header class="brand-header">
 
-<div class="app">
-  <header class="topbar">
-    <button class="back-btn hidden" id="back-btn" type="button" aria-label="Go back">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
+        <a href="https://www.yakitv.com" id="header-logo-link">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1YQTuxcQgr6q0XKRBCEsTzTDoEKiin9r3yvGgoWvAodXNjeU4QvhiYQw3TDwGmkgAx5nI0NfDuHvEn941gG5SgpHkmPfMfwJwNErA4Zidx3ykPm4Vn7ekB7o51HhqMIYM8fg7qnhlWQUHlVLSVuqjzne_uwd_aqhItqEr8-WJegszIESdLlz7K6BHU-bH/s1600/Yaki%20TV%201.png" alt="Yaki TV Index" class="brand-logo">
+        </a>
+    </header>
 
-    <a class="brand" href="https://www.yakitv.com" aria-label="Yaki TV — home">
-      <img class="brand-logo"
-           src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1YQTuxcQgr6q0XKRBCEsTzTDoEKiin9r3yvGgoWvAodXNjeU4QvhiYQw3TDwGmkgAx5nI0NfDuHvEn941gG5SgpHkmPfMfwJwNErA4Zidx3ykPm4Vn7ekB7o51HhqMIYM8fg7qnhlWQUHlVLSVuqjzne_uwd_aqhItqEr8-WJegszIESdLlz7K6BHU-bH/s1600/Yaki%20TV%201.png"
-           alt="">
-      <span class="brand-name">Yaki TV</span>
-    </a>
-
-    <div class="topbar-actions">
-      <button class="icon-btn" id="share-btn" type="button" aria-label="Share">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-          <polyline points="16 6 12 2 8 6"/>
-          <line x1="12" y1="2" x2="12" y2="15"/>
-        </svg>
-      </button>
-      <button class="icon-btn" id="theme-btn" type="button" aria-label="Toggle theme">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4"/>
-          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-        </svg>
-      </button>
+    <div class="status-alert">
+        <i class="fas fa-info-circle"></i> <b>Yaki TV:</b> This page provides a technical display frame for externally referenced resources.
     </div>
-  </header>
 
-  <main>
-    <section class="player" id="player-container" aria-label="Player">
-      <iframe
-        id="content-frame"
-        title="Content player"
-        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-        allowfullscreen
-        sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
-      </iframe>
+    <main class="frame-box" id="player-container">
+        <iframe
+            id="content-frame"
+            allow="autoplay; fullscreen; encrypted-media"
+            allowfullscreen
+            sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
+        </iframe>
+        
+        <button class="player-ctrl" id="fullscreen-btn" type="button" aria-label="Enter fullscreen">
+            <i class="fas fa-expand"></i>
+        </button>
 
-      <button class="player-ctrl" id="fullscreen-btn" type="button" aria-label="Enter fullscreen">
-        <svg id="fs-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
-          <path d="M21 8V5a2 2 0 0 0-2-2h-3"/>
-          <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
-          <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
-        </svg>
-      </button>
-
-      <button class="sound-pill" id="audio-toggle-btn" type="button" aria-label="Play with sound">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-        <span>Play with sound</span>
-      </button>
-
-      <div class="loading" id="loading-ui" role="status" aria-live="polite">
-        <div class="spinner" aria-hidden="true"></div>
-        <span id="loading-text">Resolving resource…</span>
-      </div>
-
-      <div class="fallback" id="fallback" role="alert">
-        <div class="fallback-icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-        </div>
-        <div class="fallback-title">Resource unavailable</div>
-        <p class="fallback-sub" id="fallback-sub">This stream could not be resolved right now. Please try again.</p>
-        <div class="fallback-actions">
-          <button type="button" class="btn-secondary" id="fallback-back-btn">Back</button>
-          <button type="button" class="btn-primary" id="retry-btn">Retry</button>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <span class="footer-title">Legal &amp; DMCA</span>
-      <p><strong>Operational framework.</strong> This service acts solely as a neutral presentation interface. We do not host, store, or transmit any digital media on our own infrastructure.</p>
-      <p><strong>Rights &amp; trademarks.</strong> All logos, brand names, and third-party trademarks remain the property of their respective owners.</p>
-      <p><strong>Compliance.</strong> Verified takedown requests are honoured promptly — <a href="mailto:contact@yakitv.com">contact@yakitv.com</a></p>
-    </footer>
-  </main>
+<div id="click-shield">
+    <div class="shield-brand">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1YQTuxcQgr6q0XKRBCEsTzTDoEKiin9r3yvGgoWvAodXNjeU4QvhiYQw3TDwGmkgAx5nI0NfDuHvEn941gG5SgpHkmPfMfwJwNErA4Zidx3ykPm4Vn7ekB7o51HhqMIYM8fg7qnhlWQUHlVLSVuqjzne_uwd_aqhItqEr8-WJegszIESdLlz7K6BHU-bH/s1600/Yaki%20TV%201.png"
+             alt="Yaki TV">
+        <span class="shield-brand-live">● Yaki TV</span>
+    </div>
+    <button id="audio-toggle-btn" type="button" title="Start background audio">
+        <span class="audio-icon">▶︎</span>
+        <span class="audio-label">Play with sound</span>
+    </button>
 </div>
+
+        <div id="loading-ui">
+            <div class="spinner"></div>
+            <span>Resolving resource…</span>
+        </div>
+        <div id="fallback" class="fallback-ui">
+            <i class="fas fa-exclamation-triangle fa-2x"></i>
+            <p>Resource temporarily unavailable.</p>
+        </div>
+    </main>
+
+    <div class="toolbar">
+        <button class="btn-utility" id="change-link-btn">
+        <i class="fas fa-exchange-alt"></i> <span>Change Link</span>
+        </button>
+        <button class="btn-utility" id="sync-btn">
+            <i class="fas fa-sync-alt"></i> <span>Refresh</span>
+        </button>
+        <button class="btn-utility" id="share-btn">
+            <i class="fas fa-share-nodes"></i> <span>Share</span>
+        </button>
+    </div>
+
+    <div class="community-section">
+        <iframe id="interaction-frame" title="Discussion Board"
+                data-src="https://www.youtube.com/live_chat?v=Rr6G_PRnfhA&embed_domain=ytvs-frame.pages.dev&dark_theme=1"
+            allow="autoplay; encrypted-media"
+                allowfullscreen></iframe>
+    </div>
+
+    <footer class="legal-footer">
+        <span class="legal-title">Legal Disclaimer & DMCA Policy</span>
+        <p><strong>Operational Framework:</strong> This service acts solely as a neutral presentation interface. We do not host, store, or transmit any digital media on our own infrastructure.</p>
+        <p><strong>Rights & Trademarks:</strong> All logos, brand names, and third-party trademarks remain the property of their respective owners. Users are responsible for compliance with regional regulations.</p>
+        <p><strong>Compliance Notice:</strong> Verified takedown requests are honored promptly: email contact@yakitv.com</p>
+    </footer>
+</div>
+
+
+<audio id="bg-beat" playsinline style="display:none;"></audio>
 
 <!-- Chat FAB -->
 <button class="chat-fab" id="chat-fab" type="button" aria-label="Open community chat">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-  </svg>
+  <i class="fas fa-comments"></i>
 </button>
 
 <!-- Chat drawer -->
 <div class="chat-overlay" id="chat-overlay" aria-hidden="true"></div>
 <aside class="chat-drawer" id="chat-drawer" role="dialog" aria-modal="true" aria-labelledby="chat-title">
   <header class="chat-header">
-    <h2 class="chat-title" id="chat-title">Community</h2>
+    <h2 class="chat-title" id="chat-title">Community Chat</h2>
     <button class="chat-close" id="chat-close" type="button" aria-label="Close chat">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-        <line x1="18" y1="6" x2="6" y2="18"/>
-        <line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
+      <i class="fas fa-times"></i>
     </button>
   </header>
-  <iframe id="chat-frame" title="Community chat"></iframe>
+  <iframe id="chat-frame" title="Community chat" allow="autoplay; encrypted-media"></iframe>
 </aside>
 
-<!-- Share modal -->
+<!-- ── Share Modal Markup ───────────────────────────────────────────────── -->
 <div class="modal-overlay" id="share-modal">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="share-title">
-    <h2 class="modal-title" id="share-title">Share</h2>
-    <p class="modal-desc">Send this link to anyone you'd like to watch with.</p>
-    <input class="modal-input" type="text" id="share-link" readonly aria-label="Shareable link">
-    <div class="modal-actions">
-      <button class="btn-text" id="share-cancel" type="button">Cancel</button>
-      <button class="btn-solid" id="share-copy" type="button">Copy link</button>
+    <div class="modal-box">
+        <h3>Share with family & friends</h3>
+        <p>You can copy this link and send to your friends.</p>
+        <input type="text" id="share-link-input" readonly />
+        <div class="modal-actions">
+            <button id="close-share-btn">Close</button>
+            <button class="primary" id="copy-share-btn">Copy Link</button>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- Toast host -->
-<div class="toast-host" id="toast-host" aria-live="polite" aria-atomic="true"></div>
-
-<!-- Background audio (managed by style.js) -->
-<audio id="bg-beat" playsinline style="display:none;"></audio>
-
+<!-- App footer 
+    <div id="ono-promo-footer" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #121214;
+    color: #ffffff;
+    z-index: 9998;
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    border-top: 1px solid #27272a;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+">
+    <a id="ono-promo-link" href="https://yakitv.com" target="_blank" rel="noopener" style="
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+    ">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-weight: 700; font-size: 1rem; color: #ffffff;">
+                Yono TV APK v3.3
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.6rem; color: #a1a1aa;">
+                <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">No Ads</span>
+                <span style="background: rgba(0, 240, 255, 0.15); color: #00f0ff; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">4K</span>
+            </div>
+        </div>
+        
+        <div style="
+            background: #00f0ff;
+            color: #0d0d11;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 10px 20px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        ">
+            DOWNLOAD <span style="font-size: 0.9rem;">➔</span>
+        </div>
+    </a>
+</div>--> 
+    
+<!-- ── old Sticky Footer Promotion Bar ────────────────────────────────────── -->
+<!--<div id="ono-promo-footer" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #121214;
+    color: #ffffff;
+    z-index: 9998;
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 48px 12px 16px; /* Right padding protects the close button area */
+    box-sizing: border-box;
+    border-top: 1px solid #27272a;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+">
+    <a id="ono-promo-link" href="https://onotv.me" target="_blank" rel="noopener" style="
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+    ">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #a1a1aa;">
+                <span style="color: #ef4444; font-size: 0.9rem;">✕</span>
+                <span style="font-weight: 500;">Yono TV</span>
+                <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; font-size: 0.75rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Has Ads</span>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.95rem;">
+                <span style="color: #22c55e; font-size: 1rem;">✓</span>
+                <span style="font-weight: 700; color: #ffffff;">Yono TV Apk App </span>
+                <span style="background: #22c55e; color: #000000; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px;">NO ADS • 4K</span>
+            </div>
+        </div>
+        
+        <div style="
+            background: #00f0ff;
+            color: #0d0d11;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: transform 0.2s;
+        ">
+            GO <span style="font-size: 0.9rem;">➔</span>
+        </div>
+    </a>
+    
+    <button id="close-promo-btn" onclick="document.getElementById('ono-promo-footer').style.display='none';" style="
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #9ca3af;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 6px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    ">✕</button>
+</div>        
+-->
+    
 <script>
-/* ══════════════════════════════════════════════════════════
-   CONSTANTS
-   ══════════════════════════════════════════════════════════ */
-const MANIFEST_URL = 'https://ytvs-db.pages.dev/manifest.json';
-const CHAT_URL     = 'https://ytvs-frame.pages.dev/discuss';
+    const MANIFEST_URL  = "https://ytvs-db.pages.dev/manifest.json";
+    const params        = new URLSearchParams(window.location.search);
+    const refParam      = params.get('ref');
+    const contentFrame  = document.getElementById('content-frame');
+    const fallback      = document.getElementById('fallback');
+    const loadingUI     = document.getElementById('loading-ui');
 
-const params      = new URLSearchParams(location.search);
-const refParam    = params.get('ref');
-const returnParam = params.get('return');
+    function showFallback() {
+        loadingUI.classList.remove('show');
+        contentFrame.style.display = 'none';
+        fallback.style.display     = 'block';
+    }
 
-const $ = (id) => document.getElementById(id);
+    function loadIntoFrame(url) {
+        loadingUI.classList.remove('show');
+        contentFrame.src = url;
+    }
 
-const contentFrame = $('content-frame');
-const loadingUI    = $('loading-ui');
-const loadingText  = $('loading-text');
-const fallback     = $('fallback');
-const fallbackSub  = $('fallback-sub');
-
-/* ══════════════════════════════════════════════════════════
-   THEME
-   ══════════════════════════════════════════════════════════ */
-const themeBtn = $('theme-btn');
-
-const ICON_SUN = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <circle cx="12" cy="12" r="4"/>
-  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-</svg>`;
-
-const ICON_MOON = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-</svg>`;
-
-function applyTheme(isDark) {
-  document.body.classList.toggle('light-mode', !isDark);
-  themeBtn.innerHTML = isDark ? ICON_SUN : ICON_MOON;
-  themeBtn.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
-  themeBtn.title = isDark ? 'Switch to light theme' : 'Switch to dark theme';
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', isDark ? '#000000' : '#F5F5F7');
-}
-
-let savedTheme = null;
-try { savedTheme = localStorage.getItem('yaki.theme'); } catch (_) {}
-applyTheme(savedTheme ? savedTheme === 'dark' : true);
-
-themeBtn.addEventListener('click', () => {
-  const nextIsDark = !document.body.classList.contains('light-mode') ? false : true;
-  const goingDark = document.body.classList.contains('light-mode');
-  applyTheme(goingDark);
-  try { localStorage.setItem('yaki.theme', goingDark ? 'dark' : 'light'); } catch (_) {}
-});
-
-/* ══════════════════════════════════════════════════════════
-   BACK
-   ══════════════════════════════════════════════════════════ */
-const backBtn = $('back-btn');
-const backUrl = returnParam ? decodeURIComponent(returnParam) : 'https://www.yakitv.com';
-
-if (returnParam) backBtn.classList.remove('hidden');
-
-function goBack() { location.href = backUrl; }
-backBtn.addEventListener('click', goBack);
-$('fallback-back-btn').addEventListener('click', goBack);
-
-/* ══════════════════════════════════════════════════════════
-   MANIFEST / ROUTER  (crypto core preserved verbatim)
-   ══════════════════════════════════════════════════════════ */
 const S = [
-  "d2b4c0fb","bf9358d0","e188e4d8","6aaedb0e",
-  "a70c630e","faa9eaf6","84ed07e9","b776d138"
+  "d2b4c0fb",
+  "bf9358d0",
+  "e188e4d8", 
+  "6aaedb0e", 
+  "a70c630e", 
+  "faa9eaf6", 
+  "84ed07e9", 
+  "b776d138"  
 ];
 
 async function getKey() {
   return S[0] + S[1] + S[2] + S[3] + S[4] + S[5] + S[6] + S[7];
 }
-
-function hexToBytes(hex) {
-  const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
-  }
-  return bytes;
-}
-
-async function decryptManifest(base64Payload, hexKey) {
-  const raw        = Uint8Array.from(atob(base64Payload), c => c.charCodeAt(0));
-  const nonce      = raw.slice(0, 12);
-  const ciphertext = raw.slice(12);
-  const cryptoKey  = await crypto.subtle.importKey(
-    "raw", hexToBytes(hexKey), "AES-GCM", false, ["decrypt"]
-  );
-  const plainBuf = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv: nonce }, cryptoKey, ciphertext
-  );
-  return JSON.parse(new TextDecoder().decode(plainBuf));
-}
-
-/* ── Player state helpers ───────────────────────────────── */
-let loadTimer = null;
-
-function showLoading(text) {
-  fallback.classList.remove('show');
-  contentFrame.style.display = 'block';
-  if (text) loadingText.textContent = text;
-  loadingUI.classList.add('show');
-}
-
-function hideLoading() { loadingUI.classList.remove('show'); }
-
-function showFallback(msg) {
-  hideLoading();
-  contentFrame.style.display = 'none';
-  fallback.classList.add('show');
-  if (msg) fallbackSub.textContent = msg;
-}
-
-function loadIntoFrame(url) {
-  fallback.classList.remove('show');
-  contentFrame.style.display = 'block';
-  showLoading('Connecting…');
-  clearTimeout(loadTimer);
-  contentFrame.src = url;
-  loadTimer = setTimeout(hideLoading, 12000);
-}
-
-contentFrame.addEventListener('load', () => {
-  clearTimeout(loadTimer);
-  hideLoading();
-});
-
-async function route() {
-  if (!refParam) {
-    showFallback('No content reference was supplied. Please open this page from a valid link.');
-    return;
+    
+  function hexToBytes(hex) {
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < hex.length; i += 2) {
+        bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+    }
+    return bytes;
   }
 
-  let isUrl = false;
-  try {
-    const u = new URL(refParam);
-    isUrl = u.protocol === 'http:' || u.protocol === 'https:';
-  } catch (_) { isUrl = false; }
-
-  if (isUrl) {
-    contentFrame.setAttribute(
-      'sandbox',
-      'allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock'
+  async function decryptManifest(base64Payload, hexKey) {
+    const raw = Uint8Array.from(atob(base64Payload), c => c.charCodeAt(0));
+    const nonce = raw.slice(0, 12);
+    const ciphertext = raw.slice(12);
+    const cryptoKey = await crypto.subtle.importKey(
+        "raw", hexToBytes(hexKey), "AES-GCM", false, ["decrypt"]
     );
-    document.body.classList.remove('unlocked-mode');
-    loadIntoFrame(refParam);
-    return;
-  }
+    const plainBuf = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: nonce }, cryptoKey, ciphertext
+    );
+    return JSON.parse(new TextDecoder().decode(plainBuf));
+    }
+  
+    async function route() {
+        if (!refParam) { showFallback(); return; }
 
-  showLoading('Resolving resource…');
+        let isUrl = false;
+        try {
+            const u = new URL(refParam);
+            isUrl = u.protocol === 'http:' || u.protocol === 'https:';
+        } catch (_) { isUrl = false; }
 
-  try {
-    const res = await fetch(MANIFEST_URL, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Manifest fetch failed');
+        if (isUrl) {
+            // Raw ?ref=https://… passthrough has no manifest entry to
+            // consult — always enforce the sandbox and never enter
+            // unlocked-mode, so this path can't be abused to bypass it.
+            contentFrame.setAttribute(
+                'sandbox',
+                'allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock'
+            );
+            document.body.classList.remove('unlocked-mode');
+            loadIntoFrame(refParam);
+            return;
+        }
 
-    const encryptedText = await res.text();
-    const key      = await getKey();
-    const manifest = await decryptManifest(encryptedText, key);
-    const entry    = manifest[refParam];
-    if (!entry) throw new Error(`Key "${refParam}" not found`);
+        loadingUI.classList.add('show');
 
-    if (entry.type === 'direct') {
-      const useSandbox = entry.sandboxed !== false;
-      if (useSandbox) {
-        contentFrame.setAttribute(
-          'sandbox',
-          'allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock'
-        );
-        document.body.classList.remove('unlocked-mode');
-      } else {
-        contentFrame.removeAttribute('sandbox');
-        document.body.classList.add('unlocked-mode');
-      }
-      loadIntoFrame(entry.url);
+        try {
+            const res      = await fetch(MANIFEST_URL, { cache: 'no-store' });
+            if (!res.ok) throw new Error('Manifest fetch failed');
+            const encryptedText = await res.text();
+            const key = await getKey();
+            const manifest = await decryptManifest(encryptedText, key);
+            const entry    = manifest[refParam];
+            if (!entry) throw new Error(`Key "${refParam}" not found`);
+
+            if (entry.type === 'direct') {
+                const useSandbox = entry.sandboxed !== false;
+
+                if (useSandbox) {
+                    contentFrame.setAttribute(
+                        'sandbox',
+                        'allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock'
+                    );
+                    document.body.classList.remove('unlocked-mode');
+                } else {
+                    contentFrame.removeAttribute('sandbox');
+                    document.body.classList.add('unlocked-mode');
+                }
+
+                loadIntoFrame(entry.url);
+            } else {
+                console.warn(`Key "${refParam}" is type "${entry.type}", expected "direct"`);
+                showFallback();
+            }
+        } catch (e) {
+            console.error('Manifest resolution failed:', e);
+            showFallback();
+        }
+    }
+
+    route();
+
+
+window.addEventListener('blur', () => {
+        setTimeout(() => {
+            if (document.activeElement === contentFrame) {
+                const playerContainer = document.getElementById('player-container');
+                playerContainer.classList.add('interaction-flash');
+                setTimeout(() => playerContainer.classList.remove('interaction-flash'), 400);
+            }
+        }, 50);
+    });
+    
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const playerContainer = document.getElementById('player-container');
+
+    fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            // Enter Fullscreen
+            if (playerContainer.requestFullscreen) {
+                playerContainer.requestFullscreen();
+            } else if (playerContainer.webkitRequestFullscreen) {
+                playerContainer.webkitRequestFullscreen();
+            } else if (playerContainer.msRequestFullscreen) { 
+                playerContainer.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+            
+            // MAGIC: Attempt to force Landscape orientation on mobile devices
+            try {
+                if (screen.orientation && screen.orientation.lock) {
+                    // We wrap in a catch because desktops and iOS will reject this
+                    screen.orientation.lock('landscape').catch((err) => {
+                        console.warn('Orientation lock not supported or denied:', err);
+                    });
+                }
+            } catch (e) {}
+            
+        } else {
+            // UI Update
+            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+            
+            // MAGIC: Unlock the orientation when leaving fullscreen
+            try {
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            } catch (e) {}
+        }
+    });
+    
+    
+    // ── 4. CHAT DRAWER ────────────────────────────────────────────────────────
+    const chatFab     = document.getElementById('chat-fab');
+    const chatDrawer  = document.getElementById('chat-drawer');
+    const chatOverlay = document.getElementById('chat-overlay');
+    const chatClose   = document.getElementById('chat-close');
+    const chatFrame   = document.getElementById('chat-frame');
+    let chatLoaded    = false;
+
+    function openChat() {
+        if (!chatLoaded) {
+            let embedDomain = window.location.hostname;
+            try {
+                if (document.referrer) {
+                    embedDomain = new URL(document.referrer).hostname;
+                } else if (window.top !== window.self) {
+                    embedDomain = window.top.location.hostname;
+                }
+            } catch (e) {}
+
+            // Including dark_theme=1 and dynamic embed_domain
+            chatFrame.src = `https://www.youtube.com/live_chat?v=Rr6G_PRnfhA&dark_theme=1&embed_domain=${encodeURIComponent(embedDomain)}`;
+            chatLoaded = true;
+        }
+        chatDrawer.classList.add('open');
+        chatOverlay.classList.add('open');
+        chatFab.classList.add('is-closed');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeChat() {
+        chatDrawer.classList.remove('open');
+        chatOverlay.classList.remove('open');
+        chatFab.classList.remove('is-closed');
+        document.body.style.overflow = '';
+    }
+
+    chatFab.addEventListener('click', openChat);
+    chatClose.addEventListener('click', closeChat);
+    chatOverlay.addEventListener('click', closeChat);
+
+    // ── Change Link button ────────────────────────
+const changeLinkBtn = document.getElementById('change-link-btn');
+changeLinkBtn.addEventListener('click', function() {
+    const params = new URLSearchParams(window.location.search);
+    const returnUrl = params.get('return');
+    if (returnUrl) {
+        window.location.href = decodeURIComponent(returnUrl);
     } else {
-      console.warn(`Key "${refParam}" is type "${entry.type}", expected "direct"`);
-      showFallback('This link points to unsupported content.');
+        window.location.href = "https://www.yakitv.com";
     }
-  } catch (e) {
-    console.error('Manifest resolution failed:', e);
-    showFallback("We couldn't resolve this resource. It may have expired or moved.");
-  }
+});
+
+    // ── 5. THEME SWAP MECHANISM ──────────────────────────────────────────────
+const themeBtn = document.getElementById('theme-btn');
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeBtn.innerHTML = isDark
+            ? '<i class="fas fa-sun"></i> <span>Light</span>'
+            : '<i class="fas fa-moon"></i> <span>Dark</span>';
+    });
 }
 
-route();
+    // ── 6. SYNC / FORCE REFRESH ──────────────────────────────────────────────
+    document.getElementById('sync-btn').addEventListener('click', () => location.reload());
 
-/* ══════════════════════════════════════════════════════════
-   FULLSCREEN
-   ══════════════════════════════════════════════════════════ */
-const fullscreenBtn  = $('fullscreen-btn');
-const fsIcon         = $('fs-icon');
-const playerContainer = $('player-container');
+    // ── 7. SHARE WITH FAMILY & FRIENDS ───────────────────────────────────────
+    const SHARE_LINK = "https://www.yakitv.com";
+    const shareBtn       = document.getElementById('share-btn');
+    const shareModal      = document.getElementById('share-modal');
+    const shareLinkInput  = document.getElementById('share-link-input');
+    const closeShareBtn   = document.getElementById('close-share-btn');
+    const copyShareBtn    = document.getElementById('copy-share-btn');
 
-const ICON_EXPAND = `<path d="M8 3H5a2 2 0 0 0-2 2v3"/>
-  <path d="M21 8V5a2 2 0 0 0-2-2h-3"/>
-  <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
-  <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>`;
-
-const ICON_COMPRESS = `<path d="M8 3v3a2 2 0 0 1-2 2H3"/>
-  <path d="M21 8h-3a2 2 0 0 1-2-2V3"/>
-  <path d="M3 16h3a2 2 0 0 1 2 2v3"/>
-  <path d="M16 21v-3a2 2 0 0 1 2-2h3"/>`;
-
-fullscreenBtn.addEventListener('click', () => {
-  if (!document.fullscreenElement) {
-    const req = playerContainer.requestFullscreen
-      || playerContainer.webkitRequestFullscreen
-      || playerContainer.msRequestFullscreen;
-    if (req) req.call(playerContainer);
-  } else if (document.exitFullscreen) {
-    document.exitFullscreen();
-  }
-});
-
-document.addEventListener('fullscreenchange', () => {
-  const isFs = !!document.fullscreenElement;
-  fsIcon.innerHTML = isFs ? ICON_COMPRESS : ICON_EXPAND;
-  fullscreenBtn.setAttribute('aria-label', isFs ? 'Exit fullscreen' : 'Enter fullscreen');
-
-  if (isFs) {
-    try {
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('landscape').catch(() => {});
-      }
-    } catch (_) {}
-  } else {
-    try {
-      if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
-    } catch (_) {}
-  }
-});
-
-/* ══════════════════════════════════════════════════════════
-   RETRY
-   ══════════════════════════════════════════════════════════ */
-$('retry-btn').addEventListener('click', () => {
-  fallback.classList.remove('show');
-  contentFrame.removeAttribute('src');
-  route();
-});
-
-/* ══════════════════════════════════════════════════════════
-   SOUND PILL  (auto-hide; click behaviour lives in style.js)
-   ══════════════════════════════════════════════════════════ */
-const audioBtn = $('audio-toggle-btn');
-const soundTimer = setTimeout(() => audioBtn.classList.add('is-hidden'), 12000);
-
-audioBtn.addEventListener('click', () => {
-  clearTimeout(soundTimer);
-  audioBtn.classList.add('is-hidden');
-});
-
-/* ══════════════════════════════════════════════════════════
-   CHAT DRAWER
-   ══════════════════════════════════════════════════════════ */
-const chatFab     = $('chat-fab');
-const chatDrawer  = $('chat-drawer');
-const chatOverlay = $('chat-overlay');
-const chatClose   = $('chat-close');
-const chatFrame   = $('chat-frame');
-let chatLoaded    = false;
-
-function openChat() {
-  if (!chatLoaded) {
-    chatFrame.src = CHAT_URL;
-    chatLoaded = true;
-  }
-  chatDrawer.classList.add('open');
-  chatOverlay.classList.add('open');
-  chatFab.classList.add('is-closed');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => chatClose.focus(), 120);
-}
-
-function closeChat() {
-  chatDrawer.classList.remove('open');
-  chatOverlay.classList.remove('open');
-  chatFab.classList.remove('is-closed');
-  document.body.style.overflow = '';
-  chatFab.focus();
-}
-
-chatFab.addEventListener('click', openChat);
-chatClose.addEventListener('click', closeChat);
-chatOverlay.addEventListener('click', closeChat);
-
-/* ══════════════════════════════════════════════════════════
-   SHARE  (native share → modal fallback; uses current URL)
-   ══════════════════════════════════════════════════════════ */
-const shareBtn   = $('share-btn');
-const shareModal = $('share-modal');
-const shareLink  = $('share-link');
-const shareCopy  = $('share-copy');
-const shareCancel = $('share-cancel');
-
-async function openShare() {
-  const url = location.href;
-
-  if (navigator.share) {
-    try {
-      await navigator.share({ title: 'Yaki TV', url });
-      return;
-    } catch (err) {
-      if (err && err.name === 'AbortError') return;
+    function openShareModal() {
+        shareLinkInput.value = SHARE_LINK;
+        shareModal.classList.add('active');
+        shareLinkInput.focus();
+        shareLinkInput.select();
     }
-  }
 
-  shareLink.value = url;
-  shareModal.classList.add('open');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => { shareLink.focus(); shareLink.select(); }, 60);
-}
+    function closeShareModal() {
+        shareModal.classList.remove('active');
+    }
 
-function closeShare() {
-  shareModal.classList.remove('open');
-  document.body.style.overflow = '';
-  shareBtn.focus();
-}
+    shareBtn.addEventListener('click', openShareModal);
+    closeShareBtn.addEventListener('click', closeShareModal);
 
-shareBtn.addEventListener('click', openShare);
-shareCancel.addEventListener('click', closeShare);
-shareModal.addEventListener('click', (e) => {
-  if (e.target === shareModal) closeShare();
-});
+    shareModal.addEventListener('click', (e) => {
+        if (e.target === shareModal) closeShareModal();
+    });
 
-shareCopy.addEventListener('click', async () => {
-  try {
-    await navigator.clipboard.writeText(shareLink.value);
-  } catch (_) {
-    shareLink.select();
-    document.execCommand('copy');
-  }
-  closeShare();
-  toast('Link copied');
-});
 
-/* ══════════════════════════════════════════════════════════
-   TOASTS
-   ══════════════════════════════════════════════════════════ */
-const toastHost = $('toast-host');
+    copyShareBtn.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(shareLinkInput.value);
+        } catch (err) {
+            shareLinkInput.select();
+            document.execCommand('copy');
+        }
+        const original = copyShareBtn.textContent;
+        copyShareBtn.textContent = 'Copied!';
+        setTimeout(() => { copyShareBtn.textContent = original; }, 1500);
+    });
 
-function toast(message) {
-  const el = document.createElement('div');
-  el.className = 'toast';
-  el.textContent = message;
-  toastHost.appendChild(el);
-  requestAnimationFrame(() => el.classList.add('show'));
-  setTimeout(() => {
-    el.classList.remove('show');
-    setTimeout(() => el.remove(), 350);
-  }, 1800);
-}
+    // ── Navigation guard for no-sandbox iframes ──────────────────────────
+    window.addEventListener('beforeunload', (e) => {
+        if (!document.body.classList.contains('unlocked-mode')) return;
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+    });
 
-/* ══════════════════════════════════════════════════════════
-   ESC TO CLOSE
-   ══════════════════════════════════════════════════════════ */
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    if (chatDrawer.classList.contains('open')) closeChat();
-    if (shareModal.classList.contains('open')) closeShare();
-  }
-});
-
-/* ══════════════════════════════════════════════════════════
-   NAVIGATION GUARD (unlocked-mode only)
-   ══════════════════════════════════════════════════════════ */
-window.addEventListener('beforeunload', (e) => {
-  if (!document.body.classList.contains('unlocked-mode')) return;
-  e.preventDefault();
-  e.returnValue = '';
-  return '';
-});
 </script>
-
+<!-- decouple audio because obfuscating it together with whole code introduces audio lag --> 
 <script src="style.js" defer></script>
+
 </body>
 </html>

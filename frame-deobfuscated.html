@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="referrer" content="no-referrer">
     <title>Information Sources | Yaki TV</title>
     <link href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1YQTuxcQgr6q0XKRBCEsTzTDoEKiin9r3yvGgoWvAodXNjeU4QvhiYQw3TDwGmkgAx5nI0NfDuHvEn941gG5SgpHkmPfMfwJwNErA4Zidx3ykPm4Vn7ekB7o51HhqMIYM8fg7qnhlWQUHlVLSVuqjzne_uwd_aqhItqEr8-WJegszIESdLlz7K6BHU-bH/s1600/Yaki%20TV%201.png" rel="icon" type="image/x-icon"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- 
+1. UI Made more low-tech users friendly, with pill buttons 
+2. Chat window is made more useful and better
+3. Share and fullscreen buttons over the video as they are high-yield buttons
+4. 3 types of direct embeds, properly handled 
+5. direct-nosandbox will show ad counter plus notice to help users
+6. Auto shield in 15S of quiteness in direct-nosandbox, clicking shield shows dialog to confirm. -->
 
     <style>
         :root {
@@ -45,8 +52,39 @@
             padding-bottom: 90px;
         }
 
-        .brand-header { text-align: center; margin-bottom: 10px; }
-        .brand-logo { max-height: 60px; border-radius: 999px; width: auto; }
+        .brand-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px; /* Space between logo and text */
+            text-decoration: none;
+        }
+
+        .brand-logo {
+            max-height: 48px; /* Slightly smaller so it balances with text */
+            border-radius: 999px;
+            width: auto;
+        }
+
+        .brand-text {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+            line-height: 1;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .brand-text span {
+            color: #a78bfa; /* The soft purple from your screenshot */
+        }
 
         .toolbar {
             display: flex;
@@ -74,6 +112,62 @@
         }
 
         .btn-primary { background: var(--primary); color: white; border: none; }
+
+        /* Player Overlay Pills */
+        .video-pill {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            z-index: 15;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-fullscreen {
+            top: 12px;
+            right: 12px;
+            background: #FF5722; /* Vibrant Sunset Orange */
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.5);
+        }
+        .btn-fullscreen:hover {
+            background: #E64A19;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 87, 34, 0.7);
+        }
+        .btn-fullscreen:active {
+            transform: scale(0.95);
+        }
+
+        .btn-share-overlay {
+            bottom: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.2); /* Lighter background */
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4); /* Stronger border */
+            -webkit-backdrop-filter: blur(16px) saturate(140%);
+            backdrop-filter: blur(16px) saturate(140%);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .btn-share-overlay:hover {
+            background: rgba(20, 20, 22, 0.85);
+            transform: translateY(-1px);
+        }
+        .btn-share-overlay:active {
+            transform: scale(0.95);
+        }
+
+        /* Hide pills when in fullscreen mode */
+        .frame-box:fullscreen .video-pill {
+            display: none !important;
+        }
 
         /* ── Player Box Layout ──────────────────────────────────────────────── */
         .frame-box {
@@ -147,29 +241,134 @@
             color: white;
             z-index: 20;
         }
-
-        /* ── Interface Notification Alerts ───────────────────────────────────── */
-        .status-alert {
-            display:none;
-            background: #eff6ff;
-            color: #1e40af;
-            padding: 12px;
-            border-radius: 8px;
+        
+         .status-alert {
+            background: transparent;
+            color: var(--primary);
+            padding: 0;
             font-size: 13px;
-            margin-bottom: 10px;
-            border: 1px solid #bfdbfe;
+            font-weight: 500;
+            margin-bottom: 15px;
+            margin-top: 20px;
+            border: none;
             text-align: center;
         }
-        .dark-mode .status-alert { background: #1e293b; color: #60a5fa; border-color: #3b82f6; }
+        .dark-mode .status-alert { 
+            background: transparent; 
+            color: #60a5fa; 
+            border: none; 
+        }
 
-        /* ── Integrated Interactive Chat Modules ─────────────────────────────── */
-        .community-section { margin-top: 25px; }
+        /* ── Chat FAB + DRAWER ───────────────────────────────────────────────── */
+        .chat-fab {
+            position: fixed;
+            bottom: 24px; right: 24px;
+            width: 56px; height: 56px;
+            border-radius: 40%;
+            background: var(--primary);
+            color: #fff;
+            display: grid; place-items: center;
+            box-shadow: 0 8px 28px -6px rgba(0, 123, 255, .6), 0 4px 16px rgba(0,0,0,.4);
+            z-index: 50;
+            font-size: 22px;
+            border: none;
+            cursor: pointer;
+            transition: transform .35s var(--ease-out, cubic-bezier(.22,.61,.36,1)), box-shadow .3s, background-color .2s;
+        }
+        .chat-fab:hover {
+            background: #0069d9;
+            transform: translateY(-2px);
+        }
+        .chat-fab:active { transform: scale(.9); }
+        .chat-fab.is-closed { transform: scale(0); pointer-events: none; }
 
-        #interaction-frame {
-            width: 100%; height: 450px;
-            border: 1px solid var(--border-color);
-            border-radius: 12px; margin-top: 15px;
-            display: none; background: white;
+        .chat-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0, 0, 0, .5);
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+            z-index: 60;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s ease;
+        }
+        .chat-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .chat-drawer {
+            position: fixed;
+            top: 0; right: 0; bottom: 0;
+            width: 420px;
+            max-width: 100vw;
+            background: var(--container-bg);
+            z-index: 70;
+            transform: translateX(100%);
+            transition: transform .45s cubic-bezier(.32,.72,0,1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: -20px 0 60px rgba(0, 0, 0, .5);
+            border-left: 1px solid var(--border-color);
+        }
+        .chat-drawer.open { transform: translateX(0); }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            background: var(--container-bg);
+        }
+        .chat-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .chat-close {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: grid; place-items: center;
+            color: var(--text-muted);
+            background: var(--bg-body);
+            border: none;
+            cursor: pointer;
+            transition: background-color .2s;
+        }
+        .chat-close:hover { background: var(--border-color); color: var(--text-main); }
+
+        #chat-frame {
+            flex: 1;
+            min-height: 0;
+            width: 100%;
+            border: none;
+            background: var(--container-bg);
+        }
+
+        @media (max-width: 600px) {
+            .chat-fab { bottom: 20px; right: 20px; width: 52px; height: 52px; }
+            .chat-drawer {
+                top: auto; left: 0; right: 0; bottom: 0;
+                width: 100%;
+                height: 82vh;
+                max-height: 82dvh;
+                transform: translateY(100%);
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+                border-radius: 24px 24px 0 0;
+                box-shadow: 0 -20px 60px rgba(0, 0, 0, .5);
+            }
+            .chat-drawer.open { transform: translateY(0); }
+            .chat-header { position: relative; padding-top: 24px; }
+            .chat-header::before {
+                content: '';
+                position: absolute;
+                top: 8px; left: 50%;
+                transform: translateX(-50%);
+                width: 36px; height: 4px;
+                border-radius: 2px;
+                background: var(--border-color);
+            }
         }
 
         /* ── Share Modal ──────────────────────────────────────────────────────── */
@@ -228,7 +427,7 @@
 
         .modal-actions button {
             padding: 9px 16px;
-            border-radius: 8px;
+            border-radius: 999px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
@@ -257,6 +456,194 @@
             color: var(--text-main); margin-bottom: 12px; text-transform: uppercase;
         }
 
+        body.no-shield #click-shield,
+        body.no-shield #bg-beat {
+            display: none !important;
+        }
+
+        /* ── Ad-notice (direct-nosandbox only) ──────────────────────────── */
+        .ad-strip {
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+            background: var(--container-bg); border: 2px solid var(--primary);
+            border-radius: 12px; padding: 10px 12px; margin-bottom: 10px;
+        }
+        .ad-strip[hidden] { display: none !important; }
+        .ad-strip.is-back { border-color: #22c55e; }
+        .ad-strip-icon {
+            flex: none; width: 36px; height: 36px; border-radius: 50%;
+            display: grid; place-items: center;
+            background: var(--primary); color: #fff;
+        }
+        .ad-strip.is-back .ad-strip-icon { background: #22c55e; }
+        .ad-strip-icon svg { width: 22px; height: 22px; }
+        .ad-strip-text {
+            flex: 1 1 160px; font-size: 13px; font-weight: 700; line-height: 1.35;
+            color: var(--text-main);
+        }
+        .ad-strip-text span { display: block; font-weight: 500; font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .ad-strip-counter {
+            flex: none; display: flex; align-items: center; gap: 6px; 
+            background: var(--btn-gray); /* Lighter, softer background */
+            border-radius: 99px; /* Pill shape */
+            padding: 6px 12px; 
+            margin-left: auto; /* Ensures it pushes to the right */
+        }
+        .ad-strip-counter b { 
+            font-size: 16px; font-weight: 800; line-height: 1; color: var(--text-main); 
+        }
+        .ad-strip-counter small { 
+            font-size: 11px; font-weight: 600; color: var(--text-muted); line-height: 1;
+        }
+
+        /* ---------- OVERLAY ---------- */
+        #ad-notice-overlay {
+            position: fixed; inset: 0; z-index: 2147483000;
+            display: flex;
+            align-items: center; justify-content: center;
+            padding: 16px;
+            background: rgba(15,23,42,.66);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+            box-sizing: border-box;
+        }
+        #ad-notice-overlay[hidden] { display: none !important; }
+        #ad-notice-overlay *{ box-sizing: border-box; }
+
+        /* ---------- CARD ---------- */
+        .an-card {
+            position: relative;
+            width: 100%;
+            max-width: 530px;
+            max-height: 92vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: #fff;
+            border-radius: 24px;
+            padding: 26px 22px 22px;
+            box-shadow: 0 24px 60px rgba(2,6,23,.38);
+            text-align: center;
+            animation: an-pop .28s cubic-bezier(.2,.9,.3,1.2);
+        }
+        @keyframes an-pop {
+            from{ opacity:0; transform:translateY(16px) scale(.96); }
+            to  { opacity:1; transform:none; }
+        }
+        @media (prefers-reduced-motion: reduce){
+            .an-card{ animation:none; }
+        }
+
+        /* ---------- VISUAL 1 ---------- */
+        .an-art {
+            width: 100%;
+            max-width: 290px;
+            height: auto;
+            margin: 2px auto 6px;
+            display: block;
+        }
+
+        /* ---------- TEXT ---------- */
+        .an-title {
+            margin: 0 0 8px;
+            font-size: clamp(20px, 5.2vw, 25px);
+            line-height: 1.22;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -.01em;
+        }
+        .an-sub {
+            margin: 0;
+            font-size: clamp(14px, 3.8vw, 16px);
+            line-height: 1.45;
+            color: #64748b;
+        }
+        .an-sub b{ color:#dc2626; }
+
+        /* ---------- VISUAL 2 (green = do this) ---------- */
+        .back-box {
+            display: grid;
+            grid-template-columns: minmax(0,58%) 1fr;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+            margin: 20px 0 22px;
+            padding: 10px 14px 10px 10px;
+            background: #ffffff;
+            color: #0f1f14;
+            border: 1.5px solid #d5e6d9;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(15,31,20,.08);
+            text-align: left;
+        }
+        .back-box *{ box-sizing: border-box; }
+        .back-box svg{ display: block; width: 100%; height: auto; }
+        .back-box strong {
+            display: block;
+            font-size: clamp(17px, 4.6vw, 20px);
+            font-weight: 800;
+            line-height: 1.2;
+            color: #0f1f14;
+        }
+        .back-box small {
+            display: block;
+            margin-top: 3px;
+            font-size: clamp(14px, 3.9vw, 16px);
+            color: #5b6f61;
+            line-height: 1.3;
+        }
+        .back-box .bb-pulse { animation: bb-pulse 1.4s ease-in-out infinite; }
+        @keyframes bb-pulse { 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
+        @media (prefers-reduced-motion:reduce){ .back-box .bb-pulse{ animation:none; } }
+        @media (max-width:380px){
+            .back-box {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+                gap: 10px;
+                padding: 10px;
+            }
+            .back-box svg { max-width: 240px; margin: 0 auto; }
+        }
+
+        /* ---------- BUTTON (indigo) ---------- */
+        .an-btn {
+            width: 100%;
+            border: 0;
+            cursor: pointer;
+            padding: 16px 18px;
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: clamp(17px, 4.4vw, 19px);
+            font-weight: 800;
+            color: #fff;
+            background: #4f46e5;
+            box-shadow: 0 10px 22px rgba(79,70,229,.35);
+        }
+        .an-btn:active { transform: translateY(1px); box-shadow: 0 6px 14px rgba(79,70,229,.3); }
+        .an-btn:focus-visible { outline: 3px solid #1e1b4b; outline-offset: 3px; }
+        @media (max-width:420px){
+            .an-card { padding: 22px 16px 18px; border-radius: 20px; }
+        }
+
+        /* ── Smart touch shield (direct-nosandbox only) ──────────────────── */
+        #touch-shield {
+            position: absolute;
+            inset: 0;
+            z-index: 14;              /* above iframe (1), below pills (15) */
+            background: transparent;
+            cursor: pointer;          /* Shows it is clickable */
+            pointer-events: auto;
+            touch-action: none;
+        }
+        #touch-shield[hidden] { display: none !important; }
+
+        /* Green confirm button for unlock modal */
+        #unlock-confirm {            
+            color: white !important;
+            border: none !important;
+        }
+
+
         @media (max-width: 300px) { .btn-utility span { display: none; } }
         @media (max-width: 600px) {
             .frame-box { height: 220px; aspect-ratio: auto; }
@@ -268,14 +655,19 @@
 
 <div class="app-container">
     <header class="brand-header">
-
-        <a href="https://www.yakitv.com" id="header-logo-link">
+        <a href="https://www.yakitv.com" id="header-logo-link" class="brand-link">
             <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1YQTuxcQgr6q0XKRBCEsTzTDoEKiin9r3yvGgoWvAodXNjeU4QvhiYQw3TDwGmkgAx5nI0NfDuHvEn941gG5SgpHkmPfMfwJwNErA4Zidx3ykPm4Vn7ekB7o51HhqMIYM8fg7qnhlWQUHlVLSVuqjzne_uwd_aqhItqEr8-WJegszIESdLlz7K6BHU-bH/s1600/Yaki%20TV%201.png" alt="Yaki TV Index" class="brand-logo">
+            <span class="brand-text">Yaki TV</span>
         </a>
     </header>
 
-    <div class="status-alert">
-        <i class="fas fa-info-circle"></i> <b>Yaki TV:</b> This page provides a technical display frame for externally referenced resources.
+
+
+    <!-- Ad-notice status strip (only shown in direct-nosandbox mode) -->
+    <div class="ad-strip" id="ad-notice-strip" hidden>
+        <div class="ad-strip-icon" id="ad-strip-icon"></div>
+        <div class="ad-strip-text" id="ad-strip-text"></div>
+        <div class="ad-strip-counter"><b id="ad-strip-count">0</b><small>ads closed</small></div>
     </div>
 
     <main class="frame-box" id="player-container">
@@ -285,6 +677,26 @@
             allowfullscreen
             sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
         </iframe>
+
+        <!-- Transparent touch shield — auto-lifted after a quiet period in
+             direct-nosandbox. Blocks taps that would trigger ads. -->
+        <div id="touch-shield" hidden></div>
+        
+        <!-- Ads Pill (Top Left) — nosandbox only -->
+        <button class="video-pill btn-ads-pill" id="ads-pill" type="button"
+                aria-label="Ads on — tap to lock player." hidden>
+            <i class="fas fa-triangle-exclamation"></i> <span>Ads ON</span>
+        </button>
+
+        <!-- Fullscreen Pill (Top Right) -->
+        <button class="video-pill btn-fullscreen" id="fullscreen-btn" type="button" aria-label="Enter fullscreen">
+            <i class="fas fa-expand"></i> <span>Fullscreen</span>
+        </button>
+
+        <!-- Share Pill (Bottom Right) -->
+        <button class="video-pill btn-share-overlay" id="share-btn" type="button" aria-label="Share">
+            <i class="fas fa-share-nodes"></i> <span>Share</span>
+        </button>
 
 <div id="click-shield">
     <div class="shield-brand">
@@ -308,26 +720,17 @@
         </div>
     </main>
 
+    <div class="status-alert">
+        <i class="fas fa-info-circle"></i> Not working?
+    </div>
+
     <div class="toolbar">
-        <button class="btn-utility" id="fullscreen-btn">
-            <i class="fas fa-expand"></i> <span>Fullscreen</span>
-        </button>
         <button class="btn-utility" id="change-link-btn">
-        <i class="fas fa-exchange-alt"></i> <span>Change Link</span>
+            <i class="fas fa-arrow-left"></i> <span>Change Link</span>
         </button>
         <button class="btn-utility" id="sync-btn">
             <i class="fas fa-sync-alt"></i> <span>Refresh</span>
         </button>
-        <button class="btn-utility" id="share-btn">
-            <i class="fas fa-share-nodes"></i> <span>Share</span>
-        </button>
-        <button class="btn-utility btn-primary" id="community-btn">
-            <i class="fas fa-comments"></i> <span>Chat</span>
-        </button>
-    </div>
-
-    <div class="community-section">
-        <iframe id="interaction-frame" title="Discussion Board"></iframe>
     </div>
 
     <footer class="legal-footer">
@@ -341,6 +744,23 @@
 
 <audio id="bg-beat" playsinline style="display:none;"></audio>
 
+<!-- Chat FAB -->
+<button class="chat-fab" id="chat-fab" type="button" aria-label="Open community chat">
+  <i class="fas fa-comments"></i>
+</button>
+
+<!-- Chat drawer -->
+<div class="chat-overlay" id="chat-overlay" aria-hidden="true"></div>
+<aside class="chat-drawer" id="chat-drawer" role="dialog" aria-modal="true" aria-labelledby="chat-title">
+  <header class="chat-header">
+    <h2 class="chat-title" id="chat-title">Community Chat</h2>
+    <button class="chat-close" id="chat-close" type="button" aria-label="Close chat">
+      <i class="fas fa-times"></i>
+    </button>
+  </header>
+  <iframe id="chat-frame" title="Community chat" allow="autoplay; encrypted-media"></iframe>
+</aside>
+
 <!-- ── Share Modal Markup ───────────────────────────────────────────────── -->
 <div class="modal-overlay" id="share-modal">
     <div class="modal-box">
@@ -350,6 +770,18 @@
         <div class="modal-actions">
             <button id="close-share-btn">Close</button>
             <button class="primary" id="copy-share-btn">Copy Link</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Unlock Shield Modal ──────────────────────────────────────────── -->
+<div class="modal-overlay" id="unlock-modal">
+    <div class="modal-box">
+        <h3>Unlock player?</h3>
+        <p>We are protecting you from ADS. If you unlock, ADS might be shown when you tap on screen.</p>
+        <div class="modal-actions">
+            <button id="unlock-cancel">Keep locked</button>
+            <button id="unlock-confirm">Unlock anyway</button>
         </div>
     </div>
 </div>
@@ -495,6 +927,71 @@
 </div>        
 -->
     
+<!-- Ad-notice poster overlay (direct-nosandbox only) -->
+<div id="ad-notice-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="anTitle" aria-describedby="anSub">
+  <div class="an-card">
+
+    <!-- VISUAL 1: ad tab escaping + red X -->
+    <svg class="an-art" viewBox="0 0 300 145" role="img"
+         aria-label="A game window opening a new tab, with a red X showing you should close it">
+      <rect x="8" y="52" width="176" height="84" rx="14"
+            fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2.5"/>
+      <circle cx="26" cy="68" r="3.5" fill="#cbd5e1"/>
+      <circle cx="40" cy="68" r="3.5" fill="#cbd5e1"/>
+      <circle cx="54" cy="68" r="3.5" fill="#cbd5e1"/>
+      <circle cx="96" cy="96" r="24" fill="#4f46e5"/>
+      <path d="M89 85 L111 96 L89 107 Z" fill="#ffffff"/>
+      <rect x="176" y="2" width="108" height="58" rx="12"
+            fill="#ffffff" stroke="#fca5a5" stroke-width="2.5"/>
+      <rect x="190" y="14" width="80" height="8" rx="4" fill="#fee2e2"/>
+      <rect x="190" y="28" width="56" height="8" rx="4" fill="#fee2e2"/>
+      <rect x="190" y="42" width="68" height="8" rx="4" fill="#fee2e2"/>
+      <path d="M132 52 C 140 30, 155 22, 174 22"
+            fill="none" stroke="#94a3b8" stroke-width="2.5"
+            stroke-dasharray="5 6" stroke-linecap="round"/>
+      <path d="M180 22 L168 16 L168 28 Z" fill="#94a3b8"/>
+      <circle cx="272" cy="14" r="16" fill="#ef4444"/>
+      <path d="M266 8 L278 20 M278 8 L266 20"
+            stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+
+    <h2 class="an-title" id="anTitle">New tabs may open.<br>Just close them. 👍</h2>
+    <p class="an-sub" id="anSub">
+      Those tabs are <b>ads</b> - they are <b>not from us</b>.
+    </p>
+
+    <!-- VISUAL 2: press Back -->
+    <div class="back-box">
+      <svg viewBox="0 0 310 130" role="img"
+           aria-label="Press the Back button on your phone">
+        <rect x="6" y="-30" width="152" height="150" rx="22" fill="#1b2a20"/>
+        <rect x="16" y="-18" width="132" height="94" rx="6" fill="#fff3d6"/>
+        <rect x="28" y="6" width="108" height="12" rx="4" fill="#ffb020"/>
+        <text x="82" y="58" text-anchor="middle" font-size="30" font-weight="800"
+              fill="#a85f00" font-family="system-ui, sans-serif">AD</text>
+        <rect x="16" y="84" width="132" height="26" rx="6" fill="#0d1610"/>
+        <circle class="bb-pulse" cx="42" cy="97" r="13" fill="none"
+                stroke="#3cc850" stroke-width="3"/>
+        <path d="M47 90 L36 97 L47 104 Z" fill="#fff"/>
+        <circle cx="82" cy="97" r="4.5" fill="#fff" opacity=".6"/>
+        <rect x="116" y="91" width="11" height="11" rx="2"
+              fill="none" stroke="#fff" stroke-width="2" opacity=".6"/>
+        <rect x="172" y="22" width="132" height="86" rx="18" fill="#3cc850"/>
+        <path d="M206 44 L182 65 L206 86 Z" fill="#06240d"/>
+        <text x="214" y="73" font-size="24" font-weight="800"
+              fill="#06240d" font-family="system-ui, sans-serif">BACK</text>
+      </svg>
+
+      <div>
+        <strong>Press Back</strong>
+        <small>Then tap play again.</small>
+      </div>
+    </div>
+
+    <button class="an-btn" id="ad-start-btn" type="button">Got it</button>
+  </div>
+</div>
+
 <script>
     const MANIFEST_URL  = "https://ytvs-db.pages.dev/manifest.json";
     const params        = new URLSearchParams(window.location.search);
@@ -550,27 +1047,285 @@ async function getKey() {
     return JSON.parse(new TextDecoder().decode(plainBuf));
     }
   
-    async function route() {
-        if (!refParam) { showFallback(); return; }
+    // ── Ad-notice flow (direct-nosandbox only) ─────────────────────────
+    // Primes the user for the ad-popup experience that comes with
+    // un-sandboxed embeds and tracks "ads closed" across visibility
+    // changes + page reloads (phones often kill the page while an ad is
+    // open, so state lives in sessionStorage, namespaced per-URL).
+    const AD_NS_PREFIX = 'yakitv-ns-';
+    const AD_ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>';
+    const AD_ICON_OK   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 
-        let isUrl = false;
-        try {
-            const u = new URL(refParam);
-            isUrl = u.protocol === 'http:' || u.protocol === 'https:';
-        } catch (_) { isUrl = false; }
+    let adStateKey       = null;   // non-null only after nosandbox is entered
+    let adPendingUrl     = null;
+    let adStarted        = false;
+    let adClickedInFrame = false;
+    let adCount          = 0;
 
-        if (isUrl) {
-            // Raw ?ref=https://… passthrough has no manifest entry to
-            // consult — always enforce the sandbox and never enter
-            // unlocked-mode, so this path can't be abused to bypass it.
+    function adHashUrl(s) {
+        let h = 0;
+        for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+        return Math.abs(h).toString(36);
+    }
+    function adNSget(k) { try { return sessionStorage.getItem(adStateKey + k); } catch(_) { return null; } }
+    function adNSset(k, v) { try { sessionStorage.setItem(adStateKey + k, v); } catch(_) {} }
+
+    function adShowWaiting() {
+        const strip = document.getElementById('ad-notice-strip');
+        if (!strip) return;
+        strip.classList.remove('is-back');
+        document.getElementById('ad-strip-icon').innerHTML = AD_ICON_INFO;
+        document.getElementById('ad-strip-text').innerHTML =
+            'An ad opened? It is not ours.<span>Press Back to return.</span>';
+    }
+
+    function adShowBack() {
+        const strip = document.getElementById('ad-notice-strip');
+        if (!strip) return;
+        strip.classList.remove('is-back');
+        void strip.offsetWidth;
+        strip.classList.add('is-back');
+        document.getElementById('ad-strip-icon').innerHTML = AD_ICON_OK;
+        document.getElementById('ad-strip-text').innerHTML =
+            'Welcome back!<span>The ad is gone. Press play to continue.</span>';
+    }
+
+    function adUpdateCount() {
+        const el = document.getElementById('ad-strip-count');
+        if (el) el.textContent = adCount;
+    }
+
+    function adReturnFromAd() {
+        adClickedInFrame = false;
+        adNSset('cif', '0');
+        adCount += 1;
+        adUpdateCount();
+        adShowBack();
+        armLockOrLockNow();
+    }
+
+    // Only active once we've entered nosandbox mode. Any time the page
+    // goes hidden while the last focused element was the iframe, that
+    // strongly implies an ad opened — count it on the way back.
+    document.addEventListener('visibilitychange', () => {
+        if (!adStateKey || !adStarted) return;
+        if (document.hidden) {
+            adClickedInFrame = (document.activeElement === contentFrame);
+            adNSset('cif', adClickedInFrame ? '1' : '0');
+        } else if (adClickedInFrame) {
+            adReturnFromAd();
+        }
+    });
+
+    function startAdNoticedFlow(url) {
+        adPendingUrl = url;
+        adStateKey   = AD_NS_PREFIX + adHashUrl(url);
+
+        adStarted        = adNSget('started') === '1';
+        adClickedInFrame = adNSget('cif') === '1';
+        adCount          = 0; // Reset on refresh. Let them try again.
+
+        const strip   = document.getElementById('ad-notice-strip');
+        const overlay = document.getElementById('ad-notice-overlay');
+
+        if (adStarted) {
+            // Resume — skip the poster, load immediately, restore state.
+            if (strip) strip.hidden = false;
+            adUpdateCount();
+            if (adClickedInFrame) {
+                // Page was killed/reloaded while an ad was open — count it.
+                adReturnFromAd();
+            } else {
+                adShowWaiting();
+                // DO NOT arm the lock immediately on resume. 
+                // The video is paused, they need to tap play. 
+                // We will arm the lock only after an ad fires, or after they start playing.
+            }
+            loadIntoFrame(url);
+        } else {
+            // First visit — show the poster and DON'T load the iframe.
+            if (overlay) overlay.hidden = false;
+            document.body.style.overflow = 'hidden';
+        }
+
+        const startBtn = document.getElementById('ad-start-btn');
+        if (startBtn && !startBtn._adWired) {
+            startBtn._adWired = true;
+            startBtn.addEventListener('click', () => {
+                adStarted = true;
+                adNSset('started', '1');
+                const ov = document.getElementById('ad-notice-overlay');
+                if (ov) ov.hidden = true;
+                document.body.style.overflow = '';
+                const st = document.getElementById('ad-notice-strip');
+                if (st) st.hidden = false;
+                adShowWaiting();
+                loadIntoFrame(adPendingUrl);
+                armLockOrLockNow();
+            });
+        }
+    }
+
+    // ── Smart auto-lock (direct-nosandbox) ─────────────────────────────
+    // After a quiet period with no ads, a transparent shield lifts to block
+    // accidental taps that would open yet another ad. The shield stays on
+    // even in fullscreen. Clicking it prompts the user to unlock.
+    const LOCK_QUIET_MS = 15000;
+
+    let lockTimer    = null;
+    let shieldLocked = false;
+
+    function armLock() {
+        if (lockTimer) clearTimeout(lockTimer);
+        lockTimer = setTimeout(() => { lockTimer = null; lockShield(); }, LOCK_QUIET_MS);
+    }
+
+    function disarmLock() {
+        if (lockTimer) { clearTimeout(lockTimer); lockTimer = null; }
+    }
+
+    function armLockOrLockNow() {
+        armLock();
+    }
+
+    function lockShield() {
+        const shield = document.getElementById('touch-shield');
+        if (!shield) return;
+        shieldLocked = true;
+        shield.hidden = false;
+        adStripSetLockedMessage(true);
+    }
+
+    function unlockShield() {
+        const shield = document.getElementById('touch-shield');
+        if (!shield) return;
+        shieldLocked = false;
+        shield.hidden = true;
+        adStripSetLockedMessage(false);
+        armLock(); // Re-arm the 15s timer immediately
+    }
+
+    function adStripSetLockedMessage(locked) {
+        const el = document.getElementById('ad-strip-text');
+        if (!el) return;
+        if (locked) {
+            el.innerHTML = 'Player locked to block Ads.<span>Tap the screen to unlock.</span>';
+        } else {
+            adShowWaiting();
+        }
+    }
+
+    // ── Unlock Modal Logic ─────────────────────────────────────────────
+    const _unlockModal = document.getElementById('unlock-modal');
+    const _cancelBtn   = document.getElementById('unlock-cancel');
+    const _confirmBtn  = document.getElementById('unlock-confirm');
+
+    function showUnlockModal() {
+        if (_unlockModal) _unlockModal.classList.add('active');
+    }
+
+    if (_cancelBtn && !_cancelBtn._wired) {
+        _cancelBtn._wired = true;
+        _cancelBtn.addEventListener('click', () => {
+            _unlockModal?.classList.remove('active');
+        });
+    }
+    if (_confirmBtn && !_confirmBtn._wired) {
+        _confirmBtn._wired = true;
+        _confirmBtn.addEventListener('click', () => {
+            _unlockModal?.classList.remove('active');
+            unlockShield();
+        });
+    }
+    if (_unlockModal && !_unlockModal._wired) {
+        _unlockModal._wired = true;
+        _unlockModal.addEventListener('click', (e) => {
+            if (e.target === _unlockModal) _unlockModal.classList.remove('active');
+        });
+    }
+
+    // Shield click — opens modal if locked.
+    const _shieldEl = document.getElementById('touch-shield');
+    if (_shieldEl && !_shieldEl._wired) {
+        _shieldEl._wired = true;
+        _shieldEl.addEventListener('click', () => {
+            if (shieldLocked) showUnlockModal();
+        });
+    }
+
+    // (Fullscreen shield-hiding logic removed so the shield stays on in fullscreen)
+
+    // Shared apply-mode helper — used by both the direct-URL path and the
+    // manifest path so their behaviour can never drift apart.
+    const DIRECT_MODES = ['direct-sandbox', 'direct-autoplay', 'direct-nosandbox'];
+
+    function applyDirectMode(mode, url) {
+        if (mode === 'direct-sandbox') {
             contentFrame.setAttribute(
                 'sandbox',
                 'allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock'
             );
             document.body.classList.remove('unlocked-mode');
-            loadIntoFrame(refParam);
+            document.body.classList.remove('no-shield');
+            loadIntoFrame(url);
             return;
         }
+
+        if (mode === 'direct-autoplay') {
+            contentFrame.removeAttribute('sandbox');
+            document.body.classList.add('unlocked-mode');
+            document.body.classList.remove('no-shield');
+            loadIntoFrame(url);
+            return;
+        }
+
+        // direct-nosandbox
+        contentFrame.removeAttribute('sandbox');
+        document.body.classList.add('unlocked-mode');
+        document.body.classList.add('no-shield');
+
+        // Hard-remove shield + audio BEFORE deferred style.js runs, so it
+        // can't bind to them or start playback.
+        const shieldEl = document.getElementById('click-shield');
+        if (shieldEl) shieldEl.remove();
+
+        const bgAudio = document.getElementById('bg-beat');
+        if (bgAudio) {
+            try { bgAudio.pause(); } catch (_) {}
+            bgAudio.removeAttribute('src');
+            bgAudio.remove();
+        }
+
+        // Hand off to the ad-notice flow — this may defer loadIntoFrame(url)
+        // until the user clicks "Start" on the poster.
+        startAdNoticedFlow(url);
+    }
+
+    function isHttpUrl(s) {
+        try {
+            const u = new URL(s);
+            return u.protocol === 'http:' || u.protocol === 'https:';
+        } catch (_) {
+            return false;
+        }
+    }
+
+    async function route() {
+        // Deterministic routing — the mode is the parameter NAME:
+        //   ?direct-sandbox=<url>    → sandboxed, shield + audio
+        //   ?direct-autoplay=<url>   → un-sandboxed, shield + audio
+        //   ?direct-nosandbox=<url>  → un-sandboxed, no shield / no audio
+        //   ?ref=<key>               → encrypted manifest lookup ONLY
+        for (const mode of DIRECT_MODES) {
+            const directUrl = params.get(mode);
+            if (directUrl !== null) {
+                if (!isHttpUrl(directUrl)) { showFallback(); return; }
+                applyDirectMode(mode, directUrl);
+                return;
+            }
+        }
+
+        if (!refParam) { showFallback(); return; }
 
         loadingUI.classList.add('show');
 
@@ -583,25 +1338,15 @@ async function getKey() {
             const entry    = manifest[refParam];
             if (!entry) throw new Error(`Key "${refParam}" not found`);
 
-            if (entry.type === 'direct') {
-                const useSandbox = entry.sandboxed !== false;
-
-                if (useSandbox) {
-                    contentFrame.setAttribute(
-                        'sandbox',
-                        'allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock'
-                    );
-                    document.body.classList.remove('unlocked-mode');
-                } else {
-                    contentFrame.removeAttribute('sandbox');
-                    document.body.classList.add('unlocked-mode');
-                }
-
-                loadIntoFrame(entry.url);
-            } else {
-                console.warn(`Key "${refParam}" is type "${entry.type}", expected "direct"`);
+            if (!DIRECT_MODES.includes(entry.type)) {
+                console.warn(
+                    `Key "${refParam}" is type "${entry.type}", expected one of: ${DIRECT_MODES.join(', ')}`
+                );
                 showFallback();
+                return;
             }
+
+            applyDirectMode(entry.type, entry.url);
         } catch (e) {
             console.error('Manifest resolution failed:', e);
             showFallback();
@@ -643,12 +1388,9 @@ window.addEventListener('blur', () => {
 
     document.addEventListener('fullscreenchange', () => {
         if (document.fullscreenElement) {
-            fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i> <span>Exit Fullscreen</span>';
-            
-            // MAGIC: Attempt to force Landscape orientation on mobile devices
+            // Attempt to force Landscape orientation on mobile devices
             try {
                 if (screen.orientation && screen.orientation.lock) {
-                    // We wrap in a catch because desktops and iOS will reject this
                     screen.orientation.lock('landscape').catch((err) => {
                         console.warn('Orientation lock not supported or denied:', err);
                     });
@@ -656,10 +1398,7 @@ window.addEventListener('blur', () => {
             } catch (e) {}
             
         } else {
-            // UI Update
-            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i> <span>Fullscreen</span>';
-            
-            // MAGIC: Unlock the orientation when leaving fullscreen
+            // Unlock the orientation when leaving fullscreen
             try {
                 if (screen.orientation && screen.orientation.unlock) {
                     screen.orientation.unlock();
@@ -669,24 +1408,45 @@ window.addEventListener('blur', () => {
     });
     
     
-    // ── 4. CHAT CONTROL PANEL ────────────────────────────────────────────────
-    const chatUrl     = "https://ytvs-frame.pages.dev/discuss";
-    const commBtn     = document.getElementById('community-btn');
-    const commFrame   = document.getElementById('interaction-frame');
-    let isCommActive  = false;
+    // ── 4. CHAT DRAWER ────────────────────────────────────────────────────────
+    const chatFab     = document.getElementById('chat-fab');
+    const chatDrawer  = document.getElementById('chat-drawer');
+    const chatOverlay = document.getElementById('chat-overlay');
+    const chatClose   = document.getElementById('chat-close');
+    const chatFrame   = document.getElementById('chat-frame');
+    let chatLoaded    = false;
 
-    commBtn.addEventListener('click', () => {
-        if (!isCommActive) {
-            commFrame.src          = chatUrl;
-            commFrame.style.display = "block";
-            commBtn.innerHTML      = '<i class="fas fa-times"></i> Close Chat';
-            isCommActive           = true;
-        } else {
-            commFrame.style.display = "none";
-            commBtn.innerHTML       = '<i class="fas fa-comments"></i> Chat';
-            isCommActive            = false;
+    function openChat() {
+        if (!chatLoaded) {
+            let embedDomain = window.location.hostname;
+            try {
+                if (document.referrer) {
+                    embedDomain = new URL(document.referrer).hostname;
+                } else if (window.top !== window.self) {
+                    embedDomain = window.top.location.hostname;
+                }
+            } catch (e) {}
+
+            // Including dark_theme=1 and dynamic embed_domain
+            chatFrame.src = `https://www.youtube.com/live_chat?v=Rr6G_PRnfhA&dark_theme=1&embed_domain=${encodeURIComponent(embedDomain)}`;
+            chatLoaded = true;
         }
-    });
+        chatDrawer.classList.add('open');
+        chatOverlay.classList.add('open');
+        chatFab.classList.add('is-closed');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeChat() {
+        chatDrawer.classList.remove('open');
+        chatOverlay.classList.remove('open');
+        chatFab.classList.remove('is-closed');
+        document.body.style.overflow = '';
+    }
+
+    chatFab.addEventListener('click', openChat);
+    chatClose.addEventListener('click', closeChat);
+    chatOverlay.addEventListener('click', closeChat);
 
     // ── Change Link button ────────────────────────
 const changeLinkBtn = document.getElementById('change-link-btn');

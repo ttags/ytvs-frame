@@ -44,8 +44,39 @@
             padding-bottom: 90px;
         }
 
-        .brand-header { text-align: center; margin-bottom: 10px; }
-        .brand-logo { max-height: 60px; border-radius: 999px; width: auto; }
+        .brand-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px; /* Space between logo and text */
+            text-decoration: none;
+        }
+
+        .brand-logo {
+            max-height: 48px; /* Slightly smaller so it balances with text */
+            border-radius: 999px;
+            width: auto;
+        }
+
+        .brand-text {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+            line-height: 1;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .brand-text span {
+            color: #a78bfa; /* The soft purple from your screenshot */
+        }
 
         .toolbar {
             display: flex;
@@ -74,27 +105,60 @@
 
         .btn-primary { background: var(--primary); color: white; border: none; }
 
-        /* Player overlay controls (glass) */
-        .player-ctrl {
+        /* Player Overlay Pills */
+        .video-pill {
             position: absolute;
-            top: 12px; right: 12px;
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            background: rgba(20, 20, 22, .65);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            z-index: 15;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-fullscreen {
+            top: 12px;
+            right: 12px;
+            background: #FF5722; /* Vibrant Sunset Orange */
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.5);
+        }
+        .btn-fullscreen:hover {
+            background: #E64A19;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 87, 34, 0.7);
+        }
+        .btn-fullscreen:active {
+            transform: scale(0.95);
+        }
+
+        .btn-share-overlay {
+            bottom: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.2); /* Lighter background */
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4); /* Stronger border */
             -webkit-backdrop-filter: blur(16px) saturate(140%);
             backdrop-filter: blur(16px) saturate(140%);
-            border: 1px solid rgba(255, 255, 255, .14);
-            color: #fff;
-            display: grid; place-items: center;
-            z-index: 15;
-            transition: background-color .2s, transform .15s;
-            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-        .player-ctrl:hover  { background: rgba(20, 20, 22, .85); }
-        .player-ctrl:active { transform: scale(.9); }
-        .frame-box:fullscreen .player-ctrl {
-            top: 14px; right: 14px;
-            width: 44px; height: 44px;
+        .btn-share-overlay:hover {
+            background: rgba(20, 20, 22, 0.85);
+            transform: translateY(-1px);
+        }
+        .btn-share-overlay:active {
+            transform: scale(0.95);
+        }
+
+        /* Hide pills when in fullscreen mode */
+        .frame-box:fullscreen .video-pill {
+            display: none !important;
         }
 
         /* ── Player Box Layout ──────────────────────────────────────────────── */
@@ -169,20 +233,23 @@
             color: white;
             z-index: 20;
         }
-
-        /* ── Interface Notification Alerts ───────────────────────────────────── */
-        .status-alert {
-            display:none;
-            background: #eff6ff;
-            color: #1e40af;
-            padding: 12px;
-            border-radius: 8px;
+        
+         .status-alert {
+            background: transparent;
+            color: var(--primary);
+            padding: 0;
             font-size: 13px;
-            margin-bottom: 10px;
-            border: 1px solid #bfdbfe;
+            font-weight: 500;
+            margin-bottom: 15px;
+            margin-top: 20px;
+            border: none;
             text-align: center;
         }
-        .dark-mode .status-alert { background: #1e293b; color: #60a5fa; border-color: #3b82f6; }
+        .dark-mode .status-alert { 
+            background: transparent; 
+            color: #60a5fa; 
+            border: none; 
+        }
 
         /* ── Chat FAB + DRAWER ───────────────────────────────────────────────── */
         .chat-fab {
@@ -352,7 +419,7 @@
 
         .modal-actions button {
             padding: 9px 16px;
-            border-radius: 8px;
+            border-radius: 999px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
@@ -392,19 +459,13 @@
 
 <div class="app-container">
     <header class="brand-header">
-
-        <a href="https://www.yakitv.com" id="header-logo-link">
+        <a href="https://www.yakitv.com" id="header-logo-link" class="brand-link">
             <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1YQTuxcQgr6q0XKRBCEsTzTDoEKiin9r3yvGgoWvAodXNjeU4QvhiYQw3TDwGmkgAx5nI0NfDuHvEn941gG5SgpHkmPfMfwJwNErA4Zidx3ykPm4Vn7ekB7o51HhqMIYM8fg7qnhlWQUHlVLSVuqjzne_uwd_aqhItqEr8-WJegszIESdLlz7K6BHU-bH/s1600/Yaki%20TV%201.png" alt="Yaki TV Index" class="brand-logo">
+            <span class="brand-text">Yaki TV</span>
         </a>
     </header>
 
-    <div class="status-alert">
-        <i class="fas fa-info-circle"></i> <b>Yaki TV:</b> This page provides a technical display frame for externally referenced resources.
-    </div>
-    
-            <button class="btn-utility" id="share-btn" style="position: absolute; right: 20px; top: 20px; border-radius: 50%; width: 44px; height: 44px; padding: 0;">
-            <i class="fas fa-share-nodes"></i>
-        </button>
+
 
     <main class="frame-box" id="player-container">
         <iframe
@@ -414,8 +475,14 @@
             sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
         </iframe>
         
-        <button class="player-ctrl" id="fullscreen-btn" type="button" aria-label="Enter fullscreen">
-            <i class="fas fa-expand"></i>
+        <!-- Fullscreen Pill (Top Right) -->
+        <button class="video-pill btn-fullscreen" id="fullscreen-btn" type="button" aria-label="Enter fullscreen">
+            <i class="fas fa-expand"></i> <span>Fullscreen</span>
+        </button>
+
+        <!-- Share Pill (Bottom Right) -->
+        <button class="video-pill btn-share-overlay" id="share-btn" type="button" aria-label="Share">
+            <i class="fas fa-share-nodes"></i> <span>Share</span>
         </button>
 
 <div id="click-shield">
@@ -440,15 +507,16 @@
         </div>
     </main>
 
+    <div class="status-alert">
+        <i class="fas fa-info-circle"></i> Not working?
+    </div>
+
     <div class="toolbar">
         <button class="btn-utility" id="change-link-btn">
-        <i class="fas fa-exchange-alt"></i> <span>Change Link</span>
+            <i class="fas fa-arrow-left"></i> <span>Change Link</span>
         </button>
         <button class="btn-utility" id="sync-btn">
             <i class="fas fa-sync-alt"></i> <span>Refresh</span>
-        </button>
-        <button class="btn-utility" id="share-btn">
-            <i class="fas fa-share-nodes"></i> <span>Share</span>
         </button>
     </div>
 
@@ -782,12 +850,9 @@ window.addEventListener('blur', () => {
 
     document.addEventListener('fullscreenchange', () => {
         if (document.fullscreenElement) {
-            fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
-            
-            // MAGIC: Attempt to force Landscape orientation on mobile devices
+            // Attempt to force Landscape orientation on mobile devices
             try {
                 if (screen.orientation && screen.orientation.lock) {
-                    // We wrap in a catch because desktops and iOS will reject this
                     screen.orientation.lock('landscape').catch((err) => {
                         console.warn('Orientation lock not supported or denied:', err);
                     });
@@ -795,10 +860,7 @@ window.addEventListener('blur', () => {
             } catch (e) {}
             
         } else {
-            // UI Update
-            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-            
-            // MAGIC: Unlock the orientation when leaving fullscreen
+            // Unlock the orientation when leaving fullscreen
             try {
                 if (screen.orientation && screen.orientation.unlock) {
                     screen.orientation.unlock();

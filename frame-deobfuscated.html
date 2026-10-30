@@ -1421,8 +1421,8 @@ window.addEventListener('blur', () => {
                 }
             } catch (e) {}
 
-            // Including dark_theme=1 and dynamic embed_domain
-            chatFrame.src = `https://www.youtube.com/live_chat?v=Rr6G_PRnfhA&dark_theme=1&embed_domain=${encodeURIComponent(embedDomain)}`;
+            // Including dark_theme=1 and static embed_domain
+            chatFrame.src = `https://www.youtube.com/live_chat?v=Rr6G_PRnfhA&dark_theme=1&embed_domain=ytvs-frame.pages.dev`;
             chatLoaded = true;
         }
         chatDrawer.classList.add('open');

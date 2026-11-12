@@ -14,8 +14,7 @@
 3. Share and fullscreen buttons over the video as they are high-yield buttons
 4. 3 types of direct embeds, properly handled 
 5. direct-nosandbox will show ad counter plus notice to help users
-6. Auto shield in 15S of quiteness in direct-nosandbox, clicking shield shows dialog to confirm.
-7. Gamified ad-close in-memory (particles, XP, ranks, streaks, variable reward) — NO persistence. -->
+6. Auto shield in 15S of quiteness in direct-nosandbox, clicking shield shows dialog to confirm. -->
 
     <style>
         :root {
@@ -64,12 +63,12 @@
         .brand-link {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 12px; /* Space between logo and text */
             text-decoration: none;
         }
 
         .brand-logo {
-            max-height: 48px;
+            max-height: 48px; /* Slightly smaller so it balances with text */
             border-radius: 999px;
             width: auto;
         }
@@ -83,7 +82,9 @@
             font-family: 'Inter', -apple-system, sans-serif;
         }
 
-        .brand-text span { color: #a78bfa; }
+        .brand-text span {
+            color: #a78bfa; /* The soft purple from your screenshot */
+        }
 
         .toolbar {
             display: grid;
@@ -113,6 +114,7 @@
 
         .btn-primary { background: var(--primary); color: white; border: none; }
 
+        /* Full-width community chat button */
         .btn-chat-full {
             display: flex;
             align-items: center;
@@ -141,6 +143,7 @@
         .btn-chat-full:active { transform: scale(0.98); }
         .btn-chat-full i { font-size: 16px; }
 
+        /* Player Overlay Pills */
         .video-pill {
             position: absolute;
             display: flex;
@@ -160,7 +163,7 @@
         .btn-fullscreen {
             top: 12px;
             right: 12px;
-            background: #FF5722;
+            background: #FF5722; /* Vibrant Sunset Orange */
             color: white;
             box-shadow: 0 4px 15px rgba(255, 87, 34, 0.5);
         }
@@ -169,7 +172,9 @@
             transform: translateY(-1px);
             box-shadow: 0 6px 20px rgba(255, 87, 34, 0.7);
         }
-        .btn-fullscreen:active { transform: scale(0.95); }
+        .btn-fullscreen:active {
+            transform: scale(0.95);
+        }
 
         .btn-share-overlay {
             bottom: 12px;
@@ -182,10 +187,16 @@
             background: rgba(20, 20, 22, 0.85);
             transform: translateY(-1px);
         }
-        .btn-share-overlay:active { transform: scale(0.95); }
+        .btn-share-overlay:active {
+            transform: scale(0.95);
+        }
 
-        .frame-box:fullscreen .video-pill { display: none !important; }
+        /* Hide pills when in fullscreen mode */
+        .frame-box:fullscreen .video-pill {
+            display: none !important;
+        }
 
+        /* ── Player Box Layout ──────────────────────────────────────────────── */
         .frame-box {
             position: relative;
             background: #000;
@@ -197,6 +208,7 @@
             transition: box-shadow 0.2s ease, border-color 0.2s ease;
         }
 
+        /* Subtle glowing activation boundary when the sandboxed frame absorbs a tap */
         .frame-box.interaction-flash {
             box-shadow: 0 0 20px rgba(0, 123, 255, 0.6);
             border-color: #007bff;
@@ -218,6 +230,7 @@
             background: #000;
         }
 
+        /* ── Loading Interface ───────────────────────────────────────────────── */
         #loading-ui {
             display: none;
             position: absolute;
@@ -245,6 +258,7 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* ── Error Fallbacks ─────────────────────────────────────────────────── */
         .fallback-ui {
             display: none;
             position: absolute;
@@ -255,7 +269,7 @@
             z-index: 20;
         }
         
-        .status-alert {
+         .status-alert {
             background: transparent;
             color: var(--primary);
             padding: 0;
@@ -272,319 +286,9 @@
             border: none; 
         }
 
-        /* ── Ad-notice strip (direct-nosandbox) ──────────────────────────── */
-        .ad-strip {
-            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-            background: var(--container-bg); border: 2px solid var(--primary);
-            border-radius: 12px; padding: 10px 12px; margin-bottom: 10px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            position: relative;
-        }
-        .ad-strip[hidden] { display: none !important; }
-        .ad-strip.is-back { border-color: #22c55e; }
+        /* ── Chat FAB + DRAWER ───────────────────────────────────────────────── */
+        /* (chat-fab removed — chat is now a full-width button below the toolbar) */
 
-        /* Rank-up glow flash on the whole strip */
-        .ad-strip.rank-up {
-            animation: rank-glow 1.4s ease-out;
-            border-color: #fbbf24;
-        }
-        @keyframes rank-glow {
-            0%   { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.75); }
-            100% { box-shadow: 0 0 0 22px rgba(251, 191, 36, 0); }
-        }
-
-        .ad-strip-icon {
-            flex: none; width: 36px; height: 36px; border-radius: 50%;
-            display: grid; place-items: center;
-            background: var(--primary); color: #fff;
-            position: relative;
-            transition: background-color 0.3s;
-        }
-        .ad-strip.is-back .ad-strip-icon { background: #22c55e; }
-        .ad-strip-icon svg { width: 22px; height: 22px; }
-
-        /* Shield charge ring around the icon */
-        .shield-ring {
-            position: absolute;
-            inset: -5px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.35s ease;
-        }
-        .shield-ring.active { opacity: 1; }
-        .shield-ring svg {
-            width: 100%; height: 100%;
-            transform: rotate(-90deg);
-            overflow: visible;
-        }
-        .shield-ring .ring-track {
-            fill: none; stroke: var(--border-color);
-            stroke-width: 2; opacity: 0.55;
-        }
-        .shield-ring .ring-fill {
-            fill: none; stroke: #22c55e; stroke-width: 2.5;
-            stroke-linecap: round;
-            stroke-dasharray: 125.66;
-            stroke-dashoffset: 125.66;
-        }
-
-        /* Particle burst */
-        .particle {
-            position: absolute;
-            width: 5px; height: 5px;
-            border-radius: 50%;
-            background: var(--particle-color, #22c55e);
-            top: 50%; left: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            animation: particle-fly 0.62s cubic-bezier(.2,.7,.3,1) forwards;
-            z-index: 3;
-        }
-        @keyframes particle-fly {
-            0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0); opacity: 0; }
-        }
-
-        .ad-strip-text {
-            flex: 1 1 160px; font-size: 13px; font-weight: 700; line-height: 1.35;
-            color: var(--text-main);
-            transition: color 0.2s;
-        }
-        .ad-strip-text span {
-            display: block; font-weight: 500; font-size: 12px;
-            color: var(--text-muted); margin-top: 2px;
-        }
-        .ad-strip.is-back .ad-strip-text { color: #16a34a; }
-        .dark-mode .ad-strip.is-back .ad-strip-text { color: #4ade80; }
-
-        .ad-strip-counter {
-            flex: none; display: flex; align-items: center; gap: 6px;
-            background: var(--btn-gray);
-            border-radius: 99px;
-            padding: 6px 12px;
-            margin-left: auto;
-            position: relative;
-        }
-        .ad-strip-counter b {
-            font-size: 16px; font-weight: 800; line-height: 1;
-            color: var(--text-main);
-            display: inline-block;
-            will-change: transform;
-        }
-        .ad-strip-counter b.bump {
-            animation: count-bump 0.42s cubic-bezier(.2,1.5,.3,1);
-        }
-        @keyframes count-bump {
-            0%   { transform: scale(1); }
-            40%  { transform: scale(1.55); color: #22c55e; }
-            100% { transform: scale(1); }
-        }
-        .ad-strip-counter small {
-            font-size: 11px; font-weight: 600; color: var(--text-muted); line-height: 1;
-        }
-
-        /* Floating "+N" that drifts up off the counter */
-        .float-plus {
-            position: absolute;
-            top: -2px;
-            left: 50%;
-            font-size: 13px;
-            font-weight: 800;
-            pointer-events: none;
-            white-space: nowrap;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-            animation: float-up 0.95s cubic-bezier(.2,.7,.3,1) forwards;
-            z-index: 4;
-        }
-        @keyframes float-up {
-            0%   { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            60%  { opacity: 1; transform: translate(-50%, -18px) scale(1.2); }
-            100% { opacity: 0; transform: translate(-50%, -30px) scale(1.35); }
-        }
-
-        /* XP bar / rank chip row */
-        .xp-bar-wrap {
-            background: var(--container-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 9px 14px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 12px;
-            transition: border-color 0.3s;
-        }
-        .xp-bar-wrap[hidden] { display: none !important; }
-        .xp-rank {
-            font-weight: 800;
-            color: var(--text-main);
-            white-space: nowrap;
-            font-size: 12px;
-            letter-spacing: 0.1px;
-        }
-        .xp-track {
-            flex: 1;
-            height: 7px;
-            background: var(--btn-gray);
-            border-radius: 99px;
-            overflow: hidden;
-        }
-        .xp-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #22c55e, #16a34a);
-            border-radius: 99px;
-            transition: width 0.55s cubic-bezier(.2,.9,.3,1);
-        }
-        .xp-number {
-            font-weight: 700;
-            color: var(--text-muted);
-            font-size: 11px;
-            white-space: nowrap;
-            font-variant-numeric: tabular-nums;
-        }
-
-        /* ── OVERLAY ────────────────────────────────────────────────────── */
-        #ad-notice-overlay {
-            position: fixed; inset: 0; z-index: 2147483000;
-            display: flex;
-            align-items: center; justify-content: center;
-            padding: 16px;
-            background: rgba(15,23,42,.66);
-            -webkit-backdrop-filter: blur(6px);
-            backdrop-filter: blur(6px);
-            font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-            box-sizing: border-box;
-        }
-        #ad-notice-overlay[hidden] { display: none !important; }
-        #ad-notice-overlay *{ box-sizing: border-box; }
-
-        .an-card {
-            position: relative;
-            width: 100%;
-            max-width: 530px;
-            max-height: 92vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            background: #fff;
-            border-radius: 24px;
-            padding: 26px 22px 22px;
-            box-shadow: 0 24px 60px rgba(2,6,23,.38);
-            text-align: center;
-            animation: an-pop .28s cubic-bezier(.2,.9,.3,1.2);
-        }
-        @keyframes an-pop {
-            from{ opacity:0; transform:translateY(16px) scale(.96); }
-            to  { opacity:1; transform:none; }
-        }
-
-        .an-art {
-            width: 100%;
-            max-width: 290px;
-            height: auto;
-            margin: 2px auto 6px;
-            display: block;
-        }
-
-        .an-title {
-            margin: 0 0 8px;
-            font-size: clamp(20px, 5.2vw, 25px);
-            line-height: 1.22;
-            font-weight: 800;
-            color: #0f172a;
-            letter-spacing: -.01em;
-        }
-        .an-sub {
-            margin: 0;
-            font-size: clamp(14px, 3.8vw, 16px);
-            line-height: 1.45;
-            color: #64748b;
-        }
-        .an-sub b{ color:#dc2626; }
-
-        .back-box {
-            display: grid;
-            grid-template-columns: minmax(0,58%) 1fr;
-            gap: 12px;
-            align-items: center;
-            width: 100%;
-            margin: 20px 0 22px;
-            padding: 10px 14px 10px 10px;
-            background: #ffffff;
-            color: #0f1f14;
-            border: 1.5px solid #d5e6d9;
-            border-radius: 18px;
-            box-shadow: 0 6px 18px rgba(15,31,20,.08);
-            text-align: left;
-        }
-        .back-box *{ box-sizing: border-box; }
-        .back-box svg{ display: block; width: 100%; height: auto; }
-        .back-box strong {
-            display: block;
-            font-size: clamp(17px, 4.6vw, 20px);
-            font-weight: 800;
-            line-height: 1.2;
-            color: #0f1f14;
-        }
-        .back-box small {
-            display: block;
-            margin-top: 3px;
-            font-size: clamp(14px, 3.9vw, 16px);
-            color: #5b6f61;
-            line-height: 1.3;
-        }
-        .back-box .bb-pulse { animation: bb-pulse 1.4s ease-in-out infinite; }
-        @keyframes bb-pulse { 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
-
-        .an-btn {
-            width: 100%;
-            border: 0;
-            cursor: pointer;
-            padding: 16px 18px;
-            border-radius: 16px;
-            font-family: inherit;
-            font-size: clamp(17px, 4.4vw, 19px);
-            font-weight: 800;
-            color: #fff;
-            background: #4f46e5;
-            box-shadow: 0 10px 22px rgba(79,70,229,.35);
-            transition: transform 0.1s, box-shadow 0.15s, background-color 0.2s;
-        }
-        .an-btn:active { transform: translateY(1px) scale(0.99); box-shadow: 0 6px 14px rgba(79,70,229,.3); }
-        .an-btn:focus-visible { outline: 3px solid #1e1b4b; outline-offset: 3px; }
-
-        /* ── Smart touch shield ──────────────────────────────────────────── */
-        #touch-shield {
-            position: absolute;
-            inset: 0;
-            z-index: 14;
-            background: transparent;
-            cursor: pointer;
-            pointer-events: auto;
-            touch-action: none;
-        }
-        #touch-shield[hidden] { display: none !important; }
-
-        #unlock-confirm { color: white !important; border: none !important; }
-
-        .legal-footer {
-            margin-top: 40px; padding: 25px;
-            background: var(--container-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px; font-size: 12px;
-            color: var(--text-muted); line-height: 1.6;
-        }
-
-        .legal-title {
-            display: block; font-size: 14px; font-weight: 700;
-            color: var(--text-main); margin-bottom: 12px; text-transform: uppercase;
-        }
-
-        body.no-shield #click-shield,
-        body.no-shield #bg-beat { display: none !important; }
-
-        /* ── Chat drawer ──────────────────────────────────────────────────── */
         .chat-overlay {
             position: fixed; inset: 0;
             background: rgba(0, 0, 0, .5);
@@ -655,6 +359,7 @@
             background: var(--container-bg);
         }
 
+        /* First-load spinner — shown only until the iframe fires 'load' */
         .chat-loading {
             position: absolute;
             inset: 0;
@@ -704,7 +409,7 @@
             }
         }
 
-        /* ── Share Modal ──────────────────────────────────────────────────── */
+        /* ── Share Modal ──────────────────────────────────────────────────────── */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -775,15 +480,193 @@
             border: none;
         }
 
-        @media (max-width: 300px) { .btn-utility span { display: none; } }
-        @media (max-width: 600px) {
-            .frame-box { height: 220px; aspect-ratio: auto; }
-            .frame-box:fullscreen { height: 100vh; }
+        /* ── Footer Elements ─────────────────────────────────────────────────── */
+        .legal-footer {
+            margin-top: 40px; padding: 25px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px; font-size: 12px;
+            color: var(--text-muted); line-height: 1.6;
         }
 
-        @media (max-width:420px){
-            .an-card { padding: 22px 16px 18px; border-radius: 20px; }
+        .legal-title {
+            display: block; font-size: 14px; font-weight: 700;
+            color: var(--text-main); margin-bottom: 12px; text-transform: uppercase;
         }
+
+        body.no-shield #click-shield,
+        body.no-shield #bg-beat {
+            display: none !important;
+        }
+
+        /* ── Ad-notice (direct-nosandbox only) ──────────────────────────── */
+        .ad-strip {
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+            background: var(--container-bg); border: 2px solid var(--primary);
+            border-radius: 12px; padding: 10px 12px; margin-bottom: 10px;
+        }
+        .ad-strip[hidden] { display: none !important; }
+        .ad-strip.is-back { border-color: #22c55e; }
+        .ad-strip-icon {
+            flex: none; width: 36px; height: 36px; border-radius: 50%;
+            display: grid; place-items: center;
+            background: var(--primary); color: #fff;
+        }
+        .ad-strip.is-back .ad-strip-icon { background: #22c55e; }
+        .ad-strip-icon svg { width: 22px; height: 22px; }
+        .ad-strip-text {
+            flex: 1 1 160px; font-size: 13px; font-weight: 700; line-height: 1.35;
+            color: var(--text-main);
+        }
+        .ad-strip-text span { display: block; font-weight: 500; font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        
+        
+        .ad-strip-counter {
+            flex: none; display: flex; align-items: center; gap: 8px; 
+            background: #1e293b; /* Dark, sleek arcade background */
+            border: 1px solid #334155;
+            border-radius: 99px; 
+            padding: 6px 16px; 
+            margin-left: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .ad-strip-counter b { 
+            font-size: 20px; /* Bigger score */
+            font-weight: 900; 
+            line-height: 1; 
+            color: #fbbf24; /* Vibrant Gold/Amber */
+            text-shadow: 0 0 8px rgba(251, 191, 36, 0.4); /* Gamified glow */
+            display: inline-block; /* Required for scale animation */
+         }
+        .ad-strip-counter small { 
+            font-size: 10px; 
+            font-weight: 800; 
+            color: #94a3b8; 
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* The pop animation for when the score increases */
+        .tier-godlike {
+            background: linear-gradient(90deg, #ff3366, #ff9933, #22c55e, #3b82f6, #a855f7);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: godlike-shine 2.5s linear infinite;
+        }
+        @keyframes godlike-shine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        @keyframes score-pop {
+            0%   { transform: scale(1); color: #fbbf24; }
+            40%  { transform: scale(1.5); color: #fff; text-shadow: 0 0 15px #fbbf24; }
+            100% { transform: scale(1); color: #fbbf24; }
+        }
+        .ad-score-anim {
+            animation: score-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        /* ---------- OVERLAY ---------- */
+        #ad-notice-overlay {
+            position: fixed; inset: 0; z-index: 2147483000;
+            display: flex;
+            align-items: center; justify-content: center;
+            padding: 16px;
+            background: rgba(15,23,42,.66);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+            box-sizing: border-box;
+        }
+        #ad-notice-overlay[hidden] { display: none !important; }
+        #ad-notice-overlay *{ box-sizing: border-box; }
+
+        /* ---------- CARD ---------- */
+        .an-card {
+            position: relative;
+            width: 100%;
+            max-width: 530px;
+            max-height: 92vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: #fff;
+            border-radius: 24px;
+            padding: 26px 22px 22px;
+            box-shadow: 0 24px 60px rgba(2,6,23,.38);
+            text-align: center;
+            animation: an-pop .28s cubic-bezier(.2,.9,.3,1.2);
+        }
+        @keyframes an-pop {
+            from{ opacity:0; transform:translateY(16px) scale(.96); }
+            to  { opacity:1; transform:none; }
+        }
+        @media (prefers-reduced-motion: reduce){
+            .an-card{ animation:none; }
+        }
+
+        /* ---------- VISUAL 1 ---------- */
+        .an-art {
+            width: 100%;
+            max-width: 290px;
+            height: auto;
+            margin: 2px auto 6px;
+            display: block;
+        }
+
+        /* ---------- TEXT ---------- */
+        .an-title {
+            margin: 0 0 8px;
+            font-size: clamp(20px, 5.2vw, 25px);
+            line-height: 1.22;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -.01em;
+        }
+        .an-sub {
+            margin: 0;
+            font-size: clamp(14px, 3.8vw, 16px);
+            line-height: 1.45;
+            color: #64748b;
+        }
+        .an-sub b{ color:#dc2626; }
+
+        /* ---------- VISUAL 2 (green = do this) ---------- */
+        .back-box {
+            display: grid;
+            grid-template-columns: minmax(0,58%) 1fr;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+            margin: 20px 0 22px;
+            padding: 10px 14px 10px 10px;
+            background: #ffffff;
+            color: #0f1f14;
+            border: 1.5px solid #d5e6d9;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(15,31,20,.08);
+            text-align: left;
+        }
+        .back-box *{ box-sizing: border-box; }
+        .back-box svg{ display: block; width: 100%; height: auto; }
+        .back-box strong {
+            display: block;
+            font-size: clamp(17px, 4.6vw, 20px);
+            font-weight: 800;
+            line-height: 1.2;
+            color: #0f1f14;
+        }
+        .back-box small {
+            display: block;
+            margin-top: 3px;
+            font-size: clamp(14px, 3.9vw, 16px);
+            color: #5b6f61;
+            line-height: 1.3;
+        }
+        .back-box .bb-pulse { animation: bb-pulse 1.4s ease-in-out infinite; }
+        @keyframes bb-pulse { 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
+        @media (prefers-reduced-motion:reduce){ .back-box .bb-pulse{ animation:none; } }
         @media (max-width:380px){
             .back-box {
                 grid-template-columns: 1fr;
@@ -795,14 +678,50 @@
             .back-box svg { max-width: 240px; margin: 0 auto; }
         }
 
-        /* Respect reduced motion for all the new juice */
-        @media (prefers-reduced-motion: reduce){
-            .an-card{ animation:none; }
-            .back-box .bb-pulse{ animation:none; }
-            .particle, .float-plus, .ad-strip-counter b.bump,
-            .ad-strip.rank-up { animation: none !important; }
-            .xp-fill { transition: none; }
+        /* ---------- BUTTON (indigo) ---------- */
+        .an-btn {
+            width: 100%;
+            border: 0;
+            cursor: pointer;
+            padding: 16px 18px;
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: clamp(17px, 4.4vw, 19px);
+            font-weight: 800;
+            color: #fff;
+            background: #4f46e5;
+            box-shadow: 0 10px 22px rgba(79,70,229,.35);
         }
+        .an-btn:active { transform: translateY(1px); box-shadow: 0 6px 14px rgba(79,70,229,.3); }
+        .an-btn:focus-visible { outline: 3px solid #1e1b4b; outline-offset: 3px; }
+        @media (max-width:420px){
+            .an-card { padding: 22px 16px 18px; border-radius: 20px; }
+        }
+
+        /* ── Smart touch shield (direct-nosandbox only) ──────────────────── */
+        #touch-shield {
+            position: absolute;
+            inset: 0;
+            z-index: 14;              /* above iframe (1), below pills (15) */
+            background: transparent;
+            cursor: pointer;          /* Shows it is clickable */
+            pointer-events: auto;
+            touch-action: none;
+        }
+        #touch-shield[hidden] { display: none !important; }
+
+        /* Green confirm button for unlock modal */
+        #unlock-confirm {            
+            color: white !important;
+            border: none !important;
+        }
+
+
+        @media (max-width: 300px) { .btn-utility span { display: none; } }
+        @media (max-width: 600px) {
+            .frame-box { height: 220px; aspect-ratio: auto; }
+            .frame-box:fullscreen { height: 100vh; }
+        }        
     </style>
 </head>
 <body class="dark-mode">
@@ -815,28 +734,13 @@
         </a>
     </header>
 
+
+
     <!-- Ad-notice status strip (only shown in direct-nosandbox mode) -->
     <div class="ad-strip" id="ad-notice-strip" hidden>
-        <div class="ad-strip-icon" id="ad-strip-icon">
-            <div class="shield-ring" id="shield-ring" aria-hidden="true">
-                <svg viewBox="0 0 44 44">
-                    <circle cx="22" cy="22" r="20" class="ring-track"/>
-                    <circle cx="22" cy="22" r="20" class="ring-fill" id="ring-fill"/>
-                </svg>
-            </div>
-        </div>
+        <div class="ad-strip-icon" id="ad-strip-icon"></div>
         <div class="ad-strip-text" id="ad-strip-text"></div>
-        <div class="ad-strip-counter">
-            <b id="ad-strip-count">0</b>
-            <small>ads closed</small>
-        </div>
-    </div>
-
-    <!-- XP / rank row -->
-    <div class="xp-bar-wrap" id="xp-bar-wrap" hidden>
-        <span class="xp-rank" id="xp-rank">Ad Dodger</span>
-        <div class="xp-track"><div class="xp-fill" id="xp-fill"></div></div>
-        <span class="xp-number" id="xp-number">0 XP</span>
+        <div class="ad-strip-counter"><b id="ad-strip-count">0</b><small id="ad-strip-label">ads closed</small></div>
     </div>
 
     <main class="frame-box" id="player-container">
@@ -847,27 +751,31 @@
             sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
         </iframe>
 
+        <!-- Transparent touch shield — auto-lifted after a quiet period in
+             direct-nosandbox. Blocks taps that would trigger ads. -->
         <div id="touch-shield" hidden></div>
 
+        <!-- Fullscreen Pill (Top Right) -->
         <button class="video-pill btn-fullscreen" id="fullscreen-btn" type="button" aria-label="Enter fullscreen">
             <i class="fas fa-expand"></i> <span>Fullscreen</span>
         </button>
 
+        <!-- Share Pill (Bottom Right) -->
         <button class="video-pill btn-share-overlay" id="share-btn" type="button" aria-label="Share">
             <i class="fas fa-share-nodes"></i> <span>Share</span>
         </button>
 
-        <div id="click-shield">
-            <div class="shield-brand">
-                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEguGNmp8b98m0InmYKPHeJxGIbSNRWDPE3TpwY70KkWeHe630R9-2hN9BrLVu51AT2kFhEhQFZ9WkYeKC52Rd9nB0g764qoPoQeNwoThBED4aR1RSySqSt3bdIFOdw-VdUZ50DL22iuiwF3c3siFqwQnkqfG7uuJTCPe3hsEkXxMAx2IvQIJv_Matmbt-Ma/s512/Yaki%20TV%20lime%20-%20ccff00.png"
-                     alt="Yaki TV">
-                <span class="shield-brand-live">● Yaki TV</span>
-            </div>
-            <button id="audio-toggle-btn" type="button" title="Start background audio">
-                <span class="audio-icon">▶︎</span>
-                <span class="audio-label">Play with sound</span>
-            </button>
-        </div>
+<div id="click-shield">
+    <div class="shield-brand">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEguGNmp8b98m0InmYKPHeJxGIbSNRWDPE3TpwY70KkWeHe630R9-2hN9BrLVu51AT2kFhEhQFZ9WkYeKC52Rd9nB0g764qoPoQeNwoThBED4aR1RSySqSt3bdIFOdw-VdUZ50DL22iuiwF3c3siFqwQnkqfG7uuJTCPe3hsEkXxMAx2IvQIJv_Matmbt-Ma/s512/Yaki%20TV%20lime%20-%20ccff00.png"
+             alt="Yaki TV">
+        <span class="shield-brand-live">● Yaki TV</span>
+    </div>
+    <button id="audio-toggle-btn" type="button" title="Start background audio">
+        <span class="audio-icon">▶︎</span>
+        <span class="audio-label">Play with sound</span>
+    </button>
+</div>
 
         <div id="loading-ui">
             <div class="spinner"></div>
@@ -877,6 +785,18 @@
             <i class="fas fa-exclamation-triangle fa-2x"></i>
             <p>Resource temporarily unavailable.</p>
         </div>
+        
+        <!-- ── Unlock Shield Modal (Moved here for fullscreen support) ── -->
+        <div class="modal-overlay" id="unlock-modal">
+            <div class="modal-box">
+                <h3>Unlock player?</h3>
+                <p>We are protecting you from ADS. If you unlock, ADS might be shown when you tap on screen.</p>
+                <div class="modal-actions">
+                    <button class="primary" id="unlock-cancel">Keep locked</button>
+                    <button id="unlock-confirm">Unlock anyway</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <div class="status-alert">
@@ -884,11 +804,11 @@
     </div>
 
     <div class="toolbar">
-        <button class="btn-utility" id="change-link-btn">
-            <i class="fas fa-arrow-left"></i> <span>Change Link</span>
-        </button>
         <button class="btn-utility" id="sync-btn">
             <i class="fas fa-sync-alt"></i> <span>Refresh</span>
+        </button>
+        <button class="btn-utility" id="change-link-btn">
+            <i class="fas fa-arrow-left"></i> <span>Change Link</span>
         </button>
     </div>
 
@@ -906,6 +826,8 @@
 
 
 <audio id="bg-beat" playsinline style="display:none;"></audio>
+
+<!-- Chat FAB removed — chat is now a full-width button below the toolbar -->
 
 <!-- Chat drawer -->
 <div class="chat-overlay" id="chat-overlay" aria-hidden="true"></div>
@@ -938,22 +860,154 @@
     </div>
 </div>
 
-<!-- ── Unlock Shield Modal ──────────────────────────────────────────── -->
-<div class="modal-overlay" id="unlock-modal">
-    <div class="modal-box">
-        <h3>Unlock player?</h3>
-        <p>We are protecting you from ADS. If you unlock, ADS might be shown when you tap on screen.</p>
-        <div class="modal-actions">
-            <button id="unlock-cancel">Keep locked</button>
-            <button id="unlock-confirm">Unlock anyway</button>
-        </div>
-    </div>
-</div>
 
-<!-- Ad-notice poster overlay -->
+
+<!-- App footer 
+    <div id="ono-promo-footer" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #121214;
+    color: #ffffff;
+    z-index: 9998;
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    border-top: 1px solid #27272a;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+">
+    <a id="ono-promo-link" href="https://yakitv.com" target="_blank" rel="noopener" style="
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+    ">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-weight: 700; font-size: 1rem; color: #ffffff;">
+                Yono TV APK v3.3
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.6rem; color: #a1a1aa;">
+                <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">No Ads</span>
+                <span style="background: rgba(0, 240, 255, 0.15); color: #00f0ff; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">4K</span>
+            </div>
+        </div>
+        
+        <div style="
+            background: #00f0ff;
+            color: #0d0d11;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 10px 20px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        ">
+            DOWNLOAD <span style="font-size: 0.9rem;">➔</span>
+        </div>
+    </a>
+</div>--> 
+    
+<!-- ── old Sticky Footer Promotion Bar ────────────────────────────────────── -->
+<!--<div id="ono-promo-footer" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #121214;
+    color: #ffffff;
+    z-index: 9998;
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 48px 12px 16px; /* Right padding protects the close button area */
+    box-sizing: border-box;
+    border-top: 1px solid #27272a;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+">
+    <a id="ono-promo-link" href="https://onotv.me" target="_blank" rel="noopener" style="
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+    ">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #a1a1aa;">
+                <span style="color: #ef4444; font-size: 0.9rem;">✕</span>
+                <span style="font-weight: 500;">Yono TV</span>
+                <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; font-size: 0.75rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Has Ads</span>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.95rem;">
+                <span style="color: #22c55e; font-size: 1rem;">✓</span>
+                <span style="font-weight: 700; color: #ffffff;">Yono TV Apk App </span>
+                <span style="background: #22c55e; color: #000000; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px;">NO ADS • 4K</span>
+            </div>
+        </div>
+        
+        <div style="
+            background: #00f0ff;
+            color: #0d0d11;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: transform 0.2s;
+        ">
+            GO <span style="font-size: 0.9rem;">➔</span>
+        </div>
+    </a>
+    
+    <button id="close-promo-btn" onclick="document.getElementById('ono-promo-footer').style.display='none';" style="
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #9ca3af;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 6px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    ">✕</button>
+</div>        
+-->
+    
+<!-- Ad-notice poster overlay (direct-nosandbox only) -->
 <div id="ad-notice-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="anTitle" aria-describedby="anSub">
   <div class="an-card">
 
+    <!-- VISUAL 1: ad tab escaping + red X -->
     <svg class="an-art" viewBox="0 0 300 145" role="img"
          aria-label="A game window opening a new tab, with a red X showing you should close it">
       <rect x="8" y="52" width="176" height="84" rx="14"
@@ -982,6 +1036,7 @@
       Those tabs are <b>ads</b> - they are <b>not from us</b>.
     </p>
 
+    <!-- VISUAL 2: press Back -->
     <div class="back-box">
       <svg viewBox="0 0 310 130" role="img"
            aria-label="Press the Back button on your phone">
@@ -1014,9 +1069,6 @@
 </div>
 
 <script>
-    // ═══════════════════════════════════════════════════════════════════════
-    // CONSTANTS + STATE
-    // ═══════════════════════════════════════════════════════════════════════
     const MANIFEST_URL  = "https://ytvs-db.pages.dev/manifest.json";
     const params        = new URLSearchParams(window.location.search);
     const refParam      = params.get('ref');
@@ -1035,333 +1087,138 @@
         contentFrame.src = url;
     }
 
-    const S = [
-      "d2b4c0fb", "bf9358d0", "e188e4d8", "6aaedb0e",
-      "a70c630e", "faa9eaf6", "84ed07e9", "b776d138"
-    ];
-    async function getKey() { return S.join(''); }
+const S = [
+  "d2b4c0fb",
+  "bf9358d0",
+  "e188e4d8", 
+  "6aaedb0e", 
+  "a70c630e", 
+  "faa9eaf6", 
+  "84ed07e9", 
+  "b776d138"  
+];
 
-    function hexToBytes(hex) {
-        const bytes = new Uint8Array(hex.length / 2);
-        for (let i = 0; i < hex.length; i += 2) {
-            bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
-        }
-        return bytes;
+async function getKey() {
+  return S[0] + S[1] + S[2] + S[3] + S[4] + S[5] + S[6] + S[7];
+}
+    
+  function hexToBytes(hex) {
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < hex.length; i += 2) {
+        bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
     }
+    return bytes;
+  }
 
-    async function decryptManifest(base64Payload, hexKey) {
-        const raw = Uint8Array.from(atob(base64Payload), c => c.charCodeAt(0));
-        const nonce = raw.slice(0, 12);
-        const ciphertext = raw.slice(12);
-        const cryptoKey = await crypto.subtle.importKey(
-            "raw", hexToBytes(hexKey), "AES-GCM", false, ["decrypt"]
-        );
-        const plainBuf = await crypto.subtle.decrypt(
-            { name: "AES-GCM", iv: nonce }, cryptoKey, ciphertext
-        );
-        return JSON.parse(new TextDecoder().decode(plainBuf));
-    }
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // GAME STATE — IN-MEMORY ONLY. Reload wipes it (by design).
-    // ═══════════════════════════════════════════════════════════════════════
-    const Game = {
-        run: 0,               // ads closed this page-load
-        xp: 0,                // cumulative XP this page-load
-        best: 0,              // best run this page-load
-        streak: 0,            // consecutive closes (30s window)
-        lastCloseAt: 0,
-        audioCtx: null,
-        streakWindowMs: 30000,
-        ranks: [
-            { name: 'Ad Dodger',      xp: 0   },
-            { name: 'Popup Slayer',   xp: 25  },
-            { name: 'Ad Slayer',      xp: 75  },
-            { name: 'Untouchable',    xp: 200 },
-            { name: 'Popup Royalty',  xp: 500 },
-        ],
-    };
-
-    function currentRank() {
-        let r = Game.ranks[0];
-        for (const rank of Game.ranks) if (Game.xp >= rank.xp) r = rank;
-        return r;
-    }
-    function nextRank() {
-        for (const rank of Game.ranks) if (Game.xp < rank.xp) return rank;
-        return null;
-    }
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // AUDIO — unlock on first gesture, silent-fail otherwise
-    // ═══════════════════════════════════════════════════════════════════════
-    function getAudioCtx() {
-        if (!Game.audioCtx) {
-            try {
-                const Ctx = window.AudioContext || window.webkitAudioContext;
-                if (Ctx) Game.audioCtx = new Ctx();
-            } catch (_) { /* silent */ }
-        }
-        return Game.audioCtx;
-    }
-    function unlockAudio() {
-        const ctx = getAudioCtx();
-        if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
-    }
-    function blip(freq = 660, endFreq = 1320, dur = 0.16, type = 'triangle', vol = 0.06) {
-        const ctx = getAudioCtx();
-        if (!ctx) return;
-        try {
-            const o = ctx.createOscillator();
-            const g = ctx.createGain();
-            const now = ctx.currentTime;
-            o.type = type;
-            o.frequency.setValueAtTime(freq, now);
-            o.frequency.exponentialRampToValueAtTime(Math.max(endFreq, 1), now + dur * 0.65);
-            g.gain.setValueAtTime(vol, now);
-            g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
-            o.connect(g).connect(ctx.destination);
-            o.start(now);
-            o.stop(now + dur + 0.02);
-        } catch (_) { /* silent */ }
-    }
-    function chime() {
-        blip(523.25, 783.99, 0.15, 'sine', 0.08);
-        setTimeout(() => blip(783.99, 1046.5, 0.22, 'sine', 0.08), 90);
-    }
-
-    // Unlock on the first real user gesture anywhere (capture, once each)
-    ['click', 'touchstart', 'keydown'].forEach(ev =>
-        document.addEventListener(ev, unlockAudio, { once: true, capture: true, passive: true })
+  async function decryptManifest(base64Payload, hexKey) {
+    const raw = Uint8Array.from(atob(base64Payload), c => c.charCodeAt(0));
+    const nonce = raw.slice(0, 12);
+    const ciphertext = raw.slice(12);
+    const cryptoKey = await crypto.subtle.importKey(
+        "raw", hexToBytes(hexKey), "AES-GCM", false, ["decrypt"]
     );
+    const plainBuf = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: nonce }, cryptoKey, ciphertext
+    );
+    return JSON.parse(new TextDecoder().decode(plainBuf));
+    }
+  
+    // ── Ad-notice flow (direct-nosandbox only) ─────────────────────────
+    // Primes the user for the ad-popup experience that comes with
+    // un-sandboxed embeds and tracks "ads closed" across visibility
+    // changes + page reloads (phones often kill the page while an ad is
+    // open, so state lives in sessionStorage, namespaced per-URL).
+    const AD_NS_PREFIX = 'yakitv-ns-';
+    const AD_ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>';
+    const AD_ICON_OK   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // AD-FLOW STATE (sessionStorage — this is FLOW state, not game state)
-    // ═══════════════════════════════════════════════════════════════════════
-    const AD_NS_PREFIX  = 'yakitv-ns-';
-    const AD_ICON_INFO  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>';
-    const AD_ICON_OK    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-    const AD_ICON_SHIELD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg>';
-    const AD_ICON_LOCK   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
-
-    let adStateKey       = null;
+    let adStateKey       = null;   // non-null only after nosandbox is entered
     let adPendingUrl     = null;
     let adStarted        = false;
     let adClickedInFrame = false;
-
-    // Strip-mode state machine — controls what text shows in the strip
-    let stripMode = 'waiting'; // 'waiting' | 'celebration' | 'charging' | 'locked'
+    let adCount          = 0;
 
     function adHashUrl(s) {
         let h = 0;
         for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
         return Math.abs(h).toString(36);
     }
-    function adNSget(k) { try { return sessionStorage.getItem(adStateKey + k); } catch (_) { return null; } }
-    function adNSset(k, v) { try { sessionStorage.setItem(adStateKey + k, v); } catch (_) {} }
-
-    function adStripSetText(html) {
-        const el = document.getElementById('ad-strip-text');
-        if (el) el.innerHTML = html;
-    }
-    function adStripSetIcon(svg) {
-        const el = document.getElementById('ad-strip-icon');
-        if (!el) return;
-        // preserve the ring
-        const ring = el.querySelector('.shield-ring');
-        el.innerHTML = svg;
-        if (ring) el.prepend(ring);
-    }
+    function adNSget(k) { try { return sessionStorage.getItem(adStateKey + k); } catch(_) { return null; } }
+    function adNSset(k, v) { try { sessionStorage.setItem(adStateKey + k, v); } catch(_) {} }
 
     function adShowWaiting() {
-        stripMode = 'waiting';
         const strip = document.getElementById('ad-notice-strip');
         if (!strip) return;
-        strip.classList.remove('is-back', 'rank-up');
-        adStripSetIcon(AD_ICON_SHIELD);
-        adStripSetText('🛡️ Ad shield active<span>You\'re protected from accidental taps.</span>');
+        strip.classList.remove('is-back');
+        document.getElementById('ad-strip-icon').innerHTML = AD_ICON_INFO;
+        document.getElementById('ad-strip-text').innerHTML =
+            'An ad opened? It is not ours.<span>Press Back to return.</span>';
     }
 
-    function adShowCharging() {
-        stripMode = 'charging';
+    function adShowBack() {
         const strip = document.getElementById('ad-notice-strip');
-        if (strip) strip.classList.remove('is-back');
-    }
-
-    function adShowLocked() {
-        stripMode = 'locked';
-        const strip = document.getElementById('ad-notice-strip');
-        if (strip) strip.classList.remove('is-back');
-        adStripSetIcon(AD_ICON_LOCK);
-        adStripSetText('🔒 Player locked to block ads.<span>Tap screen to unlock.</span>');
+        if (!strip) return;
+        strip.classList.remove('is-back');
+        void strip.offsetWidth;
+        strip.classList.add('is-back');
+        document.getElementById('ad-strip-icon').innerHTML = AD_ICON_OK;
+        document.getElementById('ad-strip-text').innerHTML =
+            'Welcome back!<span>The ad is gone. Press play to continue.</span>';
     }
 
     function adUpdateCount() {
         const el = document.getElementById('ad-strip-count');
-        if (el) el.textContent = Game.run;
-    }
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // GAMIFICATION PRIMITIVES
-    // ═══════════════════════════════════════════════════════════════════════
-    function spawnParticles(count = 8, color = '#22c55e') {
-        const icon = document.getElementById('ad-strip-icon');
-        if (!icon) return;
-        for (let i = 0; i < count; i++) {
-            const p = document.createElement('span');
-            p.className = 'particle';
-            const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
-            const dist  = 22 + Math.random() * 20;
-            p.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
-            p.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
-            p.style.setProperty('--particle-color', color);
-            icon.appendChild(p);
-            setTimeout(() => p.remove(), 720);
-        }
-    }
-
-    function bumpCounter() {
-        const el = document.getElementById('ad-strip-count');
-        if (!el) return;
-        el.classList.remove('bump');
-        void el.offsetWidth;
-        el.classList.add('bump');
-    }
-
-    function floatPlus(amount, color = '#22c55e') {
-        const counter = document.querySelector('.ad-strip-counter');
-        if (!counter) return;
-        const el = document.createElement('span');
-        el.className = 'float-plus';
-        el.textContent = `+${amount}`;
-        el.style.color = color;
-        counter.appendChild(el);
-        setTimeout(() => el.remove(), 1000);
-    }
-
-    const STREAK_TIERS = [
-        { min: 1,  icon: '👊', msg: 'Ad closed. Nice.'     },
-        { min: 3,  icon: '🔥', msg: 'On a streak!'         },
-        { min: 5,  icon: '⚡', msg: 'Ad Slayer mode'       },
-        { min: 10, icon: '🏆', msg: 'Untouchable'          },
-        { min: 25, icon: '👑', msg: 'Popup Royalty'        },
-    ];
-    function tierFor(streak) {
-        let t = STREAK_TIERS[0];
-        for (const x of STREAK_TIERS) if (streak >= x.min) t = x;
-        return t;
-    }
-
-    function xpForClose(streak) {
-        const base = 5;
-        const streakBonus = Math.min(streak, 10) * 2;
-        return base + streakBonus;
-    }
-
-    function renderXPBar() {
-        const wrap = document.getElementById('xp-bar-wrap');
-        if (!wrap) return;
-        wrap.hidden = false;
-        const cur = currentRank();
-        const nxt = nextRank();
-        document.getElementById('xp-rank').textContent = cur.name;
-        document.getElementById('xp-number').textContent = `${Game.xp} XP`;
-        const fill = document.getElementById('xp-fill');
-        if (!nxt) {
-            fill.style.width = '100%';
-        } else {
-            const span = nxt.xp - cur.xp;
-            const pct  = span > 0 ? ((Game.xp - cur.xp) / span) * 100 : 0;
-            fill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
-        }
-    }
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // THE CELEBRATION — single entry point for "user closed an ad"
-    // ═══════════════════════════════════════════════════════════════════════
-    function celebrateAdClose() {
-        const now = Date.now();
-        const inWindow = (now - Game.lastCloseAt) < Game.streakWindowMs;
-        Game.streak    = inWindow ? Game.streak + 1 : 1;
-        Game.lastCloseAt = now;
-        Game.run      += 1;
-        const isNewBest = Game.run > Game.best;
-        if (isNewBest) Game.best = Game.run;
-
-        const tier = tierFor(Game.streak);
-
-        // ── Variable reward roll ──────────────────────────────────────
-        let bonus = 0, bonusMsg = '';
-        if (Math.random() < 0.25) {
-            bonus = [10, 20, 50][Math.floor(Math.random() * 3)];
-            bonusMsg = bonus >= 50 ? '🎲 LUCKY! ' : bonus >= 20 ? '🎲 Double! ' : '🎲 Bonus! ';
-        }
-        const baseXP = xpForClose(Game.streak);
-        const gained = baseXP + bonus;
-
-        const prevRank = currentRank();
-        Game.xp += gained;
-        const newRank   = currentRank();
-        const rankedUp  = newRank.name !== prevRank.name;
-
-        // ── Visuals ───────────────────────────────────────────────────
-        stripMode = 'celebration';
-        const strip = document.getElementById('ad-notice-strip');
-        if (strip) {
-            strip.classList.add('is-back');
-            strip.classList.remove('rank-up');
-            if (rankedUp) {
-                void strip.offsetWidth;
-                strip.classList.add('rank-up');
+        const label = document.getElementById('ad-strip-label');
+        
+        if (el && label) {
+            el.textContent = adCount;
+            
+            // Trigger the bounce animation
+            el.classList.remove('ad-score-anim');
+            void el.offsetWidth; 
+            el.classList.add('ad-score-anim');
+            
+            // Gamified Titles & Color Escalation
+            label.classList.remove('tier-godlike');
+            
+            if (adCount === 0) {
+                label.textContent = 'ads closed';
+                el.style.color = '#fbbf24'; // Base gold
+                el.style.textShadow = '0 0 8px rgba(251, 191, 36, 0.4)';
+            } else if (adCount === 1) {
+                label.textContent = 'First Blood 🩸';
+            } else if (adCount === 2) {
+                label.textContent = 'Ad Slayer ⚔️';
+                el.style.color = '#f97316'; // Orange
+                el.style.textShadow = '0 0 10px rgba(249, 115, 22, 0.5)';
+            } else if (adCount === 3) {
+                label.textContent = 'Dominating 🔥';
+                el.style.color = '#ef4444'; // Red
+                el.style.textShadow = '0 0 12px rgba(239, 68, 68, 0.6)';
+            } else if (adCount === 4) {
+                label.textContent = 'Unstoppable 💥';
+            } else if (adCount >= 5) {
+                label.textContent = 'GODLIKE! 👑';
+                label.classList.add('tier-godlike');
+                el.style.color = '#a855f7'; // Purple
+                el.style.textShadow = '0 0 15px rgba(168, 85, 247, 0.8)';
             }
         }
-        adStripSetIcon(rankedUp ? AD_ICON_OK : AD_ICON_OK);
-        bumpCounter();
-        adUpdateCount();
-        floatPlus(gained, rankedUp ? '#fbbf24' : bonus ? '#a78bfa' : '#22c55e');
-        spawnParticles(
-            rankedUp ? 16 : bonus ? 12 : 8,
-            rankedUp ? '#fbbf24' : bonus ? '#a78bfa' : '#22c55e'
-        );
-
-        // ── Copy ──────────────────────────────────────────────────────
-        if (rankedUp) {
-            adStripSetText(`⬆️ Rank up — ${newRank.name}!<span>+${gained} XP${bonus ? ' (incl. bonus)' : ''}</span>`);
-        } else if (bonus) {
-            adStripSetText(`${bonusMsg}+${gained} XP<span>${tier.icon} ${tier.msg} · streak ×${Game.streak}</span>`);
-        } else if (isNewBest && Game.run > 1) {
-            adStripSetText(`🏆 New best — ${Game.run} in a row!<span>${tier.icon} ${tier.msg} · +${gained} XP</span>`);
-        } else {
-            adStripSetText(`${tier.icon} ${tier.msg}<span>+${gained} XP · streak ×${Game.streak}</span>`);
-        }
-
-        // ── Feedback: sound + haptic ──────────────────────────────────
-        if (rankedUp) chime();
-        else          blip(660, 1320, 0.16, 'triangle', 0.06);
-
-        if (navigator.vibrate) {
-            try { navigator.vibrate(rankedUp ? [30, 40, 30] : 35); } catch (_) {}
-        }
-
-        // ── XP bar ────────────────────────────────────────────────────
-        renderXPBar();
-
-        // ── After celebration, transition to "charging" copy ─────────
-        setTimeout(() => {
-            if (stripMode === 'celebration') adShowCharging();
-        }, 2600);
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // AD-FLOW LIFECYCLE
-    // ═══════════════════════════════════════════════════════════════════════
     function adReturnFromAd() {
         adClickedInFrame = false;
         adNSset('cif', '0');
+        adCount += 1;
+        adNSset('count', adCount.toString()); // Save the streak!
+        adUpdateCount();
+        adShowBack();
         armLockOrLockNow();
-        celebrateAdClose();  // fires counter, XP, sound, particles, copy
     }
 
+    // Only active once we've entered nosandbox mode. Any time the page
+    // goes hidden while the last focused element was the iframe, that
+    // strongly implies an ad opened — count it on the way back.
     document.addEventListener('visibilitychange', () => {
         if (!adStateKey || !adStarted) return;
         if (document.hidden) {
@@ -1372,31 +1229,32 @@
         }
     });
 
-    function startAdNoticedFlow(url) {
+function startAdNoticedFlow(url) {
         adPendingUrl = url;
         adStateKey   = AD_NS_PREFIX + adHashUrl(url);
-
         adStarted        = adNSget('started') === '1';
         adClickedInFrame = adNSget('cif') === '1';
-
-        // In-memory game state always starts at zero on page load.
-        Game.run = 0;
-        Game.streak = 0;
-        adUpdateCount();
+        adCount          = parseInt(adNSget('count')) || 0; // Remember score across mobile tab reloads
 
         const strip   = document.getElementById('ad-notice-strip');
         const overlay = document.getElementById('ad-notice-overlay');
 
         if (adStarted) {
+            // Resume — skip the poster, load immediately, restore state.
             if (strip) strip.hidden = false;
+            adUpdateCount();
             if (adClickedInFrame) {
-                // Page was reloaded while an ad was open — count that close
+                // Page was killed/reloaded while an ad was open — count it.
                 adReturnFromAd();
             } else {
                 adShowWaiting();
+                // DO NOT arm the lock immediately on resume. 
+                // The video is paused, they need to tap play. 
+                // We will arm the lock only after an ad fires, or after they start playing.
             }
             loadIntoFrame(url);
         } else {
+            // First visit — show the poster and DON'T load the iframe.
             if (overlay) overlay.hidden = false;
             document.body.style.overflow = 'hidden';
         }
@@ -1405,7 +1263,6 @@
         if (startBtn && !startBtn._adWired) {
             startBtn._adWired = true;
             startBtn.addEventListener('click', () => {
-                unlockAudio();  // gesture → unlock audio for later blips
                 adStarted = true;
                 adNSset('started', '1');
                 const ov = document.getElementById('ad-notice-overlay');
@@ -1420,82 +1277,34 @@
         }
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // SHIELD: charge ring + text + auto-lock
-    // ═══════════════════════════════════════════════════════════════════════
+    // ── Smart auto-lock (direct-nosandbox) ─────────────────────────────
+    // After a quiet period with no ads, a transparent shield lifts to block
+    // accidental taps that would open yet another ad. The shield stays on
+    // even in fullscreen. Clicking it prompts the user to unlock.
     const LOCK_QUIET_MS = 15000;
-    const RING_CIRC     = 2 * Math.PI * 20; // r=20 → ~125.66
 
     let lockTimer    = null;
-    let lockRAF      = null;
-    let lockStartAt  = 0;
     let shieldLocked = false;
 
-    function setRingProgress(pct) {
-        const fill = document.getElementById('ring-fill');
-        if (!fill) return;
-        fill.style.strokeDashoffset = String(RING_CIRC * (1 - Math.max(0, Math.min(1, pct))));
-    }
-
     function armLock() {
-        disarmLock();
-        const ring = document.getElementById('shield-ring');
-        if (ring) ring.classList.add('active');
-        setRingProgress(0);
-
-        lockStartAt = performance.now();
-
-        function tick() {
-            const elapsed = performance.now() - lockStartAt;
-            const pct = Math.min(1, elapsed / LOCK_QUIET_MS);
-            setRingProgress(pct);
-
-            // Live text while charging
-            if (stripMode === 'charging') {
-                const pctNum = Math.round(pct * 100);
-                adStripSetText(`🛡️ Recharging shield — ${pctNum}%<span>Protects against accidental ad taps.</span>`);
-            }
-
-            if (pct < 1) {
-                lockRAF = requestAnimationFrame(tick);
-            } else {
-                lockRAF = null;
-                const r = document.getElementById('shield-ring');
-                if (r) r.classList.remove('active');
-                lockShield();
-            }
-        }
-        lockRAF = requestAnimationFrame(tick);
-
-        // Backup timeout (in case RAF is throttled in a background tab)
-        lockTimer = setTimeout(() => {
-            lockTimer = null;
-            if (!lockRAF) return;
-            cancelAnimationFrame(lockRAF);
-            lockRAF = null;
-            const r = document.getElementById('shield-ring');
-            if (r) r.classList.remove('active');
-            lockShield();
-        }, LOCK_QUIET_MS + 200);
+        if (lockTimer) clearTimeout(lockTimer);
+        lockTimer = setTimeout(() => { lockTimer = null; lockShield(); }, LOCK_QUIET_MS);
     }
 
     function disarmLock() {
         if (lockTimer) { clearTimeout(lockTimer); lockTimer = null; }
-        if (lockRAF)   { cancelAnimationFrame(lockRAF); lockRAF = null; }
-        const r = document.getElementById('shield-ring');
-        if (r) r.classList.remove('active');
     }
 
-    function armLockOrLockNow() { armLock(); }
+    function armLockOrLockNow() {
+        armLock();
+    }
 
     function lockShield() {
         const shield = document.getElementById('touch-shield');
         if (!shield) return;
         shieldLocked = true;
         shield.hidden = false;
-        adShowLocked();
-        // Soft "clunk"
-        blip(180, 90, 0.25, 'sine', 0.05);
+        adStripSetLockedMessage(true);
     }
 
     function unlockShield() {
@@ -1503,13 +1312,21 @@
         if (!shield) return;
         shieldLocked = false;
         shield.hidden = true;
-        adShowCharging();
-        armLock();
+        adStripSetLockedMessage(false);
+        armLock(); // Re-arm the 15s timer immediately
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // UNLOCK MODAL
-    // ═══════════════════════════════════════════════════════════════════════
+    function adStripSetLockedMessage(locked) {
+        const el = document.getElementById('ad-strip-text');
+        if (!el) return;
+        if (locked) {
+            el.innerHTML = 'Player locked to block Ads.<span>Tap the screen to unlock.</span>';
+        } else {
+            adShowWaiting();
+        }
+    }
+
+    // ── Unlock Modal Logic ─────────────────────────────────────────────
     const _unlockModal = document.getElementById('unlock-modal');
     const _cancelBtn   = document.getElementById('unlock-cancel');
     const _confirmBtn  = document.getElementById('unlock-confirm');
@@ -1527,7 +1344,6 @@
     if (_confirmBtn && !_confirmBtn._wired) {
         _confirmBtn._wired = true;
         _confirmBtn.addEventListener('click', () => {
-            unlockAudio();
             _unlockModal?.classList.remove('active');
             unlockShield();
         });
@@ -1539,18 +1355,19 @@
         });
     }
 
+    // Shield click — opens modal if locked.
     const _shieldEl = document.getElementById('touch-shield');
     if (_shieldEl && !_shieldEl._wired) {
         _shieldEl._wired = true;
         _shieldEl.addEventListener('click', () => {
-            unlockAudio();
             if (shieldLocked) showUnlockModal();
         });
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // MODE ROUTING
-    // ═══════════════════════════════════════════════════════════════════════
+    // (Fullscreen shield-hiding logic removed so the shield stays on in fullscreen)
+
+    // Shared apply-mode helper — used by both the direct-URL path and the
+    // manifest path so their behaviour can never drift apart.
     const DIRECT_MODES = ['direct-sandbox', 'direct-autoplay', 'direct-nosandbox'];
 
     function applyDirectMode(mode, url) {
@@ -1578,6 +1395,8 @@
         document.body.classList.add('unlocked-mode');
         document.body.classList.add('no-shield');
 
+        // Hard-remove shield + audio BEFORE deferred style.js runs, so it
+        // can't bind to them or start playback.
         const shieldEl = document.getElementById('click-shield');
         if (shieldEl) shieldEl.remove();
 
@@ -1588,6 +1407,8 @@
             bgAudio.remove();
         }
 
+        // Hand off to the ad-notice flow — this may defer loadIntoFrame(url)
+        // until the user clicks "Start" on the poster.
         startAdNoticedFlow(url);
     }
 
@@ -1595,10 +1416,17 @@
         try {
             const u = new URL(s);
             return u.protocol === 'http:' || u.protocol === 'https:';
-        } catch (_) { return false; }
+        } catch (_) {
+            return false;
+        }
     }
 
     async function route() {
+        // Deterministic routing — the mode is the parameter NAME:
+        //   ?direct-sandbox=<url>    → sandboxed, shield + audio
+        //   ?direct-autoplay=<url>   → un-sandboxed, shield + audio
+        //   ?direct-nosandbox=<url>  → un-sandboxed, no shield / no audio
+        //   ?ref=<key>               → encrypted manifest lookup ONLY
         for (const mode of DIRECT_MODES) {
             const directUrl = params.get(mode);
             if (directUrl !== null) {
@@ -1613,73 +1441,85 @@
         loadingUI.classList.add('show');
 
         try {
-            const res = await fetch(MANIFEST_URL, { cache: 'no-store' });
+            const res      = await fetch(MANIFEST_URL, { cache: 'no-store' });
             if (!res.ok) throw new Error('Manifest fetch failed');
             const encryptedText = await res.text();
             const key = await getKey();
             const manifest = await decryptManifest(encryptedText, key);
-            const entry = manifest[refParam];
+            const entry    = manifest[refParam];
             if (!entry) throw new Error(`Key "${refParam}" not found`);
 
             if (!DIRECT_MODES.includes(entry.type)) {
-                console.warn(`Key "${refParam}" is type "${entry.type}", expected one of: ${DIRECT_MODES.join(', ')}`);
+                console.warn(
+                    `Key "${refParam}" is type "${entry.type}", expected one of: ${DIRECT_MODES.join(', ')}`
+                );
                 showFallback();
                 return;
             }
+
             applyDirectMode(entry.type, entry.url);
         } catch (e) {
             console.error('Manifest resolution failed:', e);
             showFallback();
         }
     }
+
     route();
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // PLAYER INTERACTION FLASH
-    // ═══════════════════════════════════════════════════════════════════════
-    window.addEventListener('blur', () => {
+
+window.addEventListener('blur', () => {
         setTimeout(() => {
             if (document.activeElement === contentFrame) {
-                const pc = document.getElementById('player-container');
-                pc.classList.add('interaction-flash');
-                setTimeout(() => pc.classList.remove('interaction-flash'), 400);
+                const playerContainer = document.getElementById('player-container');
+                playerContainer.classList.add('interaction-flash');
+                setTimeout(() => playerContainer.classList.remove('interaction-flash'), 400);
             }
         }, 50);
     });
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // FULLSCREEN
-    // ═══════════════════════════════════════════════════════════════════════
-    const fullscreenBtn   = document.getElementById('fullscreen-btn');
+    
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
     const playerContainer = document.getElementById('player-container');
 
     fullscreenBtn.addEventListener('click', () => {
         if (!document.fullscreenElement) {
-            if (playerContainer.requestFullscreen) playerContainer.requestFullscreen();
-            else if (playerContainer.webkitRequestFullscreen) playerContainer.webkitRequestFullscreen();
-            else if (playerContainer.msRequestFullscreen) playerContainer.msRequestFullscreen();
+            // Enter Fullscreen
+            if (playerContainer.requestFullscreen) {
+                playerContainer.requestFullscreen();
+            } else if (playerContainer.webkitRequestFullscreen) {
+                playerContainer.webkitRequestFullscreen();
+            } else if (playerContainer.msRequestFullscreen) { 
+                playerContainer.msRequestFullscreen();
+            }
         } else {
-            if (document.exitFullscreen) document.exitFullscreen();
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
         }
     });
 
     document.addEventListener('fullscreenchange', () => {
         if (document.fullscreenElement) {
+            // Attempt to force Landscape orientation on mobile devices
             try {
                 if (screen.orientation && screen.orientation.lock) {
-                    screen.orientation.lock('landscape').catch(() => {});
+                    screen.orientation.lock('landscape').catch((err) => {
+                        console.warn('Orientation lock not supported or denied:', err);
+                    });
                 }
-            } catch (_) {}
+            } catch (e) {}
+            
         } else {
+            // Unlock the orientation when leaving fullscreen
             try {
-                if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
-            } catch (_) {}
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            } catch (e) {}
         }
     });
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // CHAT DRAWER
-    // ═══════════════════════════════════════════════════════════════════════
+    
+    
+    // ── 4. CHAT DRAWER ────────────────────────────────────────────────────────
     const chatBtn     = document.getElementById('chat-btn');
     const chatDrawer  = document.getElementById('chat-drawer');
     const chatOverlay = document.getElementById('chat-overlay');
@@ -1690,10 +1530,30 @@
 
     function openChat() {
         if (!chatLoaded) {
+            let embedDomain = window.location.hostname;
+            try {
+                if (document.referrer) {
+                    embedDomain = new URL(document.referrer).hostname;
+                } else if (window.top !== window.self) {
+                    embedDomain = window.top.location.hostname;
+                }
+            } catch (e) {}
+
+            // Show the first-load spinner. Cross-origin iframes DO fire
+            // 'load' when their document finishes — we just can't inspect
+            // the contents. Hide on that event; a 6s timeout is only a
+            // safety net in case the browser swallows it.
             if (chatLoading) chatLoading.hidden = false;
-            const hideLoader = () => { if (chatLoading) chatLoading.hidden = true; };
+
+            const hideLoader = () => {
+                if (chatLoading) chatLoading.hidden = true;
+            };
+
             chatFrame.addEventListener('load', hideLoader, { once: true });
             setTimeout(hideLoader, 6000);
+
+            // Set src AFTER attaching the listener so we never miss the
+            // event. Empty iframes don't fire 'load', so no false trigger.
             chatFrame.src = `https://www.youtube.com/live_chat?v=Rr6G_PRnfhA&dark_theme=1&embed_domain=ytvs-frame.pages.dev`;
             chatLoaded = true;
         }
@@ -1712,41 +1572,40 @@
     chatClose.addEventListener('click', closeChat);
     chatOverlay.addEventListener('click', closeChat);
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // CHANGE LINK
-    // ═══════════════════════════════════════════════════════════════════════
-    document.getElementById('change-link-btn').addEventListener('click', function () {
-        const p = new URLSearchParams(window.location.search);
-        const returnUrl = p.get('return');
-        if (returnUrl) window.location.href = decodeURIComponent(returnUrl);
-        else           window.location.href = "https://www.yakitv.com";
-    });
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // THEME + REFRESH
-    // ═══════════════════════════════════════════════════════════════════════
-    const themeBtn = document.getElementById('theme-btn');
-    if (themeBtn) {
-        themeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            themeBtn.innerHTML = isDark
-                ? '<i class="fas fa-sun"></i> <span>Light</span>'
-                : '<i class="fas fa-moon"></i> <span>Dark</span>';
-        });
+    // ── Change Link button ────────────────────────
+const changeLinkBtn = document.getElementById('change-link-btn');
+changeLinkBtn.addEventListener('click', function() {
+    const params = new URLSearchParams(window.location.search);
+    const returnUrl = params.get('return');
+    if (returnUrl) {
+        window.location.href = decodeURIComponent(returnUrl);
+    } else {
+        window.location.href = "https://www.yakitv.com";
     }
+});
 
+    // ── 5. THEME SWAP MECHANISM ──────────────────────────────────────────────
+const themeBtn = document.getElementById('theme-btn');
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeBtn.innerHTML = isDark
+            ? '<i class="fas fa-sun"></i> <span>Light</span>'
+            : '<i class="fas fa-moon"></i> <span>Dark</span>';
+    });
+}
+
+    // ── 6. SYNC / FORCE REFRESH ──────────────────────────────────────────────
     document.getElementById('sync-btn').addEventListener('click', () => location.reload());
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // SHARE
-    // ═══════════════════════════════════════════════════════════════════════
+    // ── 7. SHARE WITH FAMILY & FRIENDS ───────────────────────────────────────
     const SHARE_LINK = "https://www.yakitv.com";
-    const shareBtn      = document.getElementById('share-btn');
-    const shareModal    = document.getElementById('share-modal');
-    const shareLinkInput = document.getElementById('share-link-input');
-    const closeShareBtn = document.getElementById('close-share-btn');
-    const copyShareBtn  = document.getElementById('copy-share-btn');
+    const shareBtn       = document.getElementById('share-btn');
+    const shareModal      = document.getElementById('share-modal');
+    const shareLinkInput  = document.getElementById('share-link-input');
+    const closeShareBtn   = document.getElementById('close-share-btn');
+    const copyShareBtn    = document.getElementById('copy-share-btn');
 
     function openShareModal() {
         shareLinkInput.value = SHARE_LINK;
@@ -1754,24 +1613,32 @@
         shareLinkInput.focus();
         shareLinkInput.select();
     }
-    function closeShareModal() { shareModal.classList.remove('active'); }
+
+    function closeShareModal() {
+        shareModal.classList.remove('active');
+    }
 
     shareBtn.addEventListener('click', openShareModal);
     closeShareBtn.addEventListener('click', closeShareModal);
+
     shareModal.addEventListener('click', (e) => {
         if (e.target === shareModal) closeShareModal();
     });
+
+
     copyShareBtn.addEventListener('click', async () => {
-        try { await navigator.clipboard.writeText(shareLinkInput.value); }
-        catch (err) { shareLinkInput.select(); document.execCommand('copy'); }
+        try {
+            await navigator.clipboard.writeText(shareLinkInput.value);
+        } catch (err) {
+            shareLinkInput.select();
+            document.execCommand('copy');
+        }
         const original = copyShareBtn.textContent;
         copyShareBtn.textContent = 'Copied!';
         setTimeout(() => { copyShareBtn.textContent = original; }, 1500);
     });
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // NAV GUARD
-    // ═══════════════════════════════════════════════════════════════════════
+    // ── Navigation guard for no-sandbox iframes ──────────────────────────
     window.addEventListener('beforeunload', (e) => {
         if (!document.body.classList.contains('unlocked-mode')) return;
         e.preventDefault();
@@ -1780,6 +1647,7 @@
     });
 
 </script>
+<!-- decouple audio because obfuscating it together with whole code introduces audio lag --> 
 <script src="style.js" defer></script>
 
 </body>

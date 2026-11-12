@@ -1216,17 +1216,30 @@ async function getKey() {
         armLockOrLockNow();
     }
 
-    // Only active once we've entered nosandbox mode. Any time the page
-    // goes hidden while the last focused element was the iframe, that
-    // strongly implies an ad opened — count it on the way back.
+    // Bulletproof return detection: checks both memory and sessionStorage
+    function handlePageReturn() {
+        if (!adStateKey || !adStarted) return;
+        // If memory was wiped by the browser, fallback to sessionStorage check
+        const wasClicked = (adClickedInFrame || adNSget('cif') === '1');
+        if (wasClicked) {
+            adReturnFromAd();
+        }
+    }
+
     document.addEventListener('visibilitychange', () => {
         if (!adStateKey || !adStarted) return;
         if (document.hidden) {
             adClickedInFrame = (document.activeElement === contentFrame);
             adNSset('cif', adClickedInFrame ? '1' : '0');
-        } else if (adClickedInFrame) {
-            adReturnFromAd();
+        } else {
+            handlePageReturn();
         }
+    });
+
+    // Backup for mobile browsers that drop visibilitychange events on tab switches
+    window.addEventListener('focus', () => {
+        if (document.hidden) return;
+        handlePageReturn();
     });
 
 function startAdNoticedFlow(url) {

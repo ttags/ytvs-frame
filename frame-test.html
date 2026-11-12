@@ -1009,8 +1009,8 @@
 
     <!-- VISUAL 1: ad tab escaping + red X -->
     <svg class="an-art" viewBox="0 0 300 145" role="img"
-         aria-label="A game window opening a new tab">
-      <!-- Main Window -->
+         aria-label="A game window opening a new ad tab">
+      <!-- Main Window (Safe Video) -->
       <rect x="8" y="52" width="176" height="84" rx="14"
             fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2.5"/>
       <circle cx="26" cy="68" r="3.5" fill="#cbd5e1"/>
@@ -1019,12 +1019,12 @@
       <circle cx="96" cy="96" r="24" fill="#4f46e5"/>
       <path d="M89 85 L111 96 L89 107 Z" fill="#ffffff"/>
       
-      <!-- New Tab Window (Muted Colors) -->
+      <!-- New Tab Window (Now clearly labeled as AD) -->
       <rect x="176" y="2" width="108" height="58" rx="12"
-            fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
-      <rect x="190" y="14" width="80" height="8" rx="4" fill="#e2e8f0"/>
-      <rect x="190" y="28" width="56" height="8" rx="4" fill="#e2e8f0"/>
-      <rect x="190" y="42" width="68" height="8" rx="4" fill="#e2e8f0"/>
+            fill="#fff3d6" stroke="#ffb020" stroke-width="2.5"/>
+      <rect x="190" y="14" width="80" height="8" rx="4" fill="#ffb020"/>
+      <text x="230" y="46" text-anchor="middle" font-size="24" font-weight="900"
+            fill="#a85f00" font-family="system-ui, sans-serif">AD</text>
       
       <!-- Arrow -->
       <path d="M132 52 C 140 30, 155 22, 174 22"
@@ -1033,9 +1033,9 @@
       <path d="M180 22 L168 16 L168 28 Z" fill="#94a3b8"/>
     </svg>
 
-    <h2 class="an-title" id="anTitle">An Ad will open.</h2>
+    <h2 class="an-title" id="anTitle">New tab will open.</h2>
     <p class="an-sub" id="anSub">
-      It is <b>not from us</b>.<br>It's how we keep the match free.
+      It is ad. It is <b>not from us</b>.<br>Just press back to close it.
     </p>
 
     <!-- VISUAL 2: press Back -->
@@ -1054,17 +1054,17 @@
         <circle cx="82" cy="97" r="4.5" fill="#fff" opacity=".6"/>
         <rect x="116" y="91" width="11" height="11" rx="2"
               fill="none" stroke="#fff" stroke-width="2" opacity=".6"/>
-        <rect x="172" y="22" width="132" height="86" rx="18" fill="#1a1a1a"/>
-        <path d="M216 42 L186 65 L216 88 Z" fill="#ffffff"/>
+        <rect x="172" y="45" width="132" height="72" rx="18" fill="#1a1a1a"/>
+                <path d="M258 56 L218 81 L258 106 Z" fill="#ffffff"/>
       </svg>
 
       <div>
-        <strong>Press this Arrow</strong>
+        <strong>Press Back</strong>
         <small>To close the Ad</small>
       </div>
     </div>
 
-    <button class="an-btn" id="ad-start-btn" type="button">Thik Chha (ठिक छ)</button>
+    <button class="an-btn" id="ad-start-btn" type="button">OK</button>
   </div>
 </div>
 

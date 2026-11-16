@@ -18,7 +18,7 @@
 
     <style>
         :root {
-            --primary: #007bff;
+            --primary: #0866ff;
             --bg-body: #f8fafc;
             --container-bg: #ffffff;
             --text-main: #1e293b;
@@ -124,7 +124,7 @@
             padding: 15px 20px;
             margin-bottom: 10px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             background: var(--primary);
             color: #fff;
             font-family: inherit;
@@ -161,9 +161,9 @@
         }
 
         .btn-fullscreen {
-            top: 12px;
-            right: 12px;
-            background: #FF5722; /* Vibrant Sunset Orange */
+            top: 16px;
+            right: 8px;
+            background: #FF4500;
             color: white;
             box-shadow: 0 4px 15px rgba(255, 87, 34, 0.5);
         }
@@ -177,8 +177,8 @@
         }
 
         .btn-share-overlay {
-            bottom: 12px;
-            right: 12px;
+            bottom: 16px;
+            right: 8px;
             background: #0F172A;
             color: white;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -291,9 +291,7 @@
 
         .chat-overlay {
             position: fixed; inset: 0;
-            background: rgba(0, 0, 0, .5);
-            -webkit-backdrop-filter: blur(4px);
-            backdrop-filter: blur(4px);
+			background: transparent;
             z-index: 60;
             opacity: 0;
             pointer-events: none;
@@ -384,7 +382,7 @@
             animation: spin 0.8s linear infinite;
         }
 
-        @media (max-width: 600px) {
+           @media (max-width: 600px) {
             .chat-drawer {
                 top: auto; left: 0; right: 0; bottom: 0;
                 width: 100%;
@@ -393,19 +391,34 @@
                 transform: translateY(100%);
                 border-left: none;
                 border-top: 1px solid var(--border-color);
-                border-radius: 24px 24px 0 0;
+                border-radius: 16px 16px 0 0; /* Slightly smaller corner radius */
                 box-shadow: 0 -20px 60px rgba(0, 0, 0, .5);
             }
             .chat-drawer.open { transform: translateY(0); }
-            .chat-header { position: relative; padding-top: 24px; }
+            
+            /* Ultra-Compact Header */
+            .chat-header { 
+                position: relative; 
+                padding: 8px 16px; /* Very tight padding */
+                min-height: 24px; /* Force a small height */
+            }
             .chat-header::before {
                 content: '';
                 position: absolute;
-                top: 8px; left: 50%;
+                top: 4px; left: 50%; 
                 transform: translateX(-50%);
-                width: 36px; height: 4px;
+                width: 24px; height: 2px; /* Tiny, subtle handle */
                 border-radius: 2px;
                 background: var(--border-color);
+            }
+            .chat-title {
+                font-size: 14px; /* Smaller text */
+                margin: 0;
+            }
+            .chat-close {
+                width: 24px; height: 24px; /* Smaller button */
+                font-size: 12px; /* Smaller icon */
+                background: transparent; /* Removes the circle background to save visual space */
             }
         }
 
@@ -455,17 +468,19 @@
             font-size: 13px;
             box-sizing: border-box;
             margin-bottom: 14px;
+            outline: none;
         }
 
         .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
+    display: flex;
+    flex-direction: column-reverse; /* Keeps "Keep locked" on top, matching your current layout */
+    gap: 10px;
         }
 
         .modal-actions button {
+            width: 100%;
             padding: 9px 16px;
-            border-radius: 999px;
+            border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
@@ -501,36 +516,130 @@
 
         /* ── Ad-notice (direct-nosandbox only) ──────────────────────────── */
         .ad-strip {
-            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-            background: var(--container-bg); border: 2px solid var(--primary);
+            display: flex; align-items: center; gap: 12px; flex-wrap: nowrap;
+            background: var(--container-bg); 
+            border: 2px solid var(--border-color);
             border-radius: 12px; padding: 10px 12px; margin-bottom: 10px;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
         }
         .ad-strip[hidden] { display: none !important; }
-        .ad-strip.is-back { border-color: #22c55e; }
-        .ad-strip-icon {
-            flex: none; width: 36px; height: 36px; border-radius: 50%;
-            display: grid; place-items: center;
-            background: var(--primary); color: #fff;
+
+        /* 15-Second Cooldown Animation (Stretched Pop) */
+        .ad-strip.is-cooldown {
+            border-color: #22c55e;
+            animation: cooldown-glow 15s linear forwards;
         }
-        .ad-strip.is-back .ad-strip-icon { background: #22c55e; }
-        .ad-strip-icon svg { width: 22px; height: 22px; }
+        @keyframes cooldown-glow {
+            0%   { box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); }
+            60%  { box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); }
+            100% { box-shadow: 0 0 0px rgba(34, 197, 94, 0); border-color: var(--border-color); }
+        }
+
+        /* Locked State */
+        .ad-strip.is-locked {
+            border-color: #0866ff;
+            box-shadow: 0 0 12px rgba(8, 102, 255, 0.2);
+        }
+
+        /* The new score badge - Dark background so Gold always pops */
+        .ad-strip-icon {
+            flex: none; width: 44px; height: 44px; border-radius: 12px;
+            display: grid; place-items: center;
+            background: #0f172a; /* Dark slate background */
+            border: 2px solid #334155; /* Default border */
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+        }
+        
+        /* Cooldown State - Green Glow */
+        .ad-strip.is-cooldown .ad-strip-icon {  
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+        }
+        
+        /* Locked State - Blue Glow */
+        .ad-strip.is-locked .ad-strip-icon { 
+            box-shadow: 0 0 12px rgba(8, 102, 255, 0.4);
+        }
+
+        /* The big gold number inside the badge */
+        .ad-strip-icon b { 
+            font-size: 22px; font-weight: 900; line-height: 1; 
+            color: #fbbf24; 
+            text-shadow: 0 0 8px rgba(251, 191, 36, 0.6); 
+            display: inline-block; 
+        }
+
         .ad-strip-text {
-            flex: 1 1 160px; font-size: 13px; font-weight: 700; line-height: 1.35;
+            flex: 1 1 auto; min-width: 0; font-size: 13px; font-weight: 700; line-height: 1.35;
             color: var(--text-main);
         }
-        .ad-strip-text span { display: block; font-weight: 500; font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-        .ad-strip-counter {
-            flex: none; display: flex; align-items: center; gap: 6px; 
-            background: var(--btn-gray); /* Lighter, softer background */
-            border-radius: 99px; /* Pill shape */
-            padding: 6px 12px; 
-            margin-left: auto; /* Ensures it pushes to the right */
+        .ad-strip-text span { 
+            display: block; font-weight: 500; font-size: 12px; 
+            color: var(--text-muted); margin-top: 2px; 
+            transition: color 0.4s;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        .ad-strip-counter b { 
-            font-size: 16px; font-weight: 800; line-height: 1; color: var(--text-main); 
+        .ad-strip.is-cooldown .ad-strip-text { color: #16a34a; }
+        .dark-mode .ad-strip.is-cooldown .ad-strip-text { color: #4ade80; }
+
+        /* Score Bounce */
+        @keyframes score-pop {
+            0%   { transform: scale(1); color: #fbbf24; }
+            40%  { transform: scale(1.6); color: #fff; text-shadow: 0 0 20px #fbbf24; }
+            100% { transform: scale(1); color: #fbbf24; }
         }
-        .ad-strip-counter small { 
-            font-size: 11px; font-weight: 600; color: var(--text-muted); line-height: 1;
+        .ad-score-anim {
+            animation: score-pop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Floating +1 */
+        .float-plus {
+            position: absolute;
+            top: -12px; left: 50%;
+            font-size: 16px; font-weight: 900;
+            color: #fbbf24;
+            pointer-events: none;
+            white-space: nowrap;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            animation: float-up 1s cubic-bezier(.2,.7,.3,1) forwards;
+            z-index: 4;
+        }
+        @keyframes float-up {
+            0%   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            70%  { opacity: 1; transform: translate(-50%, -24px) scale(1.3); }
+            100% { opacity: 0; transform: translate(-50%, -35px) scale(1.4); }
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #22c55e;
+            top: 50%; left: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: particle-fly 7s cubic-bezier(.2,.7,.3,1) forwards;
+            z-index: 3;
+        }
+        @keyframes particle-fly {
+            0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0); opacity: 0; }
+        }
+
+        /* Godlike Shimmer */
+        .tier-godlike {
+            background: linear-gradient(90deg, #ff3366, #ff9933, #22c55e, #3b82f6, #a855f7);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: godlike-shine 2.5s linear infinite;
+            display: inline-block;
+        }
+        @keyframes godlike-shine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
 
         /* ---------- OVERLAY ---------- */
@@ -654,7 +763,7 @@
             font-size: clamp(17px, 4.4vw, 19px);
             font-weight: 800;
             color: #fff;
-            background: #4f46e5;
+            background: #0866ff;
             box-shadow: 0 10px 22px rgba(79,70,229,.35);
         }
         .an-btn:active { transform: translateY(1px); box-shadow: 0 6px 14px rgba(79,70,229,.3); }
@@ -703,9 +812,10 @@
 
     <!-- Ad-notice status strip (only shown in direct-nosandbox mode) -->
     <div class="ad-strip" id="ad-notice-strip" hidden>
-        <div class="ad-strip-icon" id="ad-strip-icon"></div>
+        <div class="ad-strip-icon" id="ad-strip-icon">
+            <b id="ad-strip-count">0</b>
+        </div>
         <div class="ad-strip-text" id="ad-strip-text"></div>
-        <div class="ad-strip-counter"><b id="ad-strip-count">0</b><small>ads closed</small></div>
     </div>
 
     <main class="frame-box" id="player-container">
@@ -750,18 +860,32 @@
             <i class="fas fa-exclamation-triangle fa-2x"></i>
             <p>Resource temporarily unavailable.</p>
         </div>
+        
+        <!-- ── Unlock Shield Modal (Moved here for fullscreen support) ── -->
+        <div class="modal-overlay" id="unlock-modal">
+            <div class="modal-box">
+                <h3>Unlock player?</h3>
+                <p>We are protecting you from ADS. If you unlock, ADS might be shown when you tap on screen.</p>
+                <div class="modal-actions">
+                    <button id="unlock-confirm">Unlock anyway</button>
+                    <button class="primary" id="unlock-cancel">Keep locked</button>
+                </div>
+            </div>
+        </div>
     </main>
 
+<!-- Apple design philosophy, remove the clutters
     <div class="status-alert">
         <i class="fas fa-info-circle"></i> Not working?
     </div>
+    -->
 
     <div class="toolbar">
-        <button class="btn-utility" id="change-link-btn">
-            <i class="fas fa-arrow-left"></i> <span>Change Link</span>
-        </button>
         <button class="btn-utility" id="sync-btn">
             <i class="fas fa-sync-alt"></i> <span>Refresh</span>
+        </button>
+        <button class="btn-utility" id="change-link-btn">
+            <i class="fas fa-arrow-left"></i> <span>Change Link</span>
         </button>
     </div>
 
@@ -786,7 +910,7 @@
 <div class="chat-overlay" id="chat-overlay" aria-hidden="true"></div>
 <aside class="chat-drawer" id="chat-drawer" role="dialog" aria-modal="true" aria-labelledby="chat-title">
   <header class="chat-header">
-    <h2 class="chat-title" id="chat-title">Community Chat</h2>
+    <h2 class="chat-title" id="chat-title">Live Chat</h2>
     <button class="chat-close" id="chat-close" type="button" aria-label="Close chat">
       <i class="fas fa-times"></i>
     </button>
@@ -813,17 +937,7 @@
     </div>
 </div>
 
-<!-- ── Unlock Shield Modal ──────────────────────────────────────────── -->
-<div class="modal-overlay" id="unlock-modal">
-    <div class="modal-box">
-        <h3>Unlock player?</h3>
-        <p>We are protecting you from ADS. If you unlock, ADS might be shown when you tap on screen.</p>
-        <div class="modal-actions">
-            <button id="unlock-cancel">Keep locked</button>
-            <button id="unlock-confirm">Unlock anyway</button>
-        </div>
-    </div>
-</div>
+
 
 <!-- App footer 
     <div id="ono-promo-footer" style="
@@ -972,31 +1086,33 @@
 
     <!-- VISUAL 1: ad tab escaping + red X -->
     <svg class="an-art" viewBox="0 0 300 145" role="img"
-         aria-label="A game window opening a new tab, with a red X showing you should close it">
+         aria-label="A game window opening a new ad tab">
+      <!-- Main Window (Safe Video) -->
       <rect x="8" y="52" width="176" height="84" rx="14"
             fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2.5"/>
       <circle cx="26" cy="68" r="3.5" fill="#cbd5e1"/>
       <circle cx="40" cy="68" r="3.5" fill="#cbd5e1"/>
       <circle cx="54" cy="68" r="3.5" fill="#cbd5e1"/>
-      <circle cx="96" cy="96" r="24" fill="#4f46e5"/>
+      <circle cx="96" cy="96" r="24" fill="#0866ff"/>
       <path d="M89 85 L111 96 L89 107 Z" fill="#ffffff"/>
+      
+      <!-- New Tab Window (Now clearly labeled as AD) -->
       <rect x="176" y="2" width="108" height="58" rx="12"
-            fill="#ffffff" stroke="#fca5a5" stroke-width="2.5"/>
-      <rect x="190" y="14" width="80" height="8" rx="4" fill="#fee2e2"/>
-      <rect x="190" y="28" width="56" height="8" rx="4" fill="#fee2e2"/>
-      <rect x="190" y="42" width="68" height="8" rx="4" fill="#fee2e2"/>
+            fill="#fff3d6" stroke="#ffb020" stroke-width="2.5"/>
+      <rect x="190" y="14" width="80" height="8" rx="4" fill="#ffb020"/>
+      <text x="230" y="46" text-anchor="middle" font-size="24" font-weight="900"
+            fill="#a85f00" font-family="system-ui, sans-serif">AD</text>
+      
+      <!-- Arrow -->
       <path d="M132 52 C 140 30, 155 22, 174 22"
             fill="none" stroke="#94a3b8" stroke-width="2.5"
             stroke-dasharray="5 6" stroke-linecap="round"/>
       <path d="M180 22 L168 16 L168 28 Z" fill="#94a3b8"/>
-      <circle cx="272" cy="14" r="16" fill="#ef4444"/>
-      <path d="M266 8 L278 20 M278 8 L266 20"
-            stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
     </svg>
 
-    <h2 class="an-title" id="anTitle">New tabs may open.<br>Just close them. 👍</h2>
+    <h2 class="an-title" id="anTitle">New tabs may open.</h2>
     <p class="an-sub" id="anSub">
-      Those tabs are <b>ads</b> - they are <b>not from us</b>.
+      Those tabs are ads. They are <b>not from us</b>.<br>Just press back to close them.
     </p>
 
     <!-- VISUAL 2: press Back -->
@@ -1015,19 +1131,18 @@
         <circle cx="82" cy="97" r="4.5" fill="#fff" opacity=".6"/>
         <rect x="116" y="91" width="11" height="11" rx="2"
               fill="none" stroke="#fff" stroke-width="2" opacity=".6"/>
-        <rect x="172" y="22" width="132" height="86" rx="18" fill="#3cc850"/>
-        <path d="M206 44 L182 65 L206 86 Z" fill="#06240d"/>
-        <text x="214" y="73" font-size="24" font-weight="800"
-              fill="#06240d" font-family="system-ui, sans-serif">BACK</text>
+<rect x="172" y="45" width="132" height="72" rx="18" fill="#1a1a1a"/>
+<polyline points="234,68 225,76 234,84" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M226 76 H243 A9 9 0 0 1 243 94 H228" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
       </svg>
 
       <div>
         <strong>Press Back</strong>
-        <small>Then tap play again.</small>
+        <small>Then play again.</small>
       </div>
     </div>
 
-    <button class="an-btn" id="ad-start-btn" type="button">Got it</button>
+    <button class="an-btn" id="ad-start-btn" type="button">OK</button>
   </div>
 </div>
 
@@ -1091,11 +1206,10 @@ async function getKey() {
     // un-sandboxed embeds and tracks "ads closed" across visibility
     // changes + page reloads (phones often kill the page while an ad is
     // open, so state lives in sessionStorage, namespaced per-URL).
-    const AD_NS_PREFIX = 'yakitv-ns-';
-    const AD_ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>';
-    const AD_ICON_OK   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+      const AD_NS_PREFIX = 'yakitv-ns-';
 
-    let adStateKey       = null;   // non-null only after nosandbox is entered
+
+    let adStateKey       = null;   
     let adPendingUrl     = null;
     let adStarted        = false;
     let adClickedInFrame = false;
@@ -1109,80 +1223,195 @@ async function getKey() {
     function adNSget(k) { try { return sessionStorage.getItem(adStateKey + k); } catch(_) { return null; } }
     function adNSset(k, v) { try { sessionStorage.setItem(adStateKey + k, v); } catch(_) {} }
 
+    function spawnParticles(count = 8, color = '#22c55e') {
+        const icon = document.getElementById('ad-strip-icon');
+        if (!icon) return;
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('span');
+            p.className = 'particle';
+            const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+            const dist  = 80 + Math.random() * 60;
+            p.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+            p.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
+            p.style.background = color;
+            icon.appendChild(p);
+            setTimeout(() => p.remove(), 4100);
+        }
+    }
+
+    function floatPlus() {
+        const icon = document.querySelector('.ad-strip-icon');
+        if (!icon) return;
+        const el = document.createElement('span');
+        el.className = 'float-plus';
+        el.textContent = `+1`;
+        icon.appendChild(el);
+        setTimeout(() => el.remove(), 1000);
+    }
+
     function adShowWaiting() {
         const strip = document.getElementById('ad-notice-strip');
         if (!strip) return;
-        strip.classList.remove('is-back');
+        strip.classList.remove('is-back', 'is-locked', 'is-cooldown');
         document.getElementById('ad-strip-icon').innerHTML = AD_ICON_INFO;
         document.getElementById('ad-strip-text').innerHTML =
-            'An ad opened? It is not ours.<span>Press Back to return.</span>';
+            'If Ad opens, press back!<span>Return to player to continue.</span>';
     }
 
-    function adShowBack() {
+    // NEW: The 15s stretched success state
+    function adShowCooldown() {
         const strip = document.getElementById('ad-notice-strip');
         if (!strip) return;
-        strip.classList.remove('is-back');
-        void strip.offsetWidth;
-        strip.classList.add('is-back');
+        strip.classList.remove('is-locked');
+        strip.classList.remove('is-cooldown');
+        void strip.offsetWidth; // Force CSS animation restart
+        strip.classList.add('is-cooldown');
+        
         document.getElementById('ad-strip-icon').innerHTML = AD_ICON_OK;
         document.getElementById('ad-strip-text').innerHTML =
-            'Welcome back!<span>The ad is gone. Press play to continue.</span>';
+            'Ad closed!<span>The ad is gone.</span>';
     }
 
-    function adUpdateCount() {
+    function adShowLocked() {
+        const strip = document.getElementById('ad-notice-strip');
+        if (!strip) return;
+        strip.classList.remove('is-cooldown');
+        strip.classList.add('is-locked');
+        document.getElementById('ad-strip-icon').innerHTML = AD_ICON_LOCK;
+        document.getElementById('ad-strip-text').innerHTML =
+            'Player locked to block ads.<span>Tap the screen to unlock.</span>';
+    }
+
+    function getRankText() {
+        if (adCount === 0) return 'Ads closed';
+        if (adCount === 1) return 'First Blood 🩸';
+        if (adCount === 2) return 'Ad Slayer ⚔️';
+        if (adCount === 3) return 'Dominating 🔥';
+        if (adCount === 4) return 'Unstoppable 💥';
+        return 'Legend 👑';
+    }
+
+    function adUpdateCount(animate = true) {
         const el = document.getElementById('ad-strip-count');
-        if (el) el.textContent = adCount;
+        if (!el) return;
+
+        el.textContent = adCount;
+        
+        if (animate) {
+            el.classList.remove('ad-score-anim');
+            void el.offsetWidth; 
+            el.classList.add('ad-score-anim');
+        }
+        
+        // If we are currently showing the green cooldown state, update the rank label
+        const strip = document.getElementById('ad-notice-strip');
+        if (strip && strip.classList.contains('is-cooldown')) {
+            const rankText = getRankText();
+            const spanClass = adCount >= 5 ? 'class="tier-godlike"' : '';
+            document.getElementById('ad-strip-text').innerHTML =
+                `Ad closed!<span ${spanClass}>${rankText}</span>`;
+        }
+    }
+
+    function adShowWaiting() {
+        const strip = document.getElementById('ad-notice-strip');
+        if (!strip) return;
+        strip.classList.remove('is-cooldown', 'is-locked');
+        document.getElementById('ad-strip-text').innerHTML =
+            'If ad opens, press back!<span>Return to player to continue.</span>';
+    }
+
+    function adShowCooldown() {
+        const strip = document.getElementById('ad-notice-strip');
+        if (!strip) return;
+        strip.classList.remove('is-locked');
+        strip.classList.remove('is-cooldown');
+        void strip.offsetWidth; 
+        strip.classList.add('is-cooldown');
+        
+        const rankText = getRankText();
+        const spanClass = adCount >= 5 ? 'class="tier-godlike"' : '';
+        document.getElementById('ad-strip-text').innerHTML =
+            `Ad closed!<span ${spanClass}>${rankText}</span>`;
+    }
+
+    function adShowLocked() {
+        const strip = document.getElementById('ad-notice-strip');
+        if (!strip) return;
+        strip.classList.remove('is-cooldown');
+        strip.classList.add('is-locked');
+        document.getElementById('ad-strip-text').innerHTML =
+            '🔒 Player locked<span>Tap on screen to unlock.</span>';
     }
 
     function adReturnFromAd() {
         adClickedInFrame = false;
         adNSset('cif', '0');
         adCount += 1;
-        adUpdateCount();
-        adShowBack();
+        adNSset('count', adCount.toString()); 
+        
+        adUpdateCount(true);
+        adShowCooldown(); // Triggers the 15s green breathing effect
+        floatPlus();
+        
+        // Match particle color to score tier
+        const pColor = adCount >= 5 ? '#a855f7' : adCount >= 3 ? '#ef4444' : '#22c55e';
+        spawnParticles(adCount >= 5 ? 16 : 8, pColor);
+        
         armLockOrLockNow();
     }
 
-    // Only active once we've entered nosandbox mode. Any time the page
-    // goes hidden while the last focused element was the iframe, that
-    // strongly implies an ad opened — count it on the way back.
+    // Bulletproof return detection
+    function handlePageReturn() {
+        if (!adStateKey || !adStarted) return;
+        const wasClicked = (adClickedInFrame || adNSget('cif') === '1');
+        if (wasClicked) {
+            adReturnFromAd();
+        }
+    }
+
     document.addEventListener('visibilitychange', () => {
         if (!adStateKey || !adStarted) return;
         if (document.hidden) {
             adClickedInFrame = (document.activeElement === contentFrame);
             adNSset('cif', adClickedInFrame ? '1' : '0');
-        } else if (adClickedInFrame) {
-            adReturnFromAd();
+        } else {
+            handlePageReturn();
+        }
+    });
+
+    window.addEventListener('focus', () => {
+        if (document.hidden) return;
+        handlePageReturn();
+    });
+
+    // NEW: iOS Safari / BFCache Restore Fallback
+    window.addEventListener('pageshow', (e) => {
+        if (e.persisted && !document.hidden) {
+            handlePageReturn();
         }
     });
 
     function startAdNoticedFlow(url) {
         adPendingUrl = url;
         adStateKey   = AD_NS_PREFIX + adHashUrl(url);
-
         adStarted        = adNSget('started') === '1';
         adClickedInFrame = adNSget('cif') === '1';
-        adCount          = 0; // Reset on refresh. Let them try again.
+        adCount          = parseInt(adNSget('count')) || 0; 
 
         const strip   = document.getElementById('ad-notice-strip');
         const overlay = document.getElementById('ad-notice-overlay');
 
         if (adStarted) {
-            // Resume — skip the poster, load immediately, restore state.
             if (strip) strip.hidden = false;
-            adUpdateCount();
+            adUpdateCount(false); // Do not animate on resume
             if (adClickedInFrame) {
-                // Page was killed/reloaded while an ad was open — count it.
                 adReturnFromAd();
             } else {
                 adShowWaiting();
-                // DO NOT arm the lock immediately on resume. 
-                // The video is paused, they need to tap play. 
-                // We will arm the lock only after an ad fires, or after they start playing.
             }
             loadIntoFrame(url);
         } else {
-            // First visit — show the poster and DON'T load the iframe.
             if (overlay) overlay.hidden = false;
             document.body.style.overflow = 'hidden';
         }
@@ -1205,22 +1434,13 @@ async function getKey() {
         }
     }
 
-    // ── Smart auto-lock (direct-nosandbox) ─────────────────────────────
-    // After a quiet period with no ads, a transparent shield lifts to block
-    // accidental taps that would open yet another ad. The shield stays on
-    // even in fullscreen. Clicking it prompts the user to unlock.
     const LOCK_QUIET_MS = 15000;
-
-    let lockTimer    = null;
+    let lockTimer = null;
     let shieldLocked = false;
 
     function armLock() {
         if (lockTimer) clearTimeout(lockTimer);
         lockTimer = setTimeout(() => { lockTimer = null; lockShield(); }, LOCK_QUIET_MS);
-    }
-
-    function disarmLock() {
-        if (lockTimer) { clearTimeout(lockTimer); lockTimer = null; }
     }
 
     function armLockOrLockNow() {
@@ -1232,7 +1452,7 @@ async function getKey() {
         if (!shield) return;
         shieldLocked = true;
         shield.hidden = false;
-        adStripSetLockedMessage(true);
+        adShowLocked(); // Will snap from green to blue
     }
 
     function unlockShield() {
@@ -1240,19 +1460,11 @@ async function getKey() {
         if (!shield) return;
         shieldLocked = false;
         shield.hidden = true;
-        adStripSetLockedMessage(false);
-        armLock(); // Re-arm the 15s timer immediately
+        adShowWaiting();
+        armLock(); 
     }
 
-    function adStripSetLockedMessage(locked) {
-        const el = document.getElementById('ad-strip-text');
-        if (!el) return;
-        if (locked) {
-            el.innerHTML = 'Player locked to block Ads.<span>Tap the screen to unlock.</span>';
-        } else {
-            adShowWaiting();
-        }
-    }
+    // ... (Rest of your modal wiring and applyDirectMode remains exactly the same) ...
 
     // ── Unlock Modal Logic ─────────────────────────────────────────────
     const _unlockModal = document.getElementById('unlock-modal');

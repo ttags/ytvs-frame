@@ -458,12 +458,13 @@
         }
 
         .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
+    display: flex;
+    flex-direction: column-reverse; /* Keeps "Keep locked" on top, matching your current layout */
+    gap: 10px;
         }
 
         .modal-actions button {
+            width: 100%;
             padding: 9px 16px;
             border-radius: 999px;
             font-size: 13px;
@@ -506,13 +507,13 @@
             border-radius: 12px; padding: 10px 12px; margin-bottom: 10px;
         }
         .ad-strip[hidden] { display: none !important; }
-        .ad-strip.is-back { border-color: #22c55e; }
+        .ad-strip.is-back { border-color: #0866ff; }
         .ad-strip-icon {
             flex: none; width: 36px; height: 36px; border-radius: 50%;
             display: grid; place-items: center;
             background: var(--primary); color: #fff;
         }
-        .ad-strip.is-back .ad-strip-icon { background: #22c55e; }
+        .ad-strip.is-back .ad-strip-icon { background: #0866ff; }
         .ad-strip-icon svg { width: 22px; height: 22px; }
         .ad-strip-text {
             flex: 1 1 160px; font-size: 13px; font-weight: 700; line-height: 1.35;
@@ -792,8 +793,8 @@
                 <h3>Unlock player?</h3>
                 <p>We are protecting you from ADS. If you unlock, ADS might be shown when you tap on screen.</p>
                 <div class="modal-actions">
-                    <button class="primary" id="unlock-cancel">Keep locked</button>
                     <button id="unlock-confirm">Unlock anyway</button>
+                    <button class="primary" id="unlock-cancel">Keep locked</button>
                 </div>
             </div>
         </div>
@@ -1130,8 +1131,8 @@ async function getKey() {
     // changes + page reloads (phones often kill the page while an ad is
     // open, so state lives in sessionStorage, namespaced per-URL).
     const AD_NS_PREFIX = 'yakitv-ns-';
-    const AD_ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>';
-    const AD_ICON_OK   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+    const AD_ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"></path></svg>';
+    const AD_ICON_OK   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>';
 
     let adStateKey       = null;   // non-null only after nosandbox is entered
     let adPendingUrl     = null;
@@ -1334,7 +1335,7 @@ function startAdNoticedFlow(url) {
         const el = document.getElementById('ad-strip-text');
         if (!el) return;
         if (locked) {
-            el.innerHTML = 'Player locked to block Ads.<span>Tap the screen to unlock.</span>';
+            el.innerHTML = 'Player locked to block Ads.<span>Tap screen to unlock.</span>';
         } else {
             adShowWaiting();
         }

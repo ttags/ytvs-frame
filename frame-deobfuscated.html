@@ -538,16 +538,16 @@
 
         /* Locked State */
         .ad-strip.is-locked {
-            border-color: #007aff;
-            box-shadow: 0 0 12px rgba(8, 102, 255, 0.2);
+           border-color: #007aff;
+            box-shadow: 0 0 12px rgba(0, 122, 255, 0.3);
         }
 
         /* The new score badge - Dark background so Gold always pops */
         .ad-strip-icon {
             flex: none; width: 44px; height: 44px; border-radius: 12px;
             display: grid; place-items: center;
-            background: #0f172a; /* Dark slate background */
-            border: 2px solid #334155; /* Default border */
+            background: #000; /* Dark slate background */
+            border: 1px solid #334155; /* Default border */
             transition: border-color 0.4s ease, box-shadow 0.4s ease;
             position: relative;
         }
@@ -559,7 +559,7 @@
         
         /* Locked State - Blue Glow */
         .ad-strip.is-locked .ad-strip-icon { 
-            box-shadow: 0 0 12px rgba(8, 102, 255, 0.4);
+         box-shadow: 0 0 12px rgba(0, 122, 255, 0.4);
         }
 
         /* The big gold number inside the badge */
@@ -1294,7 +1294,7 @@ async function getKey() {
         if (!strip) return;
         strip.classList.remove('is-cooldown', 'is-locked');
         document.getElementById('ad-strip-text').innerHTML =
-            'If Ad opens, press back!<span>Return to player to continue.</span>';
+            'If ad opens, press back!<span>Return to player to continue.</span>';
     }
 
     function adShowCooldown() {

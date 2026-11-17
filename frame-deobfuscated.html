@@ -18,7 +18,7 @@
 
     <style>
         :root {
-            --primary: #0866ff;
+            --primary: #007aff;
             --bg-body: #f8fafc;
             --container-bg: #ffffff;
             --text-main: #1e293b;
@@ -538,7 +538,7 @@
 
         /* Locked State */
         .ad-strip.is-locked {
-            border-color: #0866ff;
+            border-color: #007aff;
             box-shadow: 0 0 12px rgba(8, 102, 255, 0.2);
         }
 
@@ -763,7 +763,7 @@
             font-size: clamp(17px, 4.4vw, 19px);
             font-weight: 800;
             color: #fff;
-            background: #0866ff;
+            background: #007aff;
             box-shadow: 0 10px 22px rgba(79,70,229,.35);
         }
         .an-btn:active { transform: translateY(1px); box-shadow: 0 6px 14px rgba(79,70,229,.3); }
@@ -1093,7 +1093,7 @@
       <circle cx="26" cy="68" r="3.5" fill="#cbd5e1"/>
       <circle cx="40" cy="68" r="3.5" fill="#cbd5e1"/>
       <circle cx="54" cy="68" r="3.5" fill="#cbd5e1"/>
-      <circle cx="96" cy="96" r="24" fill="#0866ff"/>
+      <circle cx="96" cy="96" r="24" fill="#007aff"/>
       <path d="M89 85 L111 96 L89 107 Z" fill="#ffffff"/>
       
       <!-- New Tab Window (Now clearly labeled as AD) -->
@@ -1206,8 +1206,9 @@ async function getKey() {
     // un-sandboxed embeds and tracks "ads closed" across visibility
     // changes + page reloads (phones often kill the page while an ad is
     // open, so state lives in sessionStorage, namespaced per-URL).
-      const AD_NS_PREFIX = 'yakitv-ns-';
-
+ 
+     // ── Ad-notice flow (direct-nosandbox only) ─────────────────────────
+    const AD_NS_PREFIX = 'yakitv-ns-';
 
     let adStateKey       = null;   
     let adPendingUrl     = null;
@@ -1223,6 +1224,23 @@ async function getKey() {
     function adNSget(k) { try { return sessionStorage.getItem(adStateKey + k); } catch(_) { return null; } }
     function adNSset(k, v) { try { sessionStorage.setItem(adStateKey + k, v); } catch(_) {} }
 
+    // Tiny Audio Blip (Dopamine hit)
+    let audioCtx = null;
+    function playBlip() {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            o.type = 'triangle';
+            o.frequency.setValueAtTime(660, audioCtx.currentTime);
+            o.frequency.exponentialRampToValueAtTime(1320, audioCtx.currentTime + 0.1);
+            g.gain.setValueAtTime(0.06, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+            o.connect(g).connect(audioCtx.destination);
+            o.start(); o.stop(audioCtx.currentTime + 0.2);
+        } catch (_) {}
+    }
+
     function spawnParticles(count = 8, color = '#22c55e') {
         const icon = document.getElementById('ad-strip-icon');
         if (!icon) return;
@@ -1230,12 +1248,12 @@ async function getKey() {
             const p = document.createElement('span');
             p.className = 'particle';
             const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
-            const dist  = 80 + Math.random() * 60;
+            const dist  = 150 + Math.random() * 120;
             p.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
             p.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
             p.style.background = color;
             icon.appendChild(p);
-            setTimeout(() => p.remove(), 4100);
+            setTimeout(() => p.remove(), 7100);
         }
     }
 
@@ -1247,39 +1265,6 @@ async function getKey() {
         el.textContent = `+1`;
         icon.appendChild(el);
         setTimeout(() => el.remove(), 1000);
-    }
-
-    function adShowWaiting() {
-        const strip = document.getElementById('ad-notice-strip');
-        if (!strip) return;
-        strip.classList.remove('is-back', 'is-locked', 'is-cooldown');
-        document.getElementById('ad-strip-icon').innerHTML = AD_ICON_INFO;
-        document.getElementById('ad-strip-text').innerHTML =
-            'If Ad opens, press back!<span>Return to player to continue.</span>';
-    }
-
-    // NEW: The 15s stretched success state
-    function adShowCooldown() {
-        const strip = document.getElementById('ad-notice-strip');
-        if (!strip) return;
-        strip.classList.remove('is-locked');
-        strip.classList.remove('is-cooldown');
-        void strip.offsetWidth; // Force CSS animation restart
-        strip.classList.add('is-cooldown');
-        
-        document.getElementById('ad-strip-icon').innerHTML = AD_ICON_OK;
-        document.getElementById('ad-strip-text').innerHTML =
-            'Ad closed!<span>The ad is gone.</span>';
-    }
-
-    function adShowLocked() {
-        const strip = document.getElementById('ad-notice-strip');
-        if (!strip) return;
-        strip.classList.remove('is-cooldown');
-        strip.classList.add('is-locked');
-        document.getElementById('ad-strip-icon').innerHTML = AD_ICON_LOCK;
-        document.getElementById('ad-strip-text').innerHTML =
-            'Player locked to block ads.<span>Tap the screen to unlock.</span>';
     }
 
     function getRankText() {
@@ -1302,15 +1287,6 @@ async function getKey() {
             void el.offsetWidth; 
             el.classList.add('ad-score-anim');
         }
-        
-        // If we are currently showing the green cooldown state, update the rank label
-        const strip = document.getElementById('ad-notice-strip');
-        if (strip && strip.classList.contains('is-cooldown')) {
-            const rankText = getRankText();
-            const spanClass = adCount >= 5 ? 'class="tier-godlike"' : '';
-            document.getElementById('ad-strip-text').innerHTML =
-                `Ad closed!<span ${spanClass}>${rankText}</span>`;
-        }
     }
 
     function adShowWaiting() {
@@ -1318,7 +1294,7 @@ async function getKey() {
         if (!strip) return;
         strip.classList.remove('is-cooldown', 'is-locked');
         document.getElementById('ad-strip-text').innerHTML =
-            'If ad opens, press back!<span>Return to player to continue.</span>';
+            'If Ad opens, press back!<span>Return to player to continue.</span>';
     }
 
     function adShowCooldown() {
@@ -1353,6 +1329,7 @@ async function getKey() {
         adUpdateCount(true);
         adShowCooldown(); // Triggers the 15s green breathing effect
         floatPlus();
+        playBlip(); // Audio hit
         
         // Match particle color to score tier
         const pColor = adCount >= 5 ? '#a855f7' : adCount >= 3 ? '#ef4444' : '#22c55e';
@@ -1385,7 +1362,7 @@ async function getKey() {
         handlePageReturn();
     });
 
-    // NEW: iOS Safari / BFCache Restore Fallback
+    // iOS Safari / BFCache Restore Fallback
     window.addEventListener('pageshow', (e) => {
         if (e.persisted && !document.hidden) {
             handlePageReturn();
@@ -1420,6 +1397,9 @@ async function getKey() {
         if (startBtn && !startBtn._adWired) {
             startBtn._adWired = true;
             startBtn.addEventListener('click', () => {
+                if (!audioCtx) { // Unlock audio on first click
+                    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(_) {}
+                }
                 adStarted = true;
                 adNSset('started', '1');
                 const ov = document.getElementById('ad-notice-overlay');
@@ -1452,7 +1432,7 @@ async function getKey() {
         if (!shield) return;
         shieldLocked = true;
         shield.hidden = false;
-        adShowLocked(); // Will snap from green to blue
+        adShowLocked();
     }
 
     function unlockShield() {
@@ -1463,8 +1443,6 @@ async function getKey() {
         adShowWaiting();
         armLock(); 
     }
-
-    // ... (Rest of your modal wiring and applyDirectMode remains exactly the same) ...
 
     // ── Unlock Modal Logic ─────────────────────────────────────────────
     const _unlockModal = document.getElementById('unlock-modal');
@@ -1715,6 +1693,7 @@ window.addEventListener('blur', () => {
     // ── Change Link button ────────────────────────
 const changeLinkBtn = document.getElementById('change-link-btn');
 changeLinkBtn.addEventListener('click', function() {
+    window.bypassUnloadGuard = true;
     const params = new URLSearchParams(window.location.search);
     const returnUrl = params.get('return');
     if (returnUrl) {
@@ -1737,7 +1716,10 @@ if (themeBtn) {
 }
 
     // ── 6. SYNC / FORCE REFRESH ──────────────────────────────────────────────
-    document.getElementById('sync-btn').addEventListener('click', () => location.reload());
+    document.getElementById('sync-btn').addEventListener('click', () => {
+        window.bypassUnloadGuard = true;
+        location.reload();
+    });
 
     // ── 7. SHARE WITH FAMILY & FRIENDS ───────────────────────────────────────
     const SHARE_LINK = "https://www.yakitv.com";
@@ -1780,6 +1762,7 @@ if (themeBtn) {
 
     // ── Navigation guard for no-sandbox iframes ──────────────────────────
     window.addEventListener('beforeunload', (e) => {
+        if (window.bypassUnloadGuard) return; // Bypass for Refresh/Change Link buttons
         if (!document.body.classList.contains('unlocked-mode')) return;
         e.preventDefault();
         e.returnValue = '';

@@ -136,10 +136,6 @@
             cursor: pointer;
             transition: background-color 0.2s, transform 0.15s, box-shadow 0.2s;
         }
-        .btn-chat-full:hover {
-            box-shadow: 0 10px 30px -6px rgba(0, 123, 255, 0.75);
-            transform: translateY(-1px);
-        }
         .btn-chat-full:active { transform: scale(0.98); }
         .btn-chat-full i { font-size: 16px; }
         .btn-chat-full.is-open {
@@ -327,21 +323,70 @@
             z-index: 2;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
             background: var(--container-bg);
-            color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 500;
         }
         .chat-loading[hidden] { display: none !important; }
-        .chat-loading .spinner {
-            width: 30px;
-            height: 30px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--primary);
+
+        /* Skeleton bubbles — mimic message layout while iframe loads */
+        .chat-skeleton {
+            flex: 1;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            overflow: hidden;
+        }
+        .sk-msg { display: flex; gap: 10px; align-items: flex-start; }
+        .sk-avatar {
+            width: 28px; height: 28px;
             border-radius: 50%;
+            background: var(--border-color);
+            flex-shrink: 0;
+            animation: sk-pulse 1.4s ease-in-out infinite;
+        }
+        .sk-bubble {
+            height: 14px;
+            margin-top: 7px;
+            border-radius: 7px;
+            background: var(--border-color);
+            flex: 1;
+            max-width: 70%;
+            animation: sk-pulse 1.4s ease-in-out infinite;
+        }
+        .sk-short { max-width: 45%; }
+        .sk-medium { max-width: 58%; }
+        .sk-msg:nth-child(2) .sk-avatar,
+        .sk-msg:nth-child(2) .sk-bubble { animation-delay: 0.2s; }
+        .sk-msg:nth-child(3) .sk-avatar,
+        .sk-msg:nth-child(3) .sk-bubble { animation-delay: 0.4s; }
+        .sk-msg:nth-child(4) .sk-avatar,
+        .sk-msg:nth-child(4) .sk-bubble { animation-delay: 0.6s; }
+        @keyframes sk-pulse {
+            0%, 100% { opacity: 0.35; }
+            50%      { opacity: 0.85; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .sk-avatar, .sk-bubble { animation: none; opacity: 0.5; }
+        }
+
+        /* Compact status bar at the bottom — spinner shrinks, text stays visible */
+        .chat-loading-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px;
+            border-top: 1px solid var(--border-color);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+        .chat-loading-status .spinner {
+            width: 16px;
+            height: 16px;
+            border-width: 2px;
+            border-color: var(--border-color);
+            border-top-color: var(--primary);
             animation: spin 0.8s linear infinite;
         }
 
@@ -813,8 +858,16 @@
              not the chat. Leaves the bottom slice (input + a few messages) interactive. -->
         <div class="chat-scroll-shield" aria-hidden="true"></div>
         <div class="chat-loading" id="chat-loading" hidden>
-            <div class="spinner"></div>
-            <span>Connecting to chat…</span>
+            <div class="chat-skeleton" aria-hidden="true">
+                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble"></div></div>
+                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble sk-short"></div></div>
+                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble sk-medium"></div></div>
+                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble"></div></div>
+            </div>
+            <div class="chat-loading-status">
+                <div class="spinner"></div>
+                <span id="chat-loading-text">Connecting to chat…</span>
+            </div>
         </div>
     </div>
 

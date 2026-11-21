@@ -301,7 +301,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 75%;            /* ← tune this: 50% = more chat, 85% = more page scroll */
+            height: 70%;            /* ← tune this: 50% = more chat, 85% = more page scroll */
             z-index: 1;             /* above iframe (0/auto), below loading overlay (2) */
             background: transparent;
             touch-action: pan-y;
@@ -310,7 +310,7 @@
 
         #chat-frame {
             width: 100%;
-            height: 450px;
+            height: 420px;
             border: none;
             display: block;
             background: var(--container-bg);
@@ -1741,6 +1741,41 @@ if (themeBtn) {
         e.preventDefault();
         e.returnValue = '';
         return '';
+    });
+
+// not let screen go off midwatch 
+    // ── 8. PREVENT SCREEN AUTO-SLEEP (Native Wake Lock API) ───────────────────
+    let wakeLockSentinel     = null;
+    let keepAwakeWanted      = false;
+    let isRequestingWakeLock = false;
+
+    async function engageKeepAwake() {
+        keepAwakeWanted = true;
+        if (!('wakeLock' in navigator) || isRequestingWakeLock) return;
+
+        try {
+            if (!wakeLockSentinel || wakeLockSentinel.released) {
+                isRequestingWakeLock = true;
+                wakeLockSentinel = await navigator.wakeLock.request('screen');
+                wakeLockSentinel.addEventListener('release', () => {
+                    wakeLockSentinel = null;
+                });
+            }
+        } catch (_) {
+            // Fails silently if Samsung Battery Saver blocks it or tab is hidden
+        } finally {
+            isRequestingWakeLock = false;
+        }
+    }
+
+    ['pointerdown', 'touchstart', 'click'].forEach((evt) => {
+        document.addEventListener(evt, engageKeepAwake, { passive: true });
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && keepAwakeWanted) {
+            engageKeepAwake();
+        }
     });
 
 </script>

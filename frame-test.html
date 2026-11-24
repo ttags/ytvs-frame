@@ -1,1611 +1,1789 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="format-detection" content="telephone=no">
-<title>MARIGOLD株式会社｜清掃は、最高のおもてなし。</title>
-<meta name="description" content="Flawless Cleaning. Total Peace of Mind. MARIGOLD delivers premium hotel housekeeping, commercial cleaning, and registered support services. 完璧な清掃で、確かな安心を。">
-<link rel="icon" type="image/png" href="https://marigoldcoltd.jp/uploads/theme/marigold-813222.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{
-  --primary:#0A2540;
-  --primary-2:#1a3a66;
-  --accent:#C9A961;
-  --accent-soft:#f5ecd4;
-  --ink:#0b1220;
-  --ink-2:#1a2332;
-  --gray:#525c6b;
-  --gray-2:#8a94a6;
-  --line:#e8ecf1;
-  --bg:#fafbfd;
-  --bg-soft:#f3f5f9;
-  --white:#ffffff;
-  --radius:20px;
-  --radius-sm:12px;
-  --shadow-xs:0 1px 2px rgba(10,37,64,.04);
-  --shadow-sm:0 2px 8px rgba(10,37,64,.06);
-  --shadow:0 8px 24px rgba(10,37,64,.08);
-  --shadow-lg:0 24px 60px rgba(10,37,64,.12);
-  --shadow-xl:0 40px 80px rgba(10,37,64,.18);
-  --ease:cubic-bezier(.22,.61,.36,1);
-  --ease-out:cubic-bezier(.16,1,.3,1);
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Information Sources | Yaki TV</title>
+    <link href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEguGNmp8b98m0InmYKPHeJxGIbSNRWDPE3TpwY70KkWeHe630R9-2hN9BrLVu51AT2kFhEhQFZ9WkYeKC52Rd9nB0g764qoPoQeNwoThBED4aR1RSySqSt3bdIFOdw-VdUZ50DL22iuiwF3c3siFqwQnkqfG7uuJTCPe3hsEkXxMAx2IvQIJv_Matmbt-Ma/s512/Yaki%20TV%20lime%20-%20ccff00.png" rel="icon" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-*,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:80px}
-body{
-  margin:0;
-  font-family:'Noto Sans JP','Inter',-apple-system,BlinkMacSystemFont,'Hiragino Sans','Yu Gothic',sans-serif;
-  color:var(--ink);
-  background:var(--white);
-  line-height:1.75;
-  font-size:16px;
-  letter-spacing:.01em;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-img{max-width:100%;height:auto;display:block}
-a{color:inherit;text-decoration:none}
-ul,ol{margin:0;padding:0;list-style:none}
-h1,h2,h3,h4,p{margin:0}
-button{font-family:inherit;border:none;background:none;cursor:pointer}
-body.nav-open,body.modal-open{overflow:hidden}
+<!-- 
+1. UI Made more low-tech users friendly, with pill buttons 
+2. Chat Window is reverted from the bottomSheet Style to direct page box embed style so users can watch the match and type too just by scrolling, not closing dialog and openeing it ( good ux ) 
+50% top part of the iframe in chat is shield so scrolling up and down becomes easier. and typing area stays there. 
+2. Chat window skeleton loading, biggest UX for impatient users. 
+3. Share and fullscreen buttons over the video as they are high-yield buttons
+4. 3 types of direct embeds, properly handled 
+5. direct-nosandbox will show ad counter plus notice to help users
+6. Auto shield in 15S of quiteness in direct-nosandbox, clicking shield shows dialog to confirm. -->
 
-.container{width:100%;max-width:1200px;margin-inline:auto;padding-inline:24px}
+    <style>
+        :root {
+            --primary: #007aff;
+            --bg-body: #f8fafc;
+            --container-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --btn-gray: #f1f5f9;
+        }
 
-/* ───── Typography ───── */
-.eyebrow{
-  font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:16px;display:inline-block;
-}
-.eyebrow--dark{color:var(--primary)}
-.h-display{
-  font-size:clamp(32px,6vw,64px);
-  font-weight:900;
-  line-height:1.1;
-  letter-spacing:-.02em;
-  color:var(--ink);
-}
-.h-display em{
-  font-style:normal;
-  background:linear-gradient(120deg,var(--primary) 0%,var(--accent) 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-}
-.h-section{
-  font-size:clamp(28px,4.5vw,48px);
-  font-weight:800;
-  line-height:1.2;
-  letter-spacing:-.015em;
-  color:var(--ink);
-}
-.h-card{
-  font-size:clamp(20px,2.4vw,26px);
-  font-weight:700;
-  line-height:1.35;
-  letter-spacing:-.01em;
-  color:var(--ink);
-}
-.body-lg{font-size:17px;line-height:1.85;color:var(--gray)}
-.body-sm{font-size:14px;line-height:1.75;color:var(--gray)}
-.en{font-family:'Inter','Noto Sans JP',sans-serif;color:var(--gray-2);font-weight:500;letter-spacing:.01em}
-.en-lg{font-size:15px;line-height:1.8;color:var(--gray)}
-.bold{font-weight:700;color:var(--ink)}
+        .dark-mode {
+            --bg-body: #0f172a;
+            --container-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --btn-gray: #334155;
+        }
 
-/* ───── Buttons ───── */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  padding:14px 28px;border-radius:999px;
-  font-size:14px;font-weight:600;letter-spacing:.04em;
-  transition:all .3s var(--ease);white-space:nowrap;
-  min-height:48px;
-}
-.btn svg{width:14px;height:14px;transition:transform .3s var(--ease)}
-.btn:hover svg{transform:translateX(4px)}
-.btn--primary{background:var(--primary);color:#fff;box-shadow:var(--shadow)}
-.btn--primary:hover{background:var(--ink);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-.btn--ghost{border:1.5px solid var(--ink);color:var(--ink)}
-.btn--ghost:hover{background:var(--ink);color:#fff;transform:translateY(-2px)}
-.btn--accent{background:var(--accent);color:var(--ink);font-weight:700;box-shadow:var(--shadow)}
-.btn--accent:hover{background:#b8964a;transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-.btn--ghost-white{border:1.5px solid rgba(255,255,255,.4);color:#fff;background:rgba(255,255,255,.06);backdrop-filter:blur(10px)}
-.btn--ghost-white:hover{background:#fff;color:var(--primary);border-color:#fff}
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: 0.3s ease;
+        }
 
-/* ───── Header ───── */
-.site-header{
-  position:sticky;top:0;z-index:100;
-  background:rgba(255,255,255,.72);
-  backdrop-filter:saturate(180%) blur(24px);
-  -webkit-backdrop-filter:saturate(180%) blur(24px);
-  border-bottom:1px solid transparent;
-  transition:all .3s var(--ease);
-}
-.site-header.is-scrolled{background:rgba(255,255,255,.88);border-bottom-color:var(--line)}
-.header-inner{
-  max-width:1280px;margin-inline:auto;height:72px;padding-inline:24px;
-  display:flex;align-items:center;gap:32px;
-}
-.logo{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.logo__mark{
-  width:36px;height:36px;border-radius:10px;
-  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-2) 100%);
-  display:grid;place-items:center;color:var(--accent);font-weight:900;font-size:18px;
-  font-family:'Inter',sans-serif;
-}
-.logo__text{display:flex;flex-direction:column;line-height:1.2}
-.logo__ja{font-size:14px;font-weight:800;letter-spacing:.02em;color:var(--ink)}
-.logo__en{font-size:9px;font-weight:600;letter-spacing:.2em;color:var(--gray-2);margin-top:1px;font-family:'Inter',sans-serif}
+        .app-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px 15px;
+            padding-bottom: 90px;
+        }
 
-.gnav{margin-left:auto;display:flex}
-.gnav ul{display:flex;align-items:center;gap:32px}
-.gnav a{position:relative;font-size:14px;font-weight:600;color:var(--ink-2);padding:8px 0;transition:color .25s}
-.gnav a::after{content:"";position:absolute;left:50%;bottom:0;width:0;height:2px;background:var(--accent);transition:all .3s var(--ease);transform:translateX(-50%)}
-.gnav a:hover{color:var(--primary)}
-.gnav a:hover::after{width:100%}
+        .brand-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
 
-.header-actions{display:flex;align-items:center;gap:12px;margin-left:auto}
-.lang-btn{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:8px 14px;border-radius:999px;border:1px solid var(--line);
-  background:#fff;font-size:12px;font-weight:600;color:var(--ink-2);
-  transition:all .2s;
-}
-.lang-btn:hover{border-color:var(--primary);color:var(--primary)}
-.lang-btn svg{width:14px;height:14px}
+        .brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px; /* Space between logo and text */
+            text-decoration: none;
+        }
 
-/* Hamburger */
-.hamburger{display:none;width:44px;height:44px;border-radius:12px;position:relative;transition:background .3s}
-.hamburger:hover{background:var(--bg-soft)}
-.hamburger span{position:absolute;left:11px;width:22px;height:2px;background:var(--ink);border-radius:2px;transition:all .35s var(--ease)}
-.hamburger span:nth-child(1){top:16px}
-.hamburger span:nth-child(2){top:22px}
-.hamburger span:nth-child(3){top:28px}
-.hamburger.is-open span:nth-child(1){top:22px;transform:rotate(45deg)}
-.hamburger.is-open span:nth-child(2){opacity:0}
-.hamburger.is-open span:nth-child(3){top:22px;transform:rotate(-45deg)}
+        .brand-logo {
+            max-height: 48px; /* Slightly smaller so it balances with text */
+            border-radius: 999px;
+            width: auto;
+        }
 
-/* Mobile Nav */
-.mobile-nav{
-  position:fixed;inset:0;z-index:95;
-  background:var(--white);
-  padding:calc(72px + 24px) 24px 120px;overflow-y:auto;
-  transform:translateY(-100%);visibility:hidden;
-  transition:transform .5s var(--ease-out),visibility .5s;
-}
-.mobile-nav.is-open{transform:translateY(0);visibility:visible}
-.mobile-nav ul{display:flex;flex-direction:column;gap:4px}
-.mobile-nav a{
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:22px;font-weight:600;padding:20px 4px;
-  border-bottom:1px solid var(--line);color:var(--ink);
-}
-.mobile-nav small{display:block;font-size:11px;color:var(--gray-2);margin-top:2px;font-family:'Inter',sans-serif;letter-spacing:.06em;font-weight:500}
-.m-acc-btn{
-  display:flex;align-items:center;justify-content:space-between;width:100%;
-  font-size:22px;font-weight:600;padding:20px 4px;border-bottom:1px solid var(--line);color:var(--ink);text-align:left;
-}
-.m-chev{width:40px;height:28px;border:1.5px solid var(--line);border-radius:14px;display:grid;place-items:center;transition:all .3s}
-.m-chev svg{width:14px;height:14px;stroke:var(--ink);fill:none;stroke-width:2;transition:transform .3s var(--ease)}
-.m-acc-item.is-open .m-chev{background:var(--primary);border-color:var(--primary)}
-.m-acc-item.is-open .m-chev svg{transform:rotate(180deg);stroke:#fff}
-.m-sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease);overflow:hidden}
-.m-acc-item.is-open .m-sub{grid-template-rows:1fr}
-.m-sub > div{overflow:hidden}
-.m-sub a{font-size:16px;font-weight:500;padding:14px 4px 14px 18px;color:var(--gray);border-bottom:none}
-.m-sub a:hover{color:var(--primary)}
-.mobile-nav .m-cta{
-  position:fixed;bottom:24px;left:24px;right:24px;
-  display:flex;justify-content:center;background:var(--primary);color:#fff;
-  border-radius:16px;padding:16px;font-size:15px;font-weight:700;
-  box-shadow:var(--shadow-lg);
-}
+        .brand-text {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+            line-height: 1;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
 
-/* ───── Hero ───── */
-.hero{
-  position:relative;min-height:100vh;overflow:hidden;
-  background:linear-gradient(180deg,#f8f9fc 0%,#eef2f8 100%);
-  padding:clamp(100px,14vw,160px) 0 clamp(80px,10vw,120px);
-  display:flex;align-items:center;
-}
-.hero::before{
-  content:"";position:absolute;top:10%;right:-10%;
-  width:60%;aspect-ratio:1;
-  background:radial-gradient(circle,rgba(201,169,97,.18),transparent 60%);
-  filter:blur(40px);z-index:0;
-}
-.hero__inner{position:relative;z-index:2;max-width:1200px;margin-inline:auto;padding-inline:24px;width:100%}
-.hero__grid{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(40px,6vw,80px);align-items:center}
-.hero__badge{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:8px 16px;border-radius:999px;
-  background:rgba(201,169,97,.12);border:1px solid rgba(201,169,97,.3);
-  font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--primary);
-  margin-bottom:28px;
-}
-.hero__badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-out infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(201,169,97,.6)}70%{box-shadow:0 0 0 12px rgba(201,169,97,0)}100%{box-shadow:0 0 0 0 rgba(201,169,97,0)}}
-.hero__title{
-  font-size:clamp(38px,6.5vw,78px);
-  font-weight:900;
-  line-height:1.05;
-  letter-spacing:-.025em;
-  color:var(--ink);
-  margin-bottom:28px;
-}
-.hero__title em{
-  font-style:normal;
-  background:linear-gradient(120deg,var(--primary) 0%,var(--accent) 80%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-}
-.hero__sub{font-size:clamp(15px,1.6vw,17px);line-height:1.9;color:var(--gray);max-width:560px;margin-bottom:40px}
-.hero__actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.hero__image{
-  position:relative;aspect-ratio:4/5;border-radius:var(--radius);
-  overflow:hidden;box-shadow:var(--shadow-xl);
-  background:linear-gradient(135deg,#d4dae6,#a8b3c7);
-}
-.hero__image::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(10,37,64,.2),transparent 50%);
-}
-.hero__image img{width:100%;height:100%;object-fit:cover}
-.hero__stats{
-  position:absolute;bottom:-40px;left:-20px;right:-20px;
-  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
-  background:rgba(255,255,255,.95);backdrop-filter:blur(20px);
-  border-radius:var(--radius);padding:20px;
-  box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,.5);
-}
-.hero__stat{text-align:center;padding:8px 4px}
-.hero__stat-num{font-size:clamp(18px,2.4vw,26px);font-weight:800;color:var(--primary);font-family:'Inter',sans-serif;letter-spacing:-.02em}
-.hero__stat-label{font-size:10px;color:var(--gray-2);font-weight:600;letter-spacing:.08em;margin-top:4px;font-family:'Inter',sans-serif}
-.hero__stat-num .unit{font-size:.7em;margin-left:2px;font-weight:700}
+        .brand-text span {
+            color: #a78bfa; /* The soft purple from your screenshot */
+        }
 
-/* ───── Sections ───── */
-.section{padding:clamp(80px,10vw,140px) 0;position:relative}
-.section--soft{background:var(--bg)}
-.section--dark{background:var(--primary);color:#fff}
-.sec-head{text-align:center;margin-bottom:clamp(48px,6vw,80px);max-width:820px;margin-inline:auto}
-.sec-head__title{margin-bottom:20px}
-.sec-head__desc{font-size:clamp(15px,1.5vw,17px);line-height:1.95;color:var(--gray)}
+        .toolbar {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr 0.9fr;
+            gap: 8px;
+            margin: 0 0 10px;
+        }
 
-/* ───── Services Grid ───── */
-.services{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
-.service-card{
-  position:relative;background:#fff;border-radius:var(--radius);
-  overflow:hidden;border:1px solid var(--line);
-  transition:all .5s var(--ease);
-  display:flex;flex-direction:column;
-}
-.service-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-xl);border-color:transparent}
-.service-card__thumb{position:relative;aspect-ratio:16/11;overflow:hidden;background:linear-gradient(135deg,#e8ecf3,#c4cbd9)}
-.service-card__thumb img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
-.service-card:hover .service-card__thumb img{transform:scale(1.06)}
-.service-card__thumb::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(10,37,64,.85),transparent 55%);
-}
-.service-card__tag{
-  position:absolute;top:16px;left:16px;z-index:2;
-  background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
-  padding:6px 12px;border-radius:999px;
-  font-size:10px;font-weight:700;letter-spacing:.15em;
-  color:var(--primary);font-family:'Inter',sans-serif;
-}
-.service-card__body{padding:28px 28px 32px;display:flex;flex-direction:column;gap:12px;flex:1}
-.service-card__title{font-size:clamp(19px,2.2vw,24px);font-weight:800;letter-spacing:-.01em;line-height:1.35}
-.service-card__title-en{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.08em;font-family:'Inter',sans-serif;margin-top:-4px}
-.service-card__text{font-size:14px;line-height:1.85;color:var(--gray)}
-.service-card__text-en{font-size:13px;color:var(--gray-2);line-height:1.75;font-family:'Inter',sans-serif;padding-top:12px;border-top:1px solid var(--line);margin-top:auto}
-.service-card__link{
-  margin-top:20px;display:inline-flex;align-items:center;gap:8px;
-  font-size:13px;font-weight:700;color:var(--primary);letter-spacing:.04em;
-}
-.service-card__link::after{
-  content:"";width:20px;height:1px;background:var(--primary);
-  transition:width .3s var(--ease);
-}
-.service-card:hover .service-card__link::after{width:32px}
+        .btn-utility {
+            background: #283548;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            white-space: nowrap;
+            transition: background-color 0.2s, transform 0.15s;
+        }
+        .btn-utility:hover { background: #334155; }
+        .btn-utility:active { transform: scale(0.97); }
 
-/* ───── Featured Service (Hospitality) ───── */
-.featured{
-  display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(40px,6vw,80px);align-items:center;
-}
-.featured__image{
-  position:relative;aspect-ratio:4/5;border-radius:var(--radius);
-  overflow:hidden;box-shadow:var(--shadow-xl);
-  background:linear-gradient(135deg,#d4dae6,#a8b3c7);
-}
-.featured__image img{width:100%;height:100%;object-fit:cover}
-.featured__badge{
-  position:absolute;top:20px;left:20px;z-index:2;
-  background:var(--accent);color:var(--primary);
-  padding:8px 16px;border-radius:999px;
-  font-size:11px;font-weight:800;letter-spacing:.15em;font-family:'Inter',sans-serif;
-  box-shadow:var(--shadow);
-}
-.featured__content h2{margin-bottom:24px}
-.featured__desc{font-size:16px;line-height:1.95;color:var(--gray);margin-bottom:20px}
-.featured__desc-en{font-size:15px;line-height:1.9;color:var(--gray-2);font-family:'Inter',sans-serif;margin-bottom:32px;padding-top:20px;border-top:1px solid var(--line)}
-.featured__points{display:flex;flex-direction:column;gap:16px;margin-bottom:32px}
-.featured__point{display:flex;align-items:flex-start;gap:14px}
-.featured__point-icon{
-  width:32px;height:32px;border-radius:50%;
-  background:var(--accent-soft);color:var(--accent);
-  display:grid;place-items:center;flex-shrink:0;
-}
-.featured__point-icon svg{width:16px;height:16px;fill:currentColor}
-.featured__point-text{font-size:15px;font-weight:600;color:var(--ink);line-height:1.5}
-.featured__point-text span{display:block;font-size:12px;color:var(--gray-2);font-weight:500;margin-top:2px;font-family:'Inter',sans-serif}
+        @media (max-width: 380px) {
+            .toolbar { gap: 6px; }
+            .btn-utility { padding: 10px 8px; font-size: 12px; }
+        }
 
-/* ───── Strength Grid ───── */
-.strength-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.strength-card{
-  background:#fff;border-radius:var(--radius);padding:36px 28px;
-  border:1px solid var(--line);
-  transition:all .4s var(--ease);
-  position:relative;overflow:hidden;
-}
-.strength-card::before{
-  content:"";position:absolute;top:0;left:0;width:32px;height:3px;
-  background:linear-gradient(90deg,var(--accent),var(--primary));
-  transition:width .4s var(--ease);
-}
-.strength-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:transparent}
-.strength-card:hover::before{width:100%}
-.strength-card__num{
-  font-size:48px;font-weight:900;color:var(--accent);
-  font-family:'Inter',sans-serif;letter-spacing:-.03em;
-  line-height:1;margin-bottom:20px;
-}
-.strength-card__title{font-size:20px;font-weight:800;letter-spacing:-.01em;margin-bottom:14px;line-height:1.4}
-.strength-card__text{font-size:14px;line-height:1.9;color:var(--gray)}
-.strength-card__text-en{font-size:13px;color:var(--gray-2);line-height:1.75;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-family:'Inter',sans-serif}
+        .btn-primary { background: var(--primary); color: white; border: none; }
 
-/* ───── Support ───── */
-.support-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.support-item{
-  background:#fff;border-radius:var(--radius-sm);padding:24px 20px;
-  border:1px solid var(--line);transition:all .3s var(--ease);
-}
-.support-item:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--accent)}
-.support-item__num{
-  display:inline-block;font-size:11px;font-weight:800;
-  color:var(--accent);font-family:'Inter',sans-serif;letter-spacing:.2em;margin-bottom:12px;
-}
-.support-item__title{font-size:15px;font-weight:700;line-height:1.5;margin-bottom:8px}
-.support-item__text{font-size:13px;line-height:1.75;color:var(--gray)}
+        /* Full-width community chat button */
+        .btn-chat-full {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 12px;
+            background: #c1f11d;
+            color: #111;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.15s, box-shadow 0.2s;
+        }
+        .btn-chat-full:active { transform: scale(0.98); }
+        .btn-chat-full i { font-size: 16px; }
+        .btn-chat-full.is-open {
+            background: #111;
+            color: #c1f11d;
+        }
 
-/* ───── Numbers ───── */
-.numbers{
-  background:linear-gradient(135deg,var(--primary) 0%,#0d2e55 100%);
-  padding:clamp(80px,10vw,120px) 0;
-  position:relative;overflow:hidden;
-}
-.numbers::before{
-  content:"";position:absolute;top:-50%;right:-20%;
-  width:80%;aspect-ratio:1;
-  background:radial-gradient(circle,rgba(201,169,97,.12),transparent 60%);
-  filter:blur(60px);
-}
-.numbers .container{position:relative;z-index:2}
-.numbers__head{text-align:center;margin-bottom:clamp(48px,6vw,72px);color:#fff}
-.numbers__title{color:#fff;margin-bottom:16px}
-.numbers__desc{font-size:16px;color:rgba(255,255,255,.7);max-width:620px;margin-inline:auto;line-height:1.85}
-.numbers__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.num-card{
-  text-align:center;padding:32px 20px;
-  border-radius:var(--radius);
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.1);
-  backdrop-filter:blur(20px);
-  transition:all .4s var(--ease);
-}
-.num-card:hover{background:rgba(255,255,255,.08);transform:translateY(-4px);border-color:rgba(201,169,97,.4)}
-.num-card__value{
-  color:#fff;font-size:clamp(32px,4.8vw,48px);font-weight:900;
-  line-height:1;letter-spacing:-.02em;font-family:'Inter',sans-serif;
-}
-.num-card__value .unit{font-size:.45em;margin-left:4px;color:var(--accent);font-weight:700;letter-spacing:.05em}
-.num-card__label{margin-top:14px;color:rgba(255,255,255,.85);font-size:13px;font-weight:600;letter-spacing:.08em}
-.num-card__label-en{font-size:11px;color:rgba(255,255,255,.5);margin-top:4px;font-family:'Inter',sans-serif;letter-spacing:.06em}
+        /* Player Overlay Pills */
+        .video-pill {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            z-index: 15;
+            transition: all 0.2s ease;
+            border: none;
+        }
 
-/* ───── CEO ───── */
-.ceo{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(40px,6vw,80px);align-items:center}
-.ceo__image{position:relative}
-.ceo__image-frame{
-  aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;
-  box-shadow:var(--shadow-xl);
-  background:linear-gradient(135deg,#e8ecf3,#c4cbd9);
-}
-.ceo__image-frame img{width:100%;height:100%;object-fit:cover}
-.ceo__quote{
-  position:absolute;bottom:-20px;left:-20px;
-  background:var(--accent);color:var(--primary);
-  width:72px;height:72px;border-radius:50%;
-  display:grid;place-items:center;
-  font-size:48px;font-weight:900;font-family:serif;
-  box-shadow:var(--shadow-lg);line-height:1;
-}
-.ceo__content h2{margin-bottom:28px}
-.ceo__body{font-size:15px;line-height:2;color:var(--gray);margin-bottom:16px}
-.ceo__body-en{font-size:14px;line-height:1.9;color:var(--gray-2);font-family:'Inter',sans-serif;margin-bottom:32px;padding-top:16px;border-top:1px solid var(--line)}
-.ceo__signature{display:flex;align-items:center;gap:16px;padding-top:24px;border-top:1px solid var(--line)}
-.ceo__sig-name{font-size:15px;font-weight:700;color:var(--ink)}
-.ceo__sig-role{font-size:12px;color:var(--gray-2);font-family:'Inter',sans-serif;letter-spacing:.06em;font-weight:500}
+        .btn-fullscreen {
+            top: 16px;
+            right: 8px;
+            background: #CE0000;
+            color: white;
+        }
+        .btn-fullscreen:hover {
+            background: #E64A19;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 87, 34, 0.7);
+        }
+        .btn-fullscreen:active {
+            transform: scale(0.95);
+        }
 
-/* ───── News ───── */
-.news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.news-card{
-  background:#fff;border-radius:var(--radius);overflow:hidden;
-  border:1px solid var(--line);
-  transition:all .4s var(--ease);
-  display:flex;flex-direction:column;
-}
-.news-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:transparent}
-.news-card__thumb{position:relative;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,#e8ecf3,#c4cbd9)}
-.news-card__thumb img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
-.news-card:hover .news-card__thumb img{transform:scale(1.06)}
-.news-card__cat{
-  position:absolute;top:14px;left:14px;
-  background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
-  color:var(--primary);font-size:10px;font-weight:700;letter-spacing:.1em;
-  padding:6px 12px;border-radius:999px;
-}
-.news-card__body{padding:24px;display:flex;flex-direction:column;gap:10px;flex:1}
-.news-card__date{font-size:12px;color:var(--gray-2);font-weight:600;font-family:'Inter',sans-serif;letter-spacing:.06em}
-.news-card__title{font-size:15px;font-weight:700;line-height:1.6;color:var(--ink);transition:color .3s}
-.news-card:hover .news-card__title{color:var(--primary)}
-.news-card__title-en{font-size:13px;color:var(--gray-2);line-height:1.6;font-family:'Inter',sans-serif;margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
+        .btn-share-overlay {
+            bottom: 16px;
+            right: 8px;
+            background: #0F172A;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .btn-share-overlay:hover {
+            background: rgba(20, 20, 22, 0.85);
+            transform: translateY(-1px);
+        }
+        .btn-share-overlay:active {
+            transform: scale(0.95);
+        }
 
-/* ───── Company ───── */
-.company-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:start}
-.company-card{
-  background:#fff;border-radius:var(--radius);border:1px solid var(--line);
-  padding:clamp(28px,3.5vw,40px);box-shadow:var(--shadow-xs);
-}
-.company-card h3{
-  font-size:20px;font-weight:800;letter-spacing:-.01em;
-  padding-bottom:18px;margin-bottom:24px;border-bottom:1px solid var(--line);
-  position:relative;
-}
-.company-card h3::after{
-  content:"";position:absolute;left:0;bottom:-1px;
-  width:40px;height:2px;background:var(--accent);border-radius:2px;
-}
-.company-table{width:100%;border-collapse:collapse;font-size:14px}
-.company-table th,.company-table td{text-align:left;padding:14px 8px;vertical-align:top;border-bottom:1px solid var(--line)}
-.company-table th{width:35%;font-weight:600;color:var(--ink)}
-.company-table th small{display:block;font-size:11px;font-weight:500;color:var(--gray-2);margin-top:3px;font-family:'Inter',sans-serif;letter-spacing:.04em}
-.company-table td{color:var(--gray);line-height:1.75}
-.company-table td small{display:block;font-size:12px;color:var(--gray-2);margin-top:3px;font-family:'Inter',sans-serif}
-.company-table tr:last-child th,.company-table tr:last-child td{border-bottom:none}
-.company-table a{color:var(--primary);font-weight:600;transition:color .2s}
-.company-table a:hover{color:var(--accent)}
+        /* Hide pills when in fullscreen mode */
+        .frame-box:fullscreen .video-pill {
+            display: none !important;
+        }
 
-.company-map{border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--line);aspect-ratio:16/11;margin-bottom:20px}
-.company-map iframe{width:100%;height:100%;border:0;display:block}
-.company-access{
-  display:flex;align-items:flex-start;gap:14px;
-  background:var(--accent-soft);border-radius:var(--radius-sm);padding:18px 20px;
-}
-.company-access__icon{
-  width:36px;height:36px;border-radius:50%;
-  background:var(--primary);color:#fff;
-  display:grid;place-items:center;flex-shrink:0;
-}
-.company-access__icon svg{width:16px;height:16px;fill:currentColor}
-.company-access__text{font-size:14px;line-height:1.75;color:var(--ink);font-weight:600}
-.company-access__text small{display:block;font-size:12px;color:var(--gray);font-weight:500;margin-top:4px;font-family:'Inter',sans-serif}
+        /* ── Player Box Layout ──────────────────────────────────────────────── */
+        .frame-box {
+            position: relative;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid var(--border-color);
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
 
-/* ───── CTA ───── */
-.cta{
-  background:linear-gradient(135deg,var(--primary) 0%,#0d2e55 100%);
-  padding:clamp(80px,10vw,140px) 0;
-  position:relative;overflow:hidden;
-}
-.cta::before{
-  content:"";position:absolute;top:-30%;right:-10%;
-  width:60%;aspect-ratio:1;
-  background:radial-gradient(circle,rgba(201,169,97,.2),transparent 60%);
-  filter:blur(60px);
-}
-.cta__inner{position:relative;z-index:2;text-align:center;max-width:720px;margin-inline:auto}
-.cta__title{color:#fff;font-size:clamp(28px,4.5vw,44px);font-weight:800;letter-spacing:-.015em;line-height:1.3;margin-bottom:20px}
-.cta__title em{font-style:normal;color:var(--accent)}
-.cta__text{color:rgba(255,255,255,.8);font-size:16px;line-height:1.9;margin-bottom:36px}
-.cta__actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+        /* Subtle glowing activation boundary when the sandboxed frame absorbs a tap */
+        .frame-box.interaction-flash {
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.6);
+            border-color: #007bff;
+        }
 
-/* ───── Footer ───── */
-.site-footer{background:#0a1428;color:rgba(255,255,255,.7);padding:clamp(64px,8vw,96px) 0 32px;font-size:14px}
-.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:48px}
-.footer-brand .logo__mark{margin-bottom:20px}
-.footer-brand .logo__ja{color:#fff}
-.footer-brand .logo__en{color:var(--accent)}
-.footer-desc{margin-top:20px;color:rgba(255,255,255,.6);font-size:13px;line-height:1.9;max-width:360px}
-.footer-desc-en{margin-top:12px;color:rgba(255,255,255,.45);font-size:12px;line-height:1.8;font-family:'Inter',sans-serif}
-.footer-addr{margin-top:24px;line-height:1.85;color:rgba(255,255,255,.65);font-size:13px}
-.footer-tel{
-  margin-top:16px;color:#fff;font-size:22px;font-weight:800;letter-spacing:.02em;
-  display:inline-flex;align-items:center;gap:10px;
-  font-family:'Inter',sans-serif;
-}
-.footer-tel__icon{
-  width:32px;height:32px;border-radius:50%;
-  background:var(--accent);color:var(--primary);
-  display:grid;place-items:center;
-}
-.footer-tel__icon svg{width:14px;height:14px;fill:currentColor}
-.footer-meta{margin-top:20px;font-size:11px;line-height:1.9;color:rgba(255,255,255,.4);font-family:'Inter',sans-serif;letter-spacing:.04em}
-.footer-meta strong{color:rgba(255,255,255,.65)}
+        .frame-box:fullscreen {
+            border-radius: 0;
+            border: none;
+            aspect-ratio: auto;
+        }
 
-.footer-col h4{color:#fff;font-size:12px;font-weight:700;letter-spacing:.16em;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.1);font-family:'Inter',sans-serif}
-.footer-col li{margin-bottom:12px}
-.footer-col a{color:rgba(255,255,255,.65);font-size:13px;transition:all .25s;display:inline-block}
-.footer-col a:hover{color:var(--accent);padding-left:4px}
-.footer-col a small{display:block;font-size:11px;color:rgba(255,255,255,.35);margin-top:2px;font-family:'Inter',sans-serif}
+        #content-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            position: relative;
+            z-index: 1;
+            background: #000;
+        }
 
-.footer-bottom{
-  margin-top:clamp(48px,6vw,72px);padding-top:28px;border-top:1px solid rgba(255,255,255,.08);
-  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
-  font-size:12px;color:rgba(255,255,255,.4);font-family:'Inter',sans-serif;letter-spacing:.02em;
-}
+        /* ── Loading Interface ───────────────────────────────────────────────── */
+        #loading-ui {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: #000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            z-index: 20;
+        }
 
-/* ───── Floating Chat ───── */
-.chat-float{
-  position:fixed;right:20px;bottom:20px;z-index:90;
-  width:60px;height:60px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent) 0%,#d4b772 100%);
-  color:var(--primary);box-shadow:var(--shadow-lg);
-  transition:all .3s var(--ease);
-  display:grid;place-items:center;
-}
-.chat-float:hover{transform:translateY(-4px) scale(1.05);box-shadow:var(--shadow-xl)}
-.chat-float svg{width:24px;height:24px;fill:currentColor}
+        #loading-ui.show { display: flex; }
 
-/* ───── Modals ───── */
-.modal-overlay{
-  position:fixed;inset:0;z-index:200;
-  background:rgba(10,37,64,.6);backdrop-filter:blur(8px);
-  display:flex;align-items:flex-end;justify-content:center;
-  padding:20px;opacity:0;visibility:hidden;transition:all .3s;
-}
-.modal-overlay.is-open{opacity:1;visibility:visible}
-.modal-card{
-  width:100%;max-width:480px;background:#fff;
-  border-radius:24px 24px 0 0;
-  box-shadow:var(--shadow-xl);
-  overflow:hidden;transform:translateY(24px);
-  transition:transform .4s var(--ease-out);
-  max-height:90vh;display:flex;flex-direction:column;
-}
-.modal-overlay.is-open .modal-card{transform:none}
-.modal-head{
-  padding:24px;color:#fff;display:flex;align-items:center;gap:14px;
-  position:relative;flex-shrink:0;
-}
-.modal-head-icon{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;flex-shrink:0}
-.modal-head-icon svg{width:22px;height:22px;fill:#fff}
-.modal-head-text h3{font-size:17px;font-weight:800;letter-spacing:-.01em}
-.modal-head-text p{font-size:12px;color:rgba(255,255,255,.8);margin-top:2px;font-family:'Inter',sans-serif}
-.modal-close{
-  position:absolute;right:16px;top:16px;
-  width:36px;height:36px;border-radius:50%;
-  background:rgba(255,255,255,.15);
-  display:grid;place-items:center;color:#fff;
-  transition:background .2s;
-}
-.modal-close:hover{background:rgba(255,255,255,.3)}
-.modal-close svg{width:16px;height:16px;stroke:#fff;stroke-width:2.5;fill:none}
-.modal-body{padding:24px;overflow-y:auto}
-.hub-options{display:flex;flex-direction:column;gap:12px}
-.hub-btn{
-  display:flex;align-items:center;gap:16px;padding:18px;
-  border-radius:14px;border:1.5px solid var(--line);
-  background:#fff;transition:all .25s;text-align:left;
-}
-.hub-btn:hover{border-color:var(--primary);background:var(--bg-soft);transform:translateY(-2px)}
-.hub-btn svg{width:28px;height:28px;flex-shrink:0}
-.hub-btn-text strong{font-size:15px;color:var(--ink);font-weight:700;display:block}
-.hub-btn-text span{font-size:12px;color:var(--gray);margin-top:2px;display:block;font-family:'Inter',sans-serif}
-.wa-form__group{margin-bottom:16px}
-.wa-form__label{display:block;font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--ink);margin-bottom:6px}
-.wa-form__label small{font-size:11px;color:var(--gray-2);font-weight:500;margin-left:6px;font-family:'Inter',sans-serif}
-.wa-form__control{
-  width:100%;padding:14px 16px;
-  border:1.5px solid var(--line);border-radius:12px;
-  font-size:15px;font-family:inherit;color:var(--ink);background:#fff;
-  transition:all .2s;outline:none;min-height:48px;
-}
-.wa-form__control:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(10,37,64,.08)}
-select.wa-form__control{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a94a6' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:16px;padding-right:40px}
-.wa-form__submit{
-  width:100%;margin-top:8px;padding:16px;border-radius:12px;
-  color:#fff;font-size:15px;font-weight:700;letter-spacing:.02em;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  transition:all .25s;min-height:52px;
-}
-.wa-form__submit:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-.wa-form__note{margin-top:14px;font-size:11px;color:var(--gray-2);text-align:center;line-height:1.6;font-family:'Inter',sans-serif}
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(255,255,255,0.15);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
 
-/* ───── Reveal Animation ───── */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
-.reveal.is-visible{opacity:1;transform:none}
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ───── Responsive ───── */
-@media(max-width:1024px){
-  .hero__grid{grid-template-columns:1fr}
-  .hero__image{aspect-ratio:16/11;max-width:560px;margin:0 auto}
-  .hero__stats{left:0;right:0}
-  .featured{grid-template-columns:1fr}
-  .featured__image{aspect-ratio:16/11;max-width:560px;margin:0 auto}
-  .ceo{grid-template-columns:1fr}
-  .ceo__image{max-width:480px;margin:0 auto}
-  .company-grid{grid-template-columns:1fr}
-  .services{grid-template-columns:1fr}
-  .strength-grid{grid-template-columns:1fr}
-  .support-grid{grid-template-columns:repeat(2,1fr)}
-  .numbers__grid{grid-template-columns:repeat(2,1fr)}
-  .news-grid{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
-  .footer-brand{grid-column:1/-1}
-}
+        /* ── Error Fallbacks ─────────────────────────────────────────────────── */
+        .fallback-ui {
+            display: none;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 20;
+        }
+        
+         .status-alert {
+            background: transparent;
+            color: var(--primary);
+            padding: 0;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            margin-top: 20px;
+            border: none;
+            text-align: center;
+        }
+        .dark-mode .status-alert { 
+            background: transparent; 
+            color: #60a5fa; 
+            border: none; 
+        }
 
-@media(max-width:768px){
-  .gnav,.header-cta,.lang-btn{display:none}
-  .hamburger{display:block}
-  .header-actions{margin-left:auto}
-  .container{padding-inline:20px}
-  .support-grid{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr}
-  .footer-bottom{flex-direction:column;align-items:flex-start;gap:12px}
-  .company-table th{display:block;width:100%;padding-bottom:4px;border-bottom:none}
-  .company-table td{display:block;padding-top:4px;padding-bottom:16px}
-  .company-table tr{display:block;border-bottom:1px solid var(--line);padding:16px 0}
-  .company-table tr:first-child{padding-top:0}
-  .company-table tr:last-child{border-bottom:none;padding-bottom:0}
-  .modal-card{max-height:95vh;border-radius:24px 24px 0 0}
-  .chat-float{right:16px;bottom:16px;width:56px;height:56px}
-}
+        /* ── Inline Chat Section (page-flow, site #2 pattern) ──────────────── */
+        .chat-section {
+            display: none;                 /* hidden until first click */
+            position: relative;
+            margin: 10px 0 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        .chat-section.open { display: block; }
+        .chat-scroll-shield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70%;            /* ← tune this: 50% = more chat, 85% = more page scroll */
+            z-index: 1;             /* above iframe (0/auto), below loading overlay (2) */
+            background: transparent;
+            touch-action: pan-y;
+            pointer-events: auto;
+        }
 
-@media(max-width:480px){
-  .hero{padding:120px 0 100px}
-  .hero__badge{font-size:11px;padding:6px 12px}
-  .hero__stats{padding:16px;gap:8px}
-  .hero__stats{left:-4px;right:-4px}
-  .hero__stat-num{font-size:16px}
-  .hero__stat-label{font-size:9px}
-  .numbers__grid{grid-template-columns:1fr 1fr;gap:12px}
-  .num-card{padding:24px 16px}
-  .logo__ja{font-size:13px}
-  .logo__en{font-size:8.5px}
-  .service-card__body{padding:22px}
-  .strength-card{padding:28px 22px}
-}
+        #chat-frame {
+            width: 100%;
+            height: 420px;
+            border: none;
+            display: block;
+            background: var(--container-bg);
+        }
 
-@media(min-width:769px){
-  .modal-overlay{align-items:center}
-  .modal-card{border-radius:24px;max-height:85vh}
-}
+        /* First-load spinner — overlay on top of the iframe until 'load' fires */
+        .chat-loading {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            background: var(--container-bg);
+        }
+        .chat-loading[hidden] { display: none !important; }
 
-@media(prefers-reduced-motion:reduce){
-  .reveal{opacity:1;transform:none;transition:none}
-  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
-}
-</style>
+        /* Skeleton bubbles — mimic message layout while iframe loads */
+        .chat-skeleton {
+            flex: 1;
+            min-height: 0;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow: hidden;
+        }
+        .sk-msg { display: flex; gap: 10px; align-items: flex-start; }
+        .sk-avatar {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--border-color);
+            flex-shrink: 0;
+            animation: sk-pulse 1.4s ease-in-out infinite;
+        }
+        .sk-bubble {
+            height: 14px;
+            margin-top: 7px;
+            border-radius: 7px;
+            background: var(--border-color);
+            flex: 1;
+            max-width: 70%;
+            animation: sk-pulse 1.4s ease-in-out infinite;
+        }
+        .sk-short { max-width: 45%; }
+        .sk-medium { max-width: 58%; }
+        .sk-msg:nth-child(2) .sk-avatar,
+        .sk-msg:nth-child(2) .sk-bubble { animation-delay: 0.2s; }
+        .sk-msg:nth-child(3) .sk-avatar,
+        .sk-msg:nth-child(3) .sk-bubble { animation-delay: 0.4s; }
+        .sk-msg:nth-child(4) .sk-avatar,
+        .sk-msg:nth-child(4) .sk-bubble { animation-delay: 0.6s; }
+        .sk-msg:nth-child(5) .sk-avatar,
+        .sk-msg:nth-child(5) .sk-bubble { animation-delay: 0.8s; }
+        .sk-msg:nth-child(6) .sk-avatar,
+        .sk-msg:nth-child(6) .sk-bubble { animation-delay: 1.0s; }
+        @keyframes sk-pulse {
+            0%, 100% { opacity: 0.35; }
+            50%      { opacity: 0.85; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .sk-avatar, .sk-bubble { animation: none; opacity: 0.5; }
+        }
+
+        /* Compact status bar at the bottom — spinner shrinks, text stays visible */
+        .chat-loading-status {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 11px 14px;
+            border-top: 1px solid var(--border-color);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+        .chat-loading-status .spinner {
+            width: 16px;
+            height: 16px;
+            border-width: 2px;
+            border-color: var(--border-color);
+            border-top-color: var(--primary);
+            animation: spin 0.8s linear infinite;
+        }
+
+
+        /* ── Share Modal ──────────────────────────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: var(--container-bg);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-box h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .modal-box p {
+            margin: 0 0 14px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        #share-link-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-size: 13px;
+            box-sizing: border-box;
+            margin-bottom: 14px;
+            outline: none;
+        }
+
+        .modal-actions {
+    display: flex;
+    flex-direction: column-reverse; /* Keeps "Keep locked" on top, matching your current layout */
+    gap: 10px;
+        }
+
+        .modal-actions button {
+            width: 100%;
+            padding: 9px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--btn-gray);
+            color: var(--text-main);
+        }
+
+        .modal-actions button.primary {
+            background: #c1f11d;
+            color: #111;
+            border: none;
+        }
+
+        /* ── Footer Elements ─────────────────────────────────────────────────── */
+        .legal-footer {
+            margin-top: 40px; padding: 25px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px; font-size: 12px;
+            color: var(--text-muted); line-height: 1.6;
+        }
+
+        .legal-title {
+            display: block; font-size: 14px; font-weight: 700;
+            color: var(--text-main); margin-bottom: 12px; text-transform: uppercase;
+        }
+
+        body.no-shield #click-shield,
+        body.no-shield #bg-beat {
+            display: none !important;
+        }
+
+        /* ── Ad-notice (direct-nosandbox only) ──────────────────────────── */
+        .ad-strip {
+            display: flex; align-items: center; gap: 12px; flex-wrap: nowrap;
+            background: var(--container-bg); 
+            border: 2px solid var(--border-color);
+            border-radius: 12px; padding: 10px 12px; margin-bottom: 10px;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+        }
+        .ad-strip[hidden] { display: none !important; }
+
+        /* 15-Second Cooldown Animation (Stretched Pop) */
+        .ad-strip.is-cooldown {
+            border-color: #22c55e;
+            animation: cooldown-glow 15s linear forwards;
+        }
+        @keyframes cooldown-glow {
+            0%   { box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); }
+            60%  { box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); }
+            100% { box-shadow: 0 0 0px rgba(34, 197, 94, 0); border-color: var(--border-color); }
+        }
+
+        /* Locked State */
+        .ad-strip.is-locked {
+           border-color: #007aff;
+        }
+
+        /* The new score badge - Dark background so Gold always pops */
+        .ad-strip-icon {
+            flex: none; width: 44px; height: 44px; border-radius: 12px;
+            display: grid; place-items: center;
+            background: #000; /* Dark slate background */
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+        }
+        
+      
+
+        /* The big gold number inside the badge */
+        .ad-strip-icon b { 
+            font-size: 24px; font-weight: 900; line-height: 1; 
+            color: #ffd60a; 
+            display: inline-block; 
+        }
+
+        .ad-strip-text {
+            flex: 1 1 auto; min-width: 0; font-size: 13px; font-weight: 700; line-height: 1.35;
+            color: var(--text-main);
+        }
+        .ad-strip-text span { 
+            display: block; font-weight: 500; font-size: 12px; 
+            color: var(--text-muted); margin-top: 2px; 
+            transition: color 0.4s;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .ad-strip.is-cooldown .ad-strip-text { color: #16a34a; }
+        .dark-mode .ad-strip.is-cooldown .ad-strip-text { color: #fff; }
+
+        /* Score Bounce */
+        @keyframes score-pop {
+            0%   { transform: scale(1); color: #fbbf24; }
+            70%  { transform: scale(1.6); color: #fff; text-shadow: 0 0 20px #fbbf24; }
+            100% { transform: scale(1); color: #fbbf24; }
+        }
+        .ad-score-anim {
+            animation: score-pop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Floating +1 */
+        .float-plus {
+            position: absolute;
+            top: -12px; left: 50%;
+            font-size: 16px; font-weight: 900;
+            color: #fbbf24;
+            pointer-events: none;
+            white-space: nowrap;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            animation: float-up 1s cubic-bezier(.2,.7,.3,1) forwards;
+            z-index: 4;
+        }
+        @keyframes float-up {
+            0%   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            70%  { opacity: 1; transform: translate(-50%, -24px) scale(1.3); }
+            100% { opacity: 0; transform: translate(-50%, -35px) scale(1.4); }
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #22c55e;
+            top: 50%; left: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: particle-fly 7s cubic-bezier(.2,.7,.3,1) forwards;
+            z-index: 3;
+        }
+        @keyframes particle-fly {
+            0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0); opacity: 0; }
+        }
+
+        /* Godlike Shimmer */
+        .tier-godlike {
+            background: linear-gradient(90deg, #ff3366, #ff9933, #22c55e, #3b82f6, #a855f7);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: godlike-shine 2.5s linear infinite;
+            display: inline-block;
+        }
+        @keyframes godlike-shine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* ---------- OVERLAY ---------- */
+        #ad-notice-overlay {
+            position: fixed; inset: 0; z-index: 2147483000;
+            display: flex;
+            align-items: center; justify-content: center;
+            padding: 16px;
+            background: rgba(15,23,42,.66);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+            box-sizing: border-box;
+        }
+        #ad-notice-overlay[hidden] { display: none !important; }
+        #ad-notice-overlay *{ box-sizing: border-box; }
+
+        /* ---------- CARD ---------- */
+        .an-card {
+            position: relative;
+            width: 100%;
+            max-width: 530px;
+            max-height: 92vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: #fff;
+            border-radius: 24px;
+            padding: 26px 22px 22px;
+            box-shadow: 0 24px 60px rgba(2,6,23,.38);
+            text-align: center;
+            animation: an-pop .28s cubic-bezier(.2,.9,.3,1.2);
+        }
+        @keyframes an-pop {
+            from{ opacity:0; transform:translateY(16px) scale(.96); }
+            to  { opacity:1; transform:none; }
+        }
+        @media (prefers-reduced-motion: reduce){
+            .an-card{ animation:none; }
+        }
+
+        /* ---------- VISUAL 1 ---------- */
+        .an-art {
+            width: 100%;
+            max-width: 290px;
+            height: auto;
+            margin: 2px auto 6px;
+            display: block;
+        }
+
+        /* ---------- TEXT ---------- */
+        .an-title {
+            margin: 0 0 8px;
+            font-size: clamp(20px, 5.2vw, 25px);
+            line-height: 1.22;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -.01em;
+        }
+        .an-sub {
+            margin: 0;
+            font-size: clamp(14px, 3.8vw, 16px);
+            line-height: 1.45;
+            color: #64748b;
+        }
+        .an-sub b{ color:#dc2626; }
+
+        /* ---------- VISUAL 2 (green = do this) ---------- */
+        .back-box {
+            display: grid;
+            grid-template-columns: minmax(0,58%) 1fr;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+            margin: 20px 0 22px;
+            padding: 10px 14px 10px 10px;
+            background: #ffffff;
+            color: #0f1f14;
+            border: 1.5px solid #d5e6d9;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(15,31,20,.08);
+            text-align: left;
+        }
+        .back-box *{ box-sizing: border-box; }
+        .back-box svg{ display: block; width: 100%; height: auto; }
+        .back-box strong {
+            display: block;
+            font-size: clamp(17px, 4.6vw, 20px);
+            font-weight: 800;
+            line-height: 1.2;
+            color: #0f1f14;
+        }
+        .back-box small {
+            display: block;
+            margin-top: 3px;
+            font-size: clamp(14px, 3.9vw, 16px);
+            color: #5b6f61;
+            line-height: 1.3;
+        }
+        .back-box .bb-pulse { animation: bb-pulse 1.4s ease-in-out infinite; }
+        @keyframes bb-pulse { 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
+        @media (prefers-reduced-motion:reduce){ .back-box .bb-pulse{ animation:none; } }
+        @media (max-width:380px){
+            .back-box {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+                gap: 10px;
+                padding: 10px;
+            }
+            .back-box svg { max-width: 240px; margin: 0 auto; }
+        }
+
+        /* ---------- BUTTON (indigo) ---------- */
+        .an-btn {
+            width: 100%;
+            border: 0;
+            cursor: pointer;
+            padding: 16px 18px;
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: clamp(17px, 4.4vw, 19px);
+            font-weight: 800;
+            color: #fff;
+            background: #007aff;
+            box-shadow: 0 10px 22px rgba(79,70,229,.35);
+        }
+        .an-btn:active { transform: translateY(1px); box-shadow: 0 6px 14px rgba(79,70,229,.3); }
+        .an-btn:focus-visible { outline: 3px solid #1e1b4b; outline-offset: 3px; }
+        @media (max-width:420px){
+            .an-card { padding: 22px 16px 18px; border-radius: 20px; }
+        }
+
+        /* ── Smart touch shield (direct-nosandbox only) ──────────────────── */
+        #touch-shield {
+            position: absolute;
+            inset: 0;
+            z-index: 14;              /* above iframe (1), below pills (15) */
+            background: transparent;
+            cursor: pointer;          /* Shows it is clickable */
+            pointer-events: auto;
+            touch-action: none;
+        }
+        #touch-shield[hidden] { display: none !important; }
+
+        /* Green confirm button for unlock modal */
+        #unlock-confirm {            
+            color: white !important;
+            border: none !important;
+        }
+
+
+        @media (max-width: 300px) { .btn-utility span { display: none; } }
+        @media (max-width: 600px) {
+            .frame-box { height: 220px; aspect-ratio: auto; }
+            .frame-box:fullscreen { height: 100vh; }
+        }        
+    </style>
 </head>
-<body>
+<body class="dark-mode">
 
-<!-- HEADER -->
-<header class="site-header" id="siteHeader">
-  <div class="header-inner">
-    <a class="logo" href="/">
-      <span class="logo__mark">M</span>
-      <span class="logo__text">
-        <span class="logo__ja">MARIGOLD株式会社</span>
-        <span class="logo__en">MARIGOLD CO., LTD.</span>
-      </span>
+<div class="app-container">
+    <header class="brand-header">
+        <a href="https://www.yakitv.com" id="header-logo-link" class="brand-link">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEguGNmp8b98m0InmYKPHeJxGIbSNRWDPE3TpwY70KkWeHe630R9-2hN9BrLVu51AT2kFhEhQFZ9WkYeKC52Rd9nB0g764qoPoQeNwoThBED4aR1RSySqSt3bdIFOdw-VdUZ50DL22iuiwF3c3siFqwQnkqfG7uuJTCPe3hsEkXxMAx2IvQIJv_Matmbt-Ma/s512/Yaki%20TV%20lime%20-%20ccff00.png" alt="Yaki TV Index" class="brand-logo">
+            <span class="brand-text">Yaki TV</span>
+        </a>
+    </header>
+
+
+
+    <!-- Ad-notice status strip (only shown in direct-nosandbox mode) -->
+    <div class="ad-strip" id="ad-notice-strip" hidden>
+        <div class="ad-strip-icon" id="ad-strip-icon">
+            <b id="ad-strip-count">0</b>
+        </div>
+        <div class="ad-strip-text" id="ad-strip-text"></div>
+    </div>
+
+    <div class="toolbar">
+        <button class="btn-utility btn-change-link" id="change-link-btn" type="button">
+            <i class="fas fa-right-left"></i> <span>Change Link</span>
+        </button>
+        <button class="btn-utility" id="sync-btn" type="button">
+            <i class="fas fa-sync-alt"></i> <span>Refresh</span>
+        </button>
+        <button class="btn-utility btn-share-top" id="share-btn" type="button">
+            <i class="fas fa-share-nodes"></i> <span>Share</span>
+        </button>
+    </div>
+
+    <main class="frame-box" id="player-container">
+        <iframe
+            id="content-frame"
+            allow="autoplay; fullscreen; encrypted-media"
+            allowfullscreen
+            sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock">
+        </iframe>
+
+        <!-- Transparent touch shield — auto-lifted after a quiet period in
+             direct-nosandbox. Blocks taps that would trigger ads. -->
+        <div id="touch-shield" hidden></div>
+
+        <!-- Fullscreen Pill (Top Right) -->
+        <button class="video-pill btn-fullscreen" id="fullscreen-btn" type="button" aria-label="Enter fullscreen">
+            <i class="fas fa-expand"></i> <span>Fullscreen</span>
+        </button>
+
+<div id="click-shield">
+    <div class="shield-brand">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEguGNmp8b98m0InmYKPHeJxGIbSNRWDPE3TpwY70KkWeHe630R9-2hN9BrLVu51AT2kFhEhQFZ9WkYeKC52Rd9nB0g764qoPoQeNwoThBED4aR1RSySqSt3bdIFOdw-VdUZ50DL22iuiwF3c3siFqwQnkqfG7uuJTCPe3hsEkXxMAx2IvQIJv_Matmbt-Ma/s512/Yaki%20TV%20lime%20-%20ccff00.png"
+             alt="Yaki TV">
+        <span class="shield-brand-live">● Yaki TV</span>
+    </div>
+    <button id="audio-toggle-btn" type="button" title="Start background audio">
+        <span class="audio-icon">▶︎</span>
+        <span class="audio-label">Play with sound</span>
+    </button>
+</div>
+
+        <div id="loading-ui">
+            <div class="spinner"></div>
+            <span>Resolving resource…</span>
+        </div>
+        <div id="fallback" class="fallback-ui">
+            <i class="fas fa-exclamation-triangle fa-2x"></i>
+            <p>Resource temporarily unavailable.</p>
+        </div>
+        
+        <!-- ── Unlock Shield Modal (Moved here for fullscreen support) ── -->
+        <div class="modal-overlay" id="unlock-modal">
+            <div class="modal-box">
+                <h3>Ads blocked</h3>
+                <p>If you unlock, ads can open when you tap the video.</p>
+                <div class="modal-actions">
+                    <button id="unlock-confirm">Unlock anyway</button>
+                    <button class="primary" id="unlock-cancel">Keep locked</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<!-- Apple design philosophy, remove the clutters
+    <div class="status-alert">
+        <i class="fas fa-info-circle"></i> Not working?
+    </div>
+    -->
+
+    <button class="btn-chat-full" id="chat-btn" type="button" aria-label="Open community chat">
+        <i class="fas fa-comments"></i> <span>Live Chat</span>
+    </button>
+
+    <!-- Inline chat section — page-flow, lazy-loaded on first click (site #2 pattern) -->
+    <div class="chat-section" id="chat-section">
+        <iframe id="chat-frame" title="Community chat" allow="autoplay; encrypted-media"></iframe>
+        <!-- Invisible scroll shield — absorbs touches so vertical gestures scroll the page,
+             not the chat. Leaves the bottom slice (input + a few messages) interactive. -->
+        <div class="chat-scroll-shield" aria-hidden="true"></div>
+        <div class="chat-loading" id="chat-loading" hidden>
+            <div class="chat-skeleton" aria-hidden="true">
+                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble"></div></div>
+                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble sk-short"></div></div>
+                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble sk-medium"></div></div>
+                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble"></div></div>
+                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble sk-medium"></div></div>
+                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble sk-short"></div></div>
+            </div>
+            <div class="chat-loading-status">
+                <div class="spinner"></div>
+                <span id="chat-loading-text">Connecting to chat…</span>
+            </div>
+        </div>
+    </div>
+
+    <footer class="legal-footer">
+        <span class="legal-title">Legal Disclaimer & DMCA Policy</span>
+        <p><strong>Operational Framework:</strong> This service acts solely as a neutral presentation interface. We do not host, store, or transmit any digital media on our own infrastructure.</p>
+        <p><strong>Rights & Trademarks:</strong> All logos, brand names, and third-party trademarks remain the property of their respective owners. Users are responsible for compliance with regional regulations.</p>
+        <p><strong>Compliance Notice:</strong> Verified takedown requests are honored promptly: email contact@yakitv.com</p>
+    </footer>
+</div>
+
+
+<audio id="bg-beat" playsinline style="display:none;"></audio>
+
+<!-- Chat FAB removed — chat is now a full-width button below the toolbar -->
+
+
+
+<!-- ── Share Modal Markup ───────────────────────────────────────────────── -->
+<div class="modal-overlay" id="share-modal">
+    <div class="modal-box">
+        <h3>Share with family & friends</h3>
+        <p>You can copy this link and send to your friends.</p>
+        <input type="text" id="share-link-input" readonly />
+        <div class="modal-actions">
+            <button id="close-share-btn">Close</button>
+            <button class="primary" id="copy-share-btn">Copy Link</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- App footer 
+    <div id="ono-promo-footer" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #121214;
+    color: #ffffff;
+    z-index: 9998;
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    border-top: 1px solid #27272a;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+">
+    <a id="ono-promo-link" href="https://yakitv.com" target="_blank" rel="noopener" style="
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+    ">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-weight: 700; font-size: 1rem; color: #ffffff;">
+                Yono TV APK v3.3
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.6rem; color: #a1a1aa;">
+                <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">No Ads</span>
+                <span style="background: rgba(0, 240, 255, 0.15); color: #00f0ff; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">4K</span>
+            </div>
+        </div>
+        
+        <div style="
+            background: #00f0ff;
+            color: #0d0d11;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 10px 20px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        ">
+            DOWNLOAD <span style="font-size: 0.9rem;">➔</span>
+        </div>
     </a>
-
-    <nav aria-label="Global Navigation" class="gnav">
-      <ul>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#featured">Hospitality</a></li>
-        <li><a href="#strength">Quality</a></li>
-        <li><a href="#support">Support</a></li>
-        <li><a href="#company">Company</a></li>
-      </ul>
-    </nav>
-
-    <div class="header-actions">
-      <button class="lang-btn" aria-label="Language">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="2" y1="12" x2="22" y2="12"/>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-        </svg>
-        JP / EN
-      </button>
-      <a class="btn btn--primary header-cta" href="#contact">Contact</a>
-      <button aria-controls="mobileNav" aria-expanded="false" aria-label="Menu" class="hamburger" id="hamburger">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<!-- Mobile Nav -->
-<div class="mobile-nav" id="mobileNav">
-  <ul>
-    <li><a href="#hero">Home<small>ホーム</small></a></li>
-    <li class="m-acc-item">
-      <button class="m-acc-btn" type="button">Services<small>事業紹介</small><span class="m-chev"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></button>
-      <div class="m-sub"><div>
-        <a href="#services">Hotel Housekeeping<small>ホテル客室清掃</small></a>
-        <a href="#services">Commercial Cleaning<small>商業施設清掃</small></a>
-        <a href="#services">Floor & Carpet<small>床・カーペット清掃</small></a>
-        <a href="#services">School Cleaning<small>学校清掃</small></a>
-        <a href="#services">High Altitude Windows<small>高所窓清掃</small></a>
-      </div></div>
-    </li>
-    <li class="m-acc-item">
-      <button class="m-acc-btn" type="button">About<small>企業情報</small><span class="m-chev"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></button>
-      <div class="m-sub"><div>
-        <a href="#featured">Hospitality Services<small>ホスピタリティ</small></a>
-        <a href="#strength">Our Quality<small>私たちのこだわり</small></a>
-        <a href="#support">Support Organization<small>登録支援機関</small></a>
-        <a href="#ceo">CEO Message<small>代表メッセージ</small></a>
-        <a href="#company">Company Profile<small>会社概要</small></a>
-      </div></div>
-    </li>
-    <li><a href="#topics">Topics<small>お知らせ</small></a></li>
-    <li><a href="#contact">Contact<small>お問い合わせ</small></a></li>
-  </ul>
-  <a class="m-cta" href="#contact">Free Consultation / 無料相談</a>
-</div>
-
-<main>
-
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero__inner">
-      <div class="hero__grid">
-        <div class="hero__copy reveal">
-          <span class="hero__badge">PREMIUM CLEANING SERVICES</span>
-          <h1 class="hero__title">
-            清掃は、<br>
-            <em>最高の</em><br>
-            <em>おもてなし。</em>
-          </h1>
-          <p class="hero__sub">
-            ホテル客室から商業施設、高所窓まで。完璧な清掃が、信頼と安心を生み出します。<br>
-            <span class="en">From hotel housekeeping to commercial and high-altitude cleaning — we deliver flawless spaces that build trust and peace of mind.</span>
-          </p>
-          <div class="hero__actions">
-            <a class="btn btn--primary" href="#services">
-              Explore Services
-              <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <a class="btn btn--ghost" href="#contact">Get a Quote</a>
-          </div>
-        </div>
-        <div class="hero__image reveal">
-          <img alt="Premium hotel housekeeping" loading="eager" src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200&q=80">
-          <div class="hero__stats">
-            <div class="hero__stat">
-              <div class="hero__stat-num">2020<span class="unit">YR</span></div>
-              <div class="hero__stat-label">ESTABLISHED</div>
+</div>--> 
+    
+<!-- ── old Sticky Footer Promotion Bar ────────────────────────────────────── -->
+<!--<div id="ono-promo-footer" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #121214;
+    color: #ffffff;
+    z-index: 9998;
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 48px 12px 16px; /* Right padding protects the close button area */
+    box-sizing: border-box;
+    border-top: 1px solid #27272a;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+">
+    <a id="ono-promo-link" href="https://onotv.me" target="_blank" rel="noopener" style="
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+    ">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #a1a1aa;">
+                <span style="color: #ef4444; font-size: 0.9rem;">✕</span>
+                <span style="font-weight: 500;">Yono TV</span>
+                <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; font-size: 0.75rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Has Ads</span>
             </div>
-            <div class="hero__stat">
-              <div class="hero__stat-num">¥30M<span class="unit">JPY</span></div>
-              <div class="hero__stat-label">CAPITAL</div>
+            
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.95rem;">
+                <span style="color: #22c55e; font-size: 1rem;">✓</span>
+                <span style="font-weight: 700; color: #ffffff;">Yono TV Apk App </span>
+                <span style="background: #22c55e; color: #000000; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px;">NO ADS • 4K</span>
             </div>
-            <div class="hero__stat">
-              <div class="hero__stat-num">6<span class="unit">LINES</span></div>
-              <div class="hero__stat-label">SERVICE LINES</div>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </section>
+        
+        <div style="
+            background: #00f0ff;
+            color: #0d0d11;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: transform 0.2s;
+        ">
+            GO <span style="font-size: 0.9rem;">➔</span>
+        </div>
+    </a>
+    
+    <button id="close-promo-btn" onclick="document.getElementById('ono-promo-footer').style.display='none';" style="
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #9ca3af;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 6px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    ">✕</button>
+</div>        
+-->
+    
+<!-- Ad-notice poster overlay (direct-nosandbox only) -->
+<div id="ad-notice-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="anTitle" aria-describedby="anSub">
+  <div class="an-card">
 
-  <!-- SERVICES -->
-  <section class="section" id="services">
-    <div class="container">
-      <div class="sec-head reveal">
-        <span class="eyebrow eyebrow--dark">Our Services</span>
-        <h2 class="h-section">事業紹介</h2>
-        <p class="sec-head__desc">
-          多言語対応のプロフェッショナルチームが、あらゆる空間に最適な清掃ソリューションを提供します。
-          <br><span class="en">Multilingual professional teams delivering tailored cleaning solutions across every environment.</span>
-        </p>
-      </div>
+    <!-- VISUAL 1: ad tab escaping + red X -->
+    <svg class="an-art" viewBox="0 0 300 145" role="img"
+         aria-label="A game window opening a new ad tab">
+      <!-- Main Window (Safe Video) -->
+      <rect x="8" y="52" width="176" height="84" rx="14"
+            fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2.5"/>
+      <circle cx="26" cy="68" r="3.5" fill="#cbd5e1"/>
+      <circle cx="40" cy="68" r="3.5" fill="#cbd5e1"/>
+      <circle cx="54" cy="68" r="3.5" fill="#cbd5e1"/>
+      <circle cx="96" cy="96" r="24" fill="#007aff"/>
+      <path d="M89 85 L111 96 L89 107 Z" fill="#ffffff"/>
+      
+      <!-- New Tab Window (Now clearly labeled as AD) -->
+      <rect x="176" y="2" width="108" height="58" rx="12"
+            fill="#fff3d6" stroke="#ffb020" stroke-width="2.5"/>
+      <rect x="190" y="14" width="80" height="8" rx="4" fill="#ffb020"/>
+      <text x="230" y="46" text-anchor="middle" font-size="24" font-weight="900"
+            fill="#a85f00" font-family="system-ui, sans-serif">AD</text>
+      
+      <!-- Arrow -->
+      <path d="M132 52 C 140 30, 155 22, 174 22"
+            fill="none" stroke="#94a3b8" stroke-width="2.5"
+            stroke-dasharray="5 6" stroke-linecap="round"/>
+      <path d="M180 22 L168 16 L168 28 Z" fill="#94a3b8"/>
+    </svg>
 
-      <div class="services">
-        <!-- 1. Hotel Housekeeping -->
-        <a class="service-card reveal" href="#featured">
-          <div class="service-card__thumb">
-            <span class="service-card__tag">FLAGSHIP</span>
-            <img alt="Hotel housekeeping" loading="lazy" src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=900&q=80">
-          </div>
-          <div class="service-card__body">
-            <h3 class="service-card__title"><strong>Hotel Housekeeping Services</strong></h3>
-            <p class="service-card__title-en">ホテル客室清掃</p>
-            <p class="service-card__text">
-              ゲストの滞在体験を左右する客室清掃を、ホスピタリティ基準で徹底管理。ベッドメイキング、バスルーム、共用部まで一貫した品質でお届けします。
-            </p>
-            <p class="service-card__text-en">Hospitality-grade room cleaning, bed making, bathroom detailing, and common-area maintenance — all delivered to the standards guests expect.</p>
-            <span class="service-card__link">View Details</span>
-          </div>
-        </a>
+    <h2 class="an-title" id="anTitle">New tabs may open.</h2>
+    <p class="an-sub" id="anSub">
+      Those tabs are ads. They are <b>not from us</b>.<br>Just press back to close them.
+    </p>
 
-        <!-- 2. Commercial Cleaning -->
-        <div class="service-card reveal">
-          <div class="service-card__thumb">
-            <img alt="Commercial cleaning" loading="lazy" src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=80">
-          </div>
-          <div class="service-card__body">
-            <h3 class="service-card__title"><strong>Commercial Cleaning</strong></h3>
-            <p class="service-card__title-en">商業施設・オフィス清掃</p>
-            <p class="service-card__text">
-              オフィス、商業施設、医療機関など、あらゆる商業空間の日常清掃と定期メンテナンス。生産性と顧客体験の向上に貢献します。
-            </p>
-            <p class="service-card__text-en">Daily and scheduled cleaning for offices, retail spaces, and medical facilities — designed to boost productivity and customer experience.</p>
-            <span class="service-card__link">View Details</span>
-          </div>
-        </div>
+    <!-- VISUAL 2: press Back -->
+    <div class="back-box">
+      <svg viewBox="0 0 310 130" role="img"
+           aria-label="Press the Back button on your phone">
+        <rect x="6" y="-30" width="152" height="150" rx="22" fill="#1b2a20"/>
+        <rect x="16" y="-18" width="132" height="94" rx="6" fill="#fff3d6"/>
+        <rect x="28" y="6" width="108" height="12" rx="4" fill="#ffb020"/>
+        <text x="82" y="58" text-anchor="middle" font-size="30" font-weight="800"
+              fill="#a85f00" font-family="system-ui, sans-serif">AD</text>
+        <rect x="16" y="84" width="132" height="26" rx="6" fill="#0d1610"/>
+        <circle class="bb-pulse" cx="42" cy="97" r="13" fill="none"
+                stroke="#3cc850" stroke-width="3"/>
+        <path d="M47 90 L36 97 L47 104 Z" fill="#fff"/>
+        <circle cx="82" cy="97" r="4.5" fill="#fff" opacity=".6"/>
+        <rect x="116" y="91" width="11" height="11" rx="2"
+              fill="none" stroke="#fff" stroke-width="2" opacity=".6"/>
+<rect x="172" y="45" width="132" height="72" rx="18" fill="#1a1a1a"/>
+<polyline points="234,68 225,76 234,84" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M226 76 H243 A9 9 0 0 1 243 94 H228" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+      </svg>
 
-        <!-- 3. Commercial Floor Cleaning -->
-        <div class="service-card reveal">
-          <div class="service-card__thumb">
-            <img alt="Commercial floor cleaning" loading="lazy" src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=900&q=80">
-          </div>
-          <div class="service-card__body">
-            <h3 class="service-card__title"><strong>Commercial Floor Cleaning</strong></h3>
-            <p class="service-card__title-en">業務用床清掃・ワックス掛け</p>
-            <p class="service-card__text">
-              各種床材に対応した洗浄・ポリッシング・ワックス施工。長期的な美観維持と耐久性向上を実現するプロ仕様のフロアケア。
-            </p>
-            <p class="service-card__text-en">Professional floor care — stripping, polishing, and waxing — for all surface types, preserving appearance and extending floor lifespan.</p>
-            <span class="service-card__link">View Details</span>
-          </div>
-        </div>
-
-        <!-- 4. Carpet Cleaning -->
-        <div class="service-card reveal">
-          <div class="service-card__thumb">
-            <img alt="Carpet cleaning" loading="lazy" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80">
-          </div>
-          <div class="service-card__body">
-            <h3 class="service-card__title"><strong>Carpet Cleaning Services</strong></h3>
-            <p class="service-card__title-en">カーペット清掃・シミ抜き</p>
-            <p class="service-card__text">
-              ホットウォーター抽出法を中心に、シミ抜き・消臭・抗菌処理まで実施。ホテル・オフィス・商業施設のカーペットを新品同様に再生します。
-            </p>
-            <p class="service-card__text-en">Hot-water extraction, stain removal, deodorizing, and antibacterial treatment — restoring carpets in hotels, offices, and retail to like-new condition.</p>
-            <span class="service-card__link">View Details</span>
-          </div>
-        </div>
-
-        <!-- 5. School Cleaning -->
-        <div class="service-card reveal">
-          <div class="service-card__thumb">
-            <img alt="School cleaning" loading="lazy" src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80">
-          </div>
-          <div class="service-card__body">
-            <h3 class="service-card__title"><strong>School Cleaning Services</strong></h3>
-            <p class="service-card__title-en">学校・教育施設清掃</p>
-            <p class="service-card__text">
-              学校、幼稚園、塾など教育機関の衛生的な学習環境を維持。安全な洗剤と徹底した除菌プロセスで、子どもたちの健康を守ります。
-            </p>
-            <p class="service-card__text-en">Maintaining hygienic learning environments in schools, kindergartens, and educational facilities with child-safe products and rigorous disinfection protocols.</p>
-            <span class="service-card__link">View Details</span>
-          </div>
-        </div>
-
-        <!-- 6. High Altitude Windows -->
-        <div class="service-card reveal">
-          <div class="service-card__thumb">
-            <img alt="High altitude windows cleaning" loading="lazy" src="https://nbropeaccess.com.au/wp-content/uploads/2022/03/northern-sydney-high-rise-rope-access-window-cleaning-harbour-bridge-views.jpg">
-          </div>
-          <div class="service-card__body">
-            <h3 class="service-card__title"><strong>High Altitude Windows Cleaning Services</strong></h3>
-            <p class="service-card__title-en">高所窓清掃・外壁ガラス清掃</p>
-            <p class="service-card__text">
-              資格保有の専門チームによる高所作業。ロープアクセスとゴンドラを組み合わせ、オフィスビル・ホテル・商業施設の外観を美しく保ちます。
-            </p>
-            <p class="service-card__text-en">Certified high-altitude specialists using rope access and gondola systems to maintain pristine facades on office towers, hotels, and commercial buildings.</p>
-            <span class="service-card__link">View Details</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURED: HOSPITALITY CLEANING -->
-  <section class="section section--soft" id="featured">
-    <div class="container">
-      <div class="featured">
-        <div class="featured__image reveal">
-          <span class="featured__badge">SIGNATURE</span>
-          <img alt="Premium hotel housekeeping" loading="lazy" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1000&q=80">
-        </div>
-        <div class="featured__content reveal">
-          <span class="eyebrow eyebrow--dark">Hospitality Cleaning Services</span>
-          <h2 class="h-section">Valuable Hotel<br>Housekeeping Services</h2>
-          <p class="featured__desc">
-            平均的なホテルスタッフ派遣会社との取引は、時としてフラストレーションを生みます。訓練されていない非生産的なスタッフは、顧客体験・評判・利益を損なう可能性があります。信頼できるチームを見つける煩雑さから、もう解放されませんか。
-          </p>
-          <p class="featured__desc-en">
-            Working with average hotel staffing agencies can be frustrating. Unproductive and untrained staff can ruin customer experience, reputation, and profits. You don't want to handle the hassles of finding a reliable team for your hotel housekeeping needs. Find rest and reliability in MARIGOLD hospitality staffing solutions and cleaning services.
-          </p>
-          <div class="featured__points">
-            <div class="featured__point">
-              <div class="featured__point-icon">
-                <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-              </div>
-              <div class="featured__point-text">
-                5つ星ホテル基準のトレーニング済みスタッフ
-                <span>Staff trained to 5-star hotel standards</span>
-              </div>
-            </div>
-            <div class="featured__point">
-              <div class="featured__point-icon">
-                <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-              </div>
-              <div class="featured__point-text">
-                多言語対応・在留資格完備の柔軟なチーム編成
-                <span>Multilingual teams with full visa compliance</span>
-              </div>
-            </div>
-            <div class="featured__point">
-              <div class="featured__point-icon">
-                <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-              </div>
-              <div class="featured__point-text">
-                SLAに基づく品質保証と透明なレポート
-                <span>SLA-backed quality assurance with transparent reporting</span>
-              </div>
-            </div>
-          </div>
-          <a class="btn btn--accent" href="#contact">
-            Request Consultation
-            <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STRENGTH -->
-  <section class="section" id="strength">
-    <div class="container">
-      <div class="sec-head reveal">
-        <span class="eyebrow eyebrow--dark">Our Quality</span>
-        <h2 class="h-section">完璧な清掃で、確かな安心を。</h2>
-        <p class="sec-head__desc">
-          Flawless Cleaning. Total Peace of Mind.
-          <br>細部にまでこだわり抜くプロフェッショナリズムが、私たちの強みです。
-        </p>
-      </div>
-
-      <div class="strength-grid">
-        <div class="strength-card reveal">
-          <div class="strength-card__num">01</div>
-          <h3 class="h-card">細部への徹底したこだわり</h3>
-          <p class="strength-card__text">
-            清掃は単なる作業ではなく、空間価値を高めるサービスです。目に見えない細部にまで気を配り、お客様に安心と満足をお届けします。
-          </p>
-          <p class="strength-card__text-en">Cleaning is a value-adding service, not a chore. We obsess over invisible details to deliver certainty and satisfaction.</p>
-        </div>
-        <div class="strength-card reveal">
-          <div class="strength-card__num">02</div>
-          <h3 class="h-card">清潔さが生み出す生産性</h3>
-          <p class="strength-card__text">
-            清潔で適切に管理された空間は、快適さ・生産性・幸福の基盤。私たちはプロフェッショナルとして、その基盤を支えます。
-          </p>
-          <p class="strength-card__text-en">Clean, well-managed spaces form the foundation of comfort, productivity, and wellbeing — a foundation we uphold as professionals.</p>
-        </div>
-        <div class="strength-card reveal">
-          <div class="strength-card__num">03</div>
-          <h3 class="h-card">信頼に支えられたチーム</h3>
-          <p class="strength-card__text">
-            訓練されたスタッフは、信頼性・プロ意識・最高水準のケアに深くコミット。一貫した品質をいつでもお届けします。
-          </p>
-          <p class="strength-card__text-en">Our trained teams are deeply committed to reliability, professionalism, and the highest standards of care — consistent quality, every time.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SUPPORT -->
-  <section class="section section--soft" id="support">
-    <div class="container">
-      <div class="sec-head reveal">
-        <span class="eyebrow eyebrow--dark">Registered Support Organization</span>
-        <h2 class="h-section">登録支援機関としてのサポート</h2>
-        <p class="sec-head__desc">
-          外国人労働者の入国前から就労後まで、一貫した支援を提供します。
-          <br><span class="en">End-to-end support for foreign workers, from pre-arrival through employment.</span>
-        </p>
-      </div>
-
-      <div class="support-grid">
-        <div class="support-item reveal">
-          <div class="support-item__num">01</div>
-          <h4 class="bold">入国前の事前ガイダンス</h4>
-          <p class="support-item__text">Pre-arrival orientation covering lifestyle, working conditions, and key regulations.<br><small>来日前に日本での生活や労働条件を丁寧に説明。</small></p>
-        </div>
-        <div class="support-item reveal">
-          <div class="support-item__num">02</div>
-          <h4 class="bold">入国後の送迎・住居確保</h4>
-          <p class="support-item__text">Airport pickup and housing arrangement for a smooth transition.<br><small>空港から住居・勤務先まで安心して移動できる送迎と住居手配。</small></p>
-        </div>
-        <div class="support-item reveal">
-          <div class="support-item__num">03</div>
-          <h4 class="bold">通訳・多言語対応</h4>
-          <p class="support-item__text">Multilingual staff supporting workplace and daily-life communication.<br><small>多言語スタッフが業務上・生活上のコミュニケーションをサポート。</small></p>
-        </div>
-        <div class="support-item reveal">
-          <div class="support-item__num">04</div>
-          <h4 class="bold">定期的な面談</h4>
-          <p class="support-item__text">Regular interviews to monitor work status and address challenges.<br><small>定期的に就労状況や生活上の課題を把握し、改善につなげます。</small></p>
-        </div>
-        <div class="support-item reveal">
-          <div class="support-item__num">05</div>
-          <h4 class="bold">日本語学習支援</h4>
-          <p class="support-item__text">Japanese language training to enhance workplace communication.<br><small>日本語能力向上で、職場での円滑なコミュニケーションを後押し。</small></p>
-        </div>
-        <div class="support-item reveal">
-          <div class="support-item__num">06</div>
-          <h4 class="bold">行政手続き代行</h4>
-          <p class="support-item__text">Immigration and municipal procedures handled on behalf of employers.<br><small>入管・自治体などへの各種手続きを企業様に代わってサポート。</small></p>
-        </div>
-        <div class="support-item reveal">
-          <div class="support-item__num">07</div>
-          <h4 class="bold">健康管理・ストレスチェック</h4>
-          <p class="support-item__text">Periodic health checks and stress monitoring for all staff.<br><small>派遣スタッフ・社員を対象に定期的な健康管理を実施。</small></p>
-        </div>
-        <div class="support-item reveal">
-          <div class="support-item__num">08</div>
-          <h4 class="bold">苦情処理・キャリア相談</h4>
-          <p class="support-item__text">Grievance handling and career transition consultation when needed.<br><small>職場や生活の悩みに寄り添い、転職相談にも対応。</small></p>
-        </div>
-        <div class="support-item reveal">
-          <div class="support-item__num">09</div>
-          <h4 class="bold">24時間緊急サポート</h4>
-          <p class="support-item__text">Emergency contact line available around the clock.<br><small>24時間対応可能な緊急連絡体制を完備。</small></p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NUMBERS -->
-  <section class="numbers">
-    <div class="container">
-      <div class="numbers__head reveal">
-        <span class="eyebrow" style="color:var(--accent)">By The Numbers</span>
-        <h2 class="h-section numbers__title">数字で見るMARIGOLD</h2>
-        <p class="numbers__desc">Our growth reflects the trust our clients place in us.<br>お客様の信頼が、私たちの実績です。</p>
-      </div>
-      <div class="numbers__grid">
-        <div class="num-card reveal">
-          <div class="num-card__value">2020<span class="unit">YR</span></div>
-          <div class="num-card__label">設立 / Established</div>
-          <div class="num-card__label-en">Company Founded</div>
-        </div>
-        <div class="num-card reveal">
-          <div class="num-card__value">¥30M<span class="unit">JPY</span></div>
-          <div class="num-card__label">資本金 / Capital</div>
-          <div class="num-card__label-en">Paid-in Capital</div>
-        </div>
-        <div class="num-card reveal">
-          <div class="num-card__value">6<span class="unit">LINES</span></div>
-          <div class="num-card__label">事業領域 / Services</div>
-          <div class="num-card__label-en">Core Service Lines</div>
-        </div>
-        <div class="num-card reveal">
-          <div class="num-card__value">多国籍<span class="unit">STAFF</span></div>
-          <div class="num-card__label">多言語対応 / Multilingual</div>
-          <div class="num-card__label-en">Diverse Professional Teams</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CEO -->
-  <section class="section" id="ceo">
-    <div class="container">
-      <div class="ceo">
-        <div class="ceo__image reveal">
-          <div class="ceo__image-frame">
-            <img alt="CEO Amrit Sapkota" loading="lazy" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjmkzvvuFllE6eb5qD2bYGxYLXJjjI_5Ykq2WXjyZrOLVeiDU4VjDtA-K5Ht2xGxLINgNwrMDWYPrbY1hrRzq3ZDPtl9rZGekVDZRSF4b3ZZYxkQhStoSjSMZ6jbQq7iucz88kOi8qFnzwbyKt_nKqtHkNZ1-vrfL9dShyphenhyphenzxf1WfCboO8ssyisACePGZY4P/s1600/image.png">
-          </div>
-          <div class="ceo__quote">"</div>
-        </div>
-        <div class="ceo__content reveal">
-          <span class="eyebrow eyebrow--dark">Message from CEO</span>
-          <h2 class="h-section">清掃とホスピタリティで<br>人々が輝く環境を。</h2>
-          <p class="ceo__body">
-            私たちは、清掃とホスピタリティを通じて、人々が輝ける清潔で安全な環境を創り出すことを使命としています。細部へのこだわりを誇りとし、信頼とプロフェッショナリズムに深くコミットしてまいります。
-          </p>
-          <p class="ceo__body-en">
-            Our mission is to create clean, safe environments where people can thrive — through cleaning and hospitality. We take pride in our attention to detail and remain deeply committed to trust and professionalism.
-          </p>
-          <div class="ceo__signature">
-            <div>
-              <div class="ceo__sig-name">サプコタ アムリット / Amrit Sapkota</div>
-              <div class="ceo__sig-role">Representative Director, MARIGOLD Co., Ltd.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TOPICS -->
-  <section class="section section--soft" id="topics">
-    <div class="container">
-      <div class="sec-head reveal">
-        <span class="eyebrow eyebrow--dark">Topics</span>
-        <h2 class="h-section">最新情報</h2>
-        <p class="sec-head__desc">Latest updates from MARIGOLD.<br>MARIGOLDの最新情報をお届けします。</p>
-      </div>
-
-      <div class="news-grid">
-        <a class="news-card reveal" href="#">
-          <div class="news-card__thumb">
-            <span class="news-card__cat">NEWS</span>
-            <img alt="Hotel project" loading="lazy" src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80">
-          </div>
-          <div class="news-card__body">
-            <div class="news-card__date">2026.05.01</div>
-            <h3 class="news-card__title">都内ホテルにて、新たな客室清掃業務を受託</h3>
-            <p class="news-card__title-en">New hotel housekeeping contract secured in Tokyo.</p>
-          </div>
-        </a>
-        <a class="news-card reveal" href="#">
-          <div class="news-card__thumb">
-            <span class="news-card__cat">REPORT</span>
-            <img alt="Training session" loading="lazy" src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80">
-          </div>
-          <div class="news-card__body">
-            <div class="news-card__date">2026.04.15</div>
-            <h3 class="news-card__title">ホスピタリティ研修を実施</h3>
-            <p class="news-card__title-en">Hospitality training program completed for housekeeping staff.</p>
-          </div>
-        </a>
-        <a class="news-card reveal" href="#">
-          <div class="news-card__thumb">
-            <span class="news-card__cat">NEWS</span>
-            <img alt="Restaurant expansion" loading="lazy" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80">
-          </div>
-          <div class="news-card__body">
-            <div class="news-card__date">2026.03.10</div>
-            <h3 class="news-card__title">新規レストラン事業をスタート</h3>
-            <p class="news-card__title-en">New restaurant business launched as part of multicultural initiative.</p>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- COMPANY -->
-  <section class="section" id="company">
-    <div class="container">
-      <div class="sec-head reveal">
-        <span class="eyebrow eyebrow--dark">Company</span>
-        <h2 class="h-section">企業情報</h2>
-        <p class="sec-head__desc">Company profile and access information.<br>MARIGOLD株式会社の会社概要・アクセス情報です。</p>
-      </div>
-
-      <div class="company-grid">
-        <div class="company-card reveal">
-          <h3>Company Profile / 会社概要</h3>
-          <table class="company-table">
-            <tbody>
-              <tr>
-                <th>会社名<small>Company Name</small></th>
-                <td>MARIGOLD株式会社<small>MARIGOLD Co., Ltd.</small></td>
-              </tr>
-              <tr>
-                <th>商号（フリガナ）<small>Phonetic Reading</small></th>
-                <td>マリゴールド<small>Marigold</small></td>
-              </tr>
-              <tr>
-                <th>所在地<small>Head Office Address</small></th>
-                <td>〒272-0138 千葉県市川市南行徳1-13-1 メゾン3006 207<small>Maison 3006 #207, 1-13-1 Minami-Gyotoku, Ichikawa, Chiba 272-0138</small></td>
-              </tr>
-              <tr>
-                <th>設立日<small>Established</small></th>
-                <td>2020年12月22日<small>December 22, 2020</small></td>
-              </tr>
-              <tr>
-                <th>代表取締役<small>Representative Director</small></th>
-                <td>サプコタ アムリット<small>Amrit Sapkota</small></td>
-              </tr>
-              <tr>
-                <th>資本金<small>Capital</small></th>
-                <td>3,000万円<small>¥30,000,000</small></td>
-              </tr>
-              <tr>
-                <th>法人番号<small>Corporate Number</small></th>
-                <td>9040001116485</td>
-              </tr>
-              <tr>
-                <th>登録番号<small>Registration Number</small></th>
-                <td>T9040001116485</td>
-              </tr>
-              <tr>
-                <th>主な業務内容<small>Core Services</small></th>
-                <td>ホテル清掃・日常清掃・床/カーペット清掃・高所窓清掃・労働者派遣・有料職業紹介・登録支援機関・レストラン経営<small>Hotel cleaning, commercial cleaning, floor/carpet cleaning, high-altitude window cleaning, worker dispatch, job placement, registered support organization, restaurant operations</small></td>
-              </tr>
-              <tr>
-                <th>電話番号<small>Phone</small></th>
-                <td>代表 / HQ: <a href="tel:0473189090">047-318-9090</a><br>携帯 / Mobile: <a href="tel:07022620661">070-2262-0661</a></td>
-              </tr>
-              <tr>
-                <th>FAX<small>Fax</small></th>
-                <td>047-318-9091</td>
-              </tr>
-              <tr>
-                <th>ウェブサイト<small>Website</small></th>
-                <td><a href="https://marigoldcoltd.jp" target="_blank" rel="noopener">marigoldcoltd.jp</a></td>
-              </tr>
-              <tr>
-                <th>メール<small>Email</small></th>
-                <td><a href="mailto:info@marigoldcoltd.jp">info@marigoldcoltd.jp</a></td>
-              </tr>
-              <tr>
-                <th>主要取引銀行<small>Main Banks</small></th>
-                <td>千葉銀行 本店営業部<small>The Chiba Bank, Ltd. — Head Office Branch</small><br>朝日信用金庫 行徳駅前支店<small>Asahi Shinkin Bank — Gyotoku-Ekimae Branch</small></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="company-card reveal">
-          <h3>Access / アクセス</h3>
-          <div class="company-map">
-            <iframe loading="lazy" src="https://www.google.com/maps?q=%E5%8D%83%E8%91%89%E7%9C%8C%E5%B8%82%E5%B7%9D%E5%B8%82%E5%8D%97%E8%A1%8C%E5%BE%B31%E4%B8%81%E7%9B%AE13-1&output=embed" title="MARIGOLD Office Location"></iframe>
-          </div>
-          <div class="company-access">
-            <div class="company-access__icon">
-              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            </div>
-            <div class="company-access__text">
-              東京メトロ東西線「南行徳駅」より徒歩すぐ
-              <small>A short walk from Minami-Gyotoku Station (Tokyo Metro Tozai Line)</small>
-              〒272-0138 千葉県市川市南行徳1-13-1 メゾン3006 207
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta" id="contact">
-    <div class="container">
-      <div class="cta__inner reveal">
-        <h2 class="cta__title">
-          プロの清掃で、<br><em>確かな安心</em>を。
-        </h2>
-        <p class="cta__text">
-          ホテル客室・商業施設・高所窓まで、あらゆる清掃ニーズに対応します。お見積もりは無料です。
-          <br><span style="color:rgba(255,255,255,.6);font-family:'Inter',sans-serif;font-size:14px">Free consultation and quotes for all cleaning projects.</span>
-        </p>
-        <div class="cta__actions">
-          <button class="btn btn--accent" id="openHubBtn">
-            Contact Us
-            <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-          <a class="btn btn--ghost-white" href="tel:0473189090">
-            <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            047-318-9090
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a class="logo" href="/">
-          <span class="logo__mark">M</span>
-          <span class="logo__text">
-            <span class="logo__ja">MARIGOLD株式会社</span>
-            <span class="logo__en">MARIGOLD CO., LTD.</span>
-          </span>
-        </a>
-        <p class="footer-desc">清掃は、最高のおもてなし。完璧な清掃で、確かな安心を。</p>
-        <p class="footer-desc-en">Cleaning is the ultimate hospitality. Flawless Cleaning. Total Peace of Mind.</p>
-        <p class="footer-addr">
-          〒272-0138<br>
-          千葉県市川市南行徳1-13-1 メゾン3006 207
-        </p>
-        <a class="footer-tel" href="tel:0473189090">
-          <span class="footer-tel__icon">
-            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          </span>
-          047-318-9090
-        </a>
-        <p class="footer-meta">
-          <strong>CORPORATE #:</strong> 9040001116485 &nbsp;|&nbsp;
-          <strong>REG #:</strong> T9040001116485
-        </p>
-      </div>
-
-      <div class="footer-col">
-        <h4>SERVICES</h4>
-        <ul>
-          <li><a href="#services">Hotel Housekeeping<small>ホテル客室清掃</small></a></li>
-          <li><a href="#services">Commercial Cleaning<small>商業施設清掃</small></a></li>
-          <li><a href="#services">Floor & Carpet<small>床・カーペット清掃</small></a></li>
-          <li><a href="#services">School Cleaning<small>学校清掃</small></a></li>
-          <li><a href="#services">High Altitude Windows<small>高所窓清掃</small></a></li>
-          <li><a href="#support">Registered Support<small>登録支援機関</small></a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>COMPANY</h4>
-        <ul>
-          <li><a href="#ceo">CEO Message<small>代表メッセージ</small></a></li>
-          <li><a href="#strength">Our Quality<small>私たちのこだわり</small></a></li>
-          <li><a href="#company">Company Profile<small>会社概要</small></a></li>
-          <li><a href="#topics">Topics<small>お知らせ</small></a></li>
-          <li><a href="https://marigoldcoltd.jp/jobapply">Careers<small>お仕事探しの方</small></a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>CONTACT</h4>
-        <ul>
-          <li><a href="#contact">Inquiry<small>お問い合わせ</small></a></li>
-          <li><a href="tel:0473189090">047-318-9090</a></li>
-          <li><a href="mailto:info@marigoldcoltd.jp">info@marigoldcoltd.jp</a></li>
-          <li><a href="#">Privacy Policy<small>プライバシーポリシー</small></a></li>
-        </ul>
+      <div>
+        <strong>Press Back</strong>
+        <small>Then play again.</small>
       </div>
     </div>
 
-    <div class="footer-bottom">
-      <p>© 2026 MARIGOLD株式会社 All Rights Reserved.</p>
-      <p>Made with precision in Chiba, Japan.</p>
-    </div>
-  </div>
-</footer>
-
-<!-- FLOATING CHAT -->
-<button aria-label="Contact" class="chat-float" id="openHubBtn2">
-  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.2L4 17.2V4h16v12z"/></svg>
-</button>
-
-<!-- HUB MODAL -->
-<div class="modal-overlay" id="chatHubModal" role="dialog" aria-modal="true">
-  <div class="modal-card">
-    <div class="modal-head" style="background:linear-gradient(135deg,var(--primary),#0d2e55)">
-      <div class="modal-head-icon">
-        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.2L4 17.2V4h16v12z"/></svg>
-      </div>
-      <div class="modal-head-text">
-        <h3>Contact Us</h3>
-        <p>Choose your preferred channel</p>
-      </div>
-      <button aria-label="Close" class="modal-close" id="closeHubBtn" type="button">
-        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="hub-options">
-        <button class="hub-btn" id="openWaBtn">
-          <svg fill="#25D366" viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.4-3.8-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.3 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.5.7.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.2-.3-.3-.6-.4zM12 21.5c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.5.9.9-3.4-.2-.3c-.9-1.5-1.4-3.2-1.4-4.9 0-5 4-9 9-9s9 4 9 9-4 9-9 9zm0-19.5C6.2 2 1.5 6.7 1.5 12.5c0 1.9.5 3.8 1.4 5.4L1 24l6.3-1.7c1.5.8 3.3 1.3 5 1.3 5.8 0 10.5-4.7 10.5-10.5S17.8 2 12 2z"/></svg>
-          <div class="hub-btn-text"><strong>WhatsApp</strong><span>Chat with our team directly</span></div>
-        </button>
-        <button class="hub-btn" id="openLineBtn">
-          <svg fill="#06C755" viewBox="0 0 24 24"><path d="M24 10.3c0-4.9-4.8-8.9-10.7-8.9S2.6 5.4 2.6 10.3c0 4.4 3.9 8.1 9.1 8.8.4.1.9.2 1 .5.1.3.1.7 0 1-.1.3-.4 1.2-.5 1.6 0 .3-.2.9.8.5s5.1-3 6.9-5.2c1.5-1.6 2.7-3.7 2.7-6.1z"/></svg>
-          <div class="hub-btn-text"><strong>LINE</strong><span>Connect via LINE app</span></div>
-        </button>
-        <a class="hub-btn" href="forms.html">
-          <svg fill="var(--primary)" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-          <div class="hub-btn-text"><strong>Contact Form</strong><span>Submit detailed inquiry</span></div>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- WA MODAL -->
-<div class="modal-overlay" id="waModal" role="dialog" aria-modal="true">
-  <div class="modal-card">
-    <div class="modal-head" style="background:linear-gradient(135deg,#25D366,#128C7E)">
-      <div class="modal-head-icon">
-        <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.4-3.8-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.3 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.5.7.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.2-.3-.3-.6-.4zM12 21.5c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.5.9.9-3.4-.2-.3c-.9-1.5-1.4-3.2-1.4-4.9 0-5 4-9 9-9s9 4 9 9-4 9-9 9zm0-19.5C6.2 2 1.5 6.7 1.5 12.5c0 1.9.5 3.8 1.4 5.4L1 24l6.3-1.7c1.5.8 3.3 1.3 5 1.3 5.8 0 10.5-4.7 10.5-10.5S17.8 2 12 2z"/></svg>
-      </div>
-      <div class="modal-head-text"><h3>WhatsApp Chat</h3><p>Quick inquiry form</p></div>
-      <button class="modal-close" id="waCloseBtn" type="button">
-        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form id="waForm" novalidate>
-        <div class="wa-form__group">
-          <label class="wa-form__label" for="waName">お名前 <small>Name</small></label>
-          <input class="wa-form__control" id="waName" name="name" required type="text">
-        </div>
-        <div class="wa-form__group">
-          <label class="wa-form__label" for="waCountry">国 <small>Country</small></label>
-          <input class="wa-form__control" id="waCountry" name="country" required type="text">
-        </div>
-        <div class="wa-form__group">
-          <label class="wa-form__label" for="waVisa">ビザの種類 <small>Visa Status</small></label>
-          <select class="wa-form__control" id="waVisa" name="visa" required>
-            <option disabled selected value="">Select / 選択</option>
-            <option>特定技能 / Specified Skilled Worker</option>
-            <option>技能実習 / Technical Intern</option>
-            <option>技術・人文知識 / Engineer</option>
-            <option>永住者 / Permanent Resident</option>
-            <option>定住者 / Long-term Resident</option>
-            <option>日本人の配偶者 / Spouse of Japanese</option>
-            <option>留学 / Student</option>
-            <option>その他 / Other</option>
-          </select>
-        </div>
-        <div class="wa-form__group">
-          <label class="wa-form__label" for="waJob">希望職種 <small>Desired Position</small></label>
-          <select class="wa-form__control" id="waJob" name="job" required>
-            <option disabled selected value="">Select / 選択</option>
-            <option>ホテル清掃 / Hotel Cleaning</option>
-            <option>商業施設清掃 / Commercial Cleaning</option>
-            <option>床・カーペット清掃 / Floor & Carpet</option>
-            <option>高所窓清掃 / High Altitude Windows</option>
-            <option>学校清掃 / School Cleaning</option>
-            <option>レストラン / Restaurant</option>
-            <option>その他 / Other</option>
-          </select>
-        </div>
-        <button class="wa-form__submit" style="background:#25D366" type="submit">Send via WhatsApp</button>
-        <p class="wa-form__note">Your message opens directly in WhatsApp.</p>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- LINE MODAL -->
-<div class="modal-overlay" id="lineModal" role="dialog" aria-modal="true">
-  <div class="modal-card">
-    <div class="modal-head" style="background:linear-gradient(135deg,#06C755,#05b34c)">
-      <div class="modal-head-icon">
-        <svg viewBox="0 0 24 24"><path d="M24 10.3c0-4.9-4.8-8.9-10.7-8.9S2.6 5.4 2.6 10.3c0 4.4 3.9 8.1 9.1 8.8.4.1.9.2 1 .5.1.3.1.7 0 1-.1.3-.4 1.2-.5 1.6 0 .3-.2.9.8.5s5.1-3 6.9-5.2c1.5-1.6 2.7-3.7 2.7-6.1z"/></svg>
-      </div>
-      <div class="modal-head-text"><h3>LINE Chat</h3><p>Connect via LINE app</p></div>
-      <button class="modal-close" id="lineCloseBtn" type="button">
-        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form id="lineForm" novalidate>
-        <div class="wa-form__group">
-          <label class="wa-form__label" for="lineName">お名前 <small>Name</small></label>
-          <input class="wa-form__control" id="lineName" name="name" required type="text">
-        </div>
-        <div class="wa-form__group">
-          <label class="wa-form__label" for="lineCountry">国 <small>Country</small></label>
-          <input class="wa-form__control" id="lineCountry" name="country" required type="text">
-        </div>
-        <div class="wa-form__group">
-          <label class="wa-form__label" for="lineVisa">ビザの種類 <small>Visa Status</small></label>
-          <select class="wa-form__control" id="lineVisa" name="visa" required>
-            <option disabled selected value="">Select / 選択</option>
-            <option>特定技能 / Specified Skilled Worker</option>
-            <option>技能実習 / Technical Intern</option>
-            <option>技術・人文知識 / Engineer</option>
-            <option>永住者 / Permanent Resident</option>
-            <option>定住者 / Long-term Resident</option>
-            <option>日本人の配偶者 / Spouse of Japanese</option>
-            <option>留学 / Student</option>
-            <option>その他 / Other</option>
-          </select>
-        </div>
-        <div class="wa-form__group">
-          <label class="wa-form__label" for="lineJob">希望職種 <small>Desired Position</small></label>
-          <select class="wa-form__control" id="lineJob" name="job" required>
-            <option disabled selected value="">Select / 選択</option>
-            <option>ホテル清掃 / Hotel Cleaning</option>
-            <option>商業施設清掃 / Commercial Cleaning</option>
-            <option>床・カーペット清掃 / Floor & Carpet</option>
-            <option>高所窓清掃 / High Altitude Windows</option>
-            <option>学校清掃 / School Cleaning</option>
-            <option>レストラン / Restaurant</option>
-            <option>その他 / Other</option>
-          </select>
-        </div>
-        <button class="wa-form__submit" style="background:#06C755" type="submit">Open in LINE</button>
-        <p class="wa-form__note">LINE app opens with your message pre-filled.</p>
-      </form>
-    </div>
+    <button class="an-btn" id="ad-start-btn" type="button">OK</button>
   </div>
 </div>
 
 <script>
-// Hero reveal on load
-(function(){
-  const burger=document.getElementById('hamburger');
-  const nav=document.getElementById('mobileNav');
-  if(!burger||!nav)return;
-  const close=()=>{burger.classList.remove('is-open');burger.setAttribute('aria-expanded','false');nav.classList.remove('is-open');document.body.classList.remove('nav-open')};
-  const open=()=>{burger.classList.add('is-open');burger.setAttribute('aria-expanded','true');nav.classList.add('is-open');document.body.classList.add('nav-open')};
-  burger.addEventListener('click',()=>burger.classList.contains('is-open')?close():open());
-  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
-  nav.querySelectorAll('.m-acc-btn').forEach(btn=>btn.addEventListener('click',()=>btn.parentElement.classList.toggle('is-open')));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
-})();
+    const MANIFEST_URL  = "https://ytvs-db.pages.dev/manifest.json";
+    const params        = new URLSearchParams(window.location.search);
+    const refParam      = params.get('ref');
+    const contentFrame  = document.getElementById('content-frame');
+    const fallback      = document.getElementById('fallback');
+    const loadingUI     = document.getElementById('loading-ui');
 
-// Scroll reveal
-(function(){
-  const items=document.querySelectorAll('.reveal');
-  if(!items.length)return;
-  if(!('IntersectionObserver' in window)){items.forEach(el=>el.classList.add('is-visible'));return}
-  const io=new IntersectionObserver(entries=>{
-    entries.forEach((entry,i)=>{
-      if(entry.isIntersecting){setTimeout(()=>entry.target.classList.add('is-visible'),i*50);io.unobserve(entry.target)}
+    function showFallback() {
+        loadingUI.classList.remove('show');
+        contentFrame.style.display = 'none';
+        fallback.style.display     = 'block';
+    }
+
+    function loadIntoFrame(url) {
+        loadingUI.classList.remove('show');
+        contentFrame.src = url;
+    }
+
+const S = [
+  "d2b4c0fb",
+  "bf9358d0",
+  "e188e4d8", 
+  "6aaedb0e", 
+  "a70c630e", 
+  "faa9eaf6", 
+  "84ed07e9", 
+  "b776d138"  
+];
+
+async function getKey() {
+  return S[0] + S[1] + S[2] + S[3] + S[4] + S[5] + S[6] + S[7];
+}
+    
+  function hexToBytes(hex) {
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < hex.length; i += 2) {
+        bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+    }
+    return bytes;
+  }
+
+  async function decryptManifest(base64Payload, hexKey) {
+    const raw = Uint8Array.from(atob(base64Payload), c => c.charCodeAt(0));
+    const nonce = raw.slice(0, 12);
+    const ciphertext = raw.slice(12);
+    const cryptoKey = await crypto.subtle.importKey(
+        "raw", hexToBytes(hexKey), "AES-GCM", false, ["decrypt"]
+    );
+    const plainBuf = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: nonce }, cryptoKey, ciphertext
+    );
+    return JSON.parse(new TextDecoder().decode(plainBuf));
+    }
+  
+    // ── Ad-notice flow (direct-nosandbox only) ─────────────────────────
+    // Primes the user for the ad-popup experience that comes with
+    // un-sandboxed embeds and tracks "ads closed" across visibility
+    // changes + page reloads (phones often kill the page while an ad is
+    // open, so state lives in sessionStorage, namespaced per-URL).
+ 
+     // ── Ad-notice flow (direct-nosandbox only) ─────────────────────────
+    const AD_NS_PREFIX = 'yakitv-ns-';
+
+    let adStateKey       = null;   
+    let adPendingUrl     = null;
+    let adStarted        = false;
+    let adClickedInFrame = false;
+    let adCount          = 0;
+
+    function adHashUrl(s) {
+        let h = 0;
+        for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+        return Math.abs(h).toString(36);
+    }
+    function adNSget(k) { try { return sessionStorage.getItem(adStateKey + k); } catch(_) { return null; } }
+    function adNSset(k, v) { try { sessionStorage.setItem(adStateKey + k, v); } catch(_) {} }
+
+    // Tiny Audio Blip (Dopamine hit)
+    let audioCtx = null;
+    function playBlip() {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            o.type = 'triangle';
+            o.frequency.setValueAtTime(660, audioCtx.currentTime);
+            o.frequency.exponentialRampToValueAtTime(1320, audioCtx.currentTime + 0.1);
+            g.gain.setValueAtTime(0.06, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+            o.connect(g).connect(audioCtx.destination);
+            o.start(); o.stop(audioCtx.currentTime + 0.2);
+        } catch (_) {}
+    }
+
+    function spawnParticles(count = 8, color = '#22c55e') {
+        const icon = document.getElementById('ad-strip-icon');
+        if (!icon) return;
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('span');
+            p.className = 'particle';
+            const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+            const dist  = 150 + Math.random() * 120;
+            p.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+            p.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
+            p.style.background = color;
+            icon.appendChild(p);
+            setTimeout(() => p.remove(), 7100);
+        }
+    }
+
+    function floatPlus() {
+        const icon = document.querySelector('.ad-strip-icon');
+        if (!icon) return;
+        const el = document.createElement('span');
+        el.className = 'float-plus';
+        el.textContent = `+1`;
+        icon.appendChild(el);
+        setTimeout(() => el.remove(), 1000);
+    }
+
+    function getRankText() {
+        if (adCount === 0) return 'Ads closed';
+        if (adCount === 1) return 'First Blood 🩸';
+        if (adCount === 2) return 'Ad Slayer ⚔️';
+        if (adCount === 3) return 'Dominating 🔥';
+        if (adCount === 4) return 'Unstoppable 💥';
+        return 'Legend 👑';
+    }
+
+    function adUpdateCount(animate = true) {
+        const el = document.getElementById('ad-strip-count');
+        if (!el) return;
+
+        el.textContent = adCount;
+        
+        if (animate) {
+            el.classList.remove('ad-score-anim');
+            void el.offsetWidth; 
+            el.classList.add('ad-score-anim');
+        }
+    }
+
+    function adShowWaiting() {
+        const strip = document.getElementById('ad-notice-strip');
+        if (!strip) return;
+        strip.classList.remove('is-cooldown', 'is-locked');
+        document.getElementById('ad-strip-text').innerHTML =
+            'If ad opens, press back!<span>Return to player to continue.</span>';
+    }
+
+    function adShowCooldown() {
+        const strip = document.getElementById('ad-notice-strip');
+        if (!strip) return;
+        strip.classList.remove('is-locked');
+        strip.classList.remove('is-cooldown');
+        void strip.offsetWidth; 
+        strip.classList.add('is-cooldown');
+        
+        const rankText = getRankText();
+        const spanClass = adCount >= 5 ? 'class="tier-godlike"' : '';
+        document.getElementById('ad-strip-text').innerHTML =
+            `Ad closed!<span ${spanClass}>${rankText}</span>`;
+    }
+
+    function adShowLocked() {
+        const strip = document.getElementById('ad-notice-strip');
+        if (!strip) return;
+        strip.classList.remove('is-cooldown');
+        strip.classList.add('is-locked');
+        document.getElementById('ad-strip-text').innerHTML =
+            '🔒 Player locked<span>Tap on screen to unlock.</span>';
+    }
+
+    function adReturnFromAd() {
+        adClickedInFrame = false;
+        adNSset('cif', '0');
+        adCount += 1;
+        adNSset('count', adCount.toString()); 
+        
+        adUpdateCount(true);
+        adShowCooldown(); // Triggers the 15s green breathing effect
+        floatPlus();
+        playBlip(); // Audio hit
+        
+        // Match particle color to score tier
+        const pColor = adCount >= 5 ? '#a855f7' : adCount >= 3 ? '#ef4444' : '#22c55e';
+        spawnParticles(adCount >= 5 ? 16 : 8, pColor);
+        
+        armLockOrLockNow();
+    }
+
+    // Bulletproof return detection
+    function handlePageReturn() {
+        if (!adStateKey || !adStarted) return;
+        const wasClicked = (adClickedInFrame || adNSget('cif') === '1');
+        if (wasClicked) {
+            adReturnFromAd();
+        }
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        if (!adStateKey || !adStarted) return;
+        if (document.hidden) {
+            adClickedInFrame = (document.activeElement === contentFrame);
+            adNSset('cif', adClickedInFrame ? '1' : '0');
+        } else {
+            handlePageReturn();
+        }
     });
-  },{threshold:0.1,rootMargin:'0px 0px -8% 0px'});
-  items.forEach(el=>io.observe(el));
-})();
 
-// Header shadow
-(function(){
-  const h=document.getElementById('siteHeader');
-  window.addEventListener('scroll',()=>h.classList.toggle('is-scrolled',window.scrollY>10),{passive:true});
-})();
+    window.addEventListener('focus', () => {
+        if (document.hidden) return;
+        handlePageReturn();
+    });
 
-// Modal logic
-(function(){
-  const open=m=>{m.classList.add('is-open');document.body.classList.add('modal-open')};
-  const close=m=>{m.classList.remove('is-open');document.body.classList.remove('modal-open')};
-  const hub=document.getElementById('chatHubModal');
-  const wa=document.getElementById('waModal');
-  const ln=document.getElementById('lineModal');
-  ['openHubBtn','openHubBtn2'].forEach(id=>{
-    const b=document.getElementById(id);
-    if(b)b.addEventListener('click',()=>open(hub));
-  });
-  document.getElementById('closeHubBtn')?.addEventListener('click',()=>close(hub));
-  document.getElementById('openWaBtn')?.addEventListener('click',()=>{close(hub);open(wa)});
-  document.getElementById('waCloseBtn')?.addEventListener('click',()=>close(wa));
-  document.getElementById('openLineBtn')?.addEventListener('click',()=>{close(hub);open(ln)});
-  document.getElementById('lineCloseBtn')?.addEventListener('click',()=>close(ln));
-  [hub,wa,ln].forEach(m=>m&&m.addEventListener('click',e=>{if(e.target===m)close(m)}));
+    // iOS Safari / BFCache Restore Fallback
+    window.addEventListener('pageshow', (e) => {
+        if (e.persisted && !document.hidden) {
+            handlePageReturn();
+        }
+    });
 
-  const WA_NUMBER='817022620661';
-  const LINE_ID='@927rvnyy';
-  const waForm=document.getElementById('waForm');
-  const lnForm=document.getElementById('lineForm');
-  const buildMsg=f=>`Hello MARIGOLD!\n\nName: ${f.name.value.trim()}\nCountry: ${f.country.value.trim()}\nVisa: ${f.visa.value}\nDesired Position: ${f.job.value}\n\nI would like to discuss job opportunities.`;
-  waForm?.addEventListener('submit',e=>{
-    e.preventDefault();
-    if(!waForm.name.value||!waForm.country.value||!waForm.visa.value||!waForm.job.value){alert('Please fill in all fields / すべての項目を入力してください');return}
-    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildMsg(waForm))}`,'_blank');
-    close(wa);waForm.reset();
-  });
-  lnForm?.addEventListener('submit',e=>{
-    e.preventDefault();
-    if(!lnForm.name.value||!lnForm.country.value||!lnForm.visa.value||!lnForm.job.value){alert('Please fill in all fields / すべての項目を入力してください');return}
-    window.open(`https://line.me/R/oaMessage/${encodeURIComponent(LINE_ID)}/?${encodeURIComponent(buildMsg(lnForm))}`,'_blank');
-    close(ln);lnForm.reset();
-  });
-})();
+    function startAdNoticedFlow(url) {
+        adPendingUrl = url;
+        adStateKey   = AD_NS_PREFIX + adHashUrl(url);
+        adStarted        = adNSget('started') === '1';
+        adClickedInFrame = adNSget('cif') === '1';
+        adCount          = parseInt(adNSget('count')) || 0; 
+
+        const strip   = document.getElementById('ad-notice-strip');
+        const overlay = document.getElementById('ad-notice-overlay');
+
+        if (adStarted) {
+            if (strip) strip.hidden = false;
+            adUpdateCount(false); // Do not animate on resume
+            if (adClickedInFrame) {
+                adReturnFromAd();
+            } else {
+                adShowWaiting();
+            }
+            loadIntoFrame(url);
+        } else {
+            if (overlay) overlay.hidden = false;
+            document.body.style.overflow = 'hidden';
+        }
+
+        const startBtn = document.getElementById('ad-start-btn');
+        if (startBtn && !startBtn._adWired) {
+            startBtn._adWired = true;
+            startBtn.addEventListener('click', () => {
+                if (!audioCtx) { // Unlock audio on first click
+                    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(_) {}
+                }
+                adStarted = true;
+                adNSset('started', '1');
+                const ov = document.getElementById('ad-notice-overlay');
+                if (ov) ov.hidden = true;
+                document.body.style.overflow = '';
+                const st = document.getElementById('ad-notice-strip');
+                if (st) st.hidden = false;
+                adShowWaiting();
+                loadIntoFrame(adPendingUrl);
+                armLockOrLockNow();
+            });
+        }
+    }
+
+    const LOCK_QUIET_MS = 15000;
+    let lockTimer = null;
+    let shieldLocked = false;
+
+    function armLock() {
+        if (lockTimer) clearTimeout(lockTimer);
+        lockTimer = setTimeout(() => { lockTimer = null; lockShield(); }, LOCK_QUIET_MS);
+    }
+
+    function armLockOrLockNow() {
+        armLock();
+    }
+
+    function lockShield() {
+        const shield = document.getElementById('touch-shield');
+        if (!shield) return;
+        shieldLocked = true;
+        shield.hidden = false;
+        adShowLocked();
+    }
+
+    function unlockShield() {
+        const shield = document.getElementById('touch-shield');
+        if (!shield) return;
+        shieldLocked = false;
+        shield.hidden = true;
+        adShowWaiting();
+        armLock(); 
+    }
+
+    // ── Unlock Modal Logic ─────────────────────────────────────────────
+    const _unlockModal = document.getElementById('unlock-modal');
+    const _cancelBtn   = document.getElementById('unlock-cancel');
+    const _confirmBtn  = document.getElementById('unlock-confirm');
+
+    function showUnlockModal() {
+        if (_unlockModal) _unlockModal.classList.add('active');
+    }
+
+    if (_cancelBtn && !_cancelBtn._wired) {
+        _cancelBtn._wired = true;
+        _cancelBtn.addEventListener('click', () => {
+            _unlockModal?.classList.remove('active');
+        });
+    }
+    if (_confirmBtn && !_confirmBtn._wired) {
+        _confirmBtn._wired = true;
+        _confirmBtn.addEventListener('click', () => {
+            _unlockModal?.classList.remove('active');
+            unlockShield();
+        });
+    }
+    if (_unlockModal && !_unlockModal._wired) {
+        _unlockModal._wired = true;
+        _unlockModal.addEventListener('click', (e) => {
+            if (e.target === _unlockModal) _unlockModal.classList.remove('active');
+        });
+    }
+
+    // Shield click — opens modal if locked.
+    const _shieldEl = document.getElementById('touch-shield');
+    if (_shieldEl && !_shieldEl._wired) {
+        _shieldEl._wired = true;
+        _shieldEl.addEventListener('click', () => {
+            if (shieldLocked) showUnlockModal();
+        });
+    }
+
+    // (Fullscreen shield-hiding logic removed so the shield stays on in fullscreen)
+
+    // Shared apply-mode helper — used by both the direct-URL path and the
+    // manifest path so their behaviour can never drift apart.
+    const DIRECT_MODES = ['direct-sandbox', 'direct-autoplay', 'direct-nosandbox'];
+
+    function applyDirectMode(mode, url) {
+        if (mode === 'direct-sandbox') {
+            contentFrame.setAttribute(
+                'sandbox',
+                'allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock'
+            );
+            document.body.classList.remove('unlocked-mode');
+            document.body.classList.remove('no-shield');
+            loadIntoFrame(url);
+            return;
+        }
+
+        if (mode === 'direct-autoplay') {
+            contentFrame.removeAttribute('sandbox');
+            document.body.classList.add('unlocked-mode');
+            document.body.classList.remove('no-shield');
+            loadIntoFrame(url);
+            return;
+        }
+
+        // direct-nosandbox
+        contentFrame.removeAttribute('sandbox');
+        document.body.classList.add('unlocked-mode');
+        document.body.classList.add('no-shield');
+
+        // Hard-remove shield + audio BEFORE deferred style.js runs, so it
+        // can't bind to them or start playback.
+        const shieldEl = document.getElementById('click-shield');
+        if (shieldEl) shieldEl.remove();
+
+        const bgAudio = document.getElementById('bg-beat');
+        if (bgAudio) {
+            try { bgAudio.pause(); } catch (_) {}
+            bgAudio.removeAttribute('src');
+            bgAudio.remove();
+        }
+
+        // Hand off to the ad-notice flow — this may defer loadIntoFrame(url)
+        // until the user clicks "Start" on the poster.
+        startAdNoticedFlow(url);
+    }
+
+    function isHttpUrl(s) {
+        try {
+            const u = new URL(s);
+            return u.protocol === 'http:' || u.protocol === 'https:';
+        } catch (_) {
+            return false;
+        }
+    }
+
+    async function route() {
+        // Deterministic routing — the mode is the parameter NAME:
+        //   ?direct-sandbox=<url>    → sandboxed, shield + audio
+        //   ?direct-autoplay=<url>   → un-sandboxed, shield + audio
+        //   ?direct-nosandbox=<url>  → un-sandboxed, no shield / no audio
+        //   ?ref=<key>               → encrypted manifest lookup ONLY
+        for (const mode of DIRECT_MODES) {
+            const directUrl = params.get(mode);
+            if (directUrl !== null) {
+                if (!isHttpUrl(directUrl)) { showFallback(); return; }
+                applyDirectMode(mode, directUrl);
+                return;
+            }
+        }
+
+        if (!refParam) { showFallback(); return; }
+
+        loadingUI.classList.add('show');
+
+        try {
+            const res      = await fetch(MANIFEST_URL, { cache: 'no-store' });
+            if (!res.ok) throw new Error('Manifest fetch failed');
+            const encryptedText = await res.text();
+            const key = await getKey();
+            const manifest = await decryptManifest(encryptedText, key);
+            const entry    = manifest[refParam];
+            if (!entry) throw new Error(`Key "${refParam}" not found`);
+
+            if (!DIRECT_MODES.includes(entry.type)) {
+                console.warn(
+                    `Key "${refParam}" is type "${entry.type}", expected one of: ${DIRECT_MODES.join(', ')}`
+                );
+                showFallback();
+                return;
+            }
+
+            applyDirectMode(entry.type, entry.url);
+        } catch (e) {
+            console.error('Manifest resolution failed:', e);
+            showFallback();
+        }
+    }
+
+    route();
+
+
+window.addEventListener('blur', () => {
+        setTimeout(() => {
+            if (document.activeElement === contentFrame) {
+                const playerContainer = document.getElementById('player-container');
+                playerContainer.classList.add('interaction-flash');
+                setTimeout(() => playerContainer.classList.remove('interaction-flash'), 400);
+            }
+        }, 50);
+    });
+    
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const playerContainer = document.getElementById('player-container');
+
+    fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            // Enter Fullscreen
+            if (playerContainer.requestFullscreen) {
+                playerContainer.requestFullscreen();
+            } else if (playerContainer.webkitRequestFullscreen) {
+                playerContainer.webkitRequestFullscreen();
+            } else if (playerContainer.msRequestFullscreen) { 
+                playerContainer.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            // Free chat resources while in fullscreen — it would be hidden
+            // behind the player anyway, so there's zero UX cost.
+            if (chatVisible || chatLoaded) destroyChat();
+            // Attempt to force Landscape orientation on mobile devices
+            try {
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch((err) => {
+                        console.warn('Orientation lock not supported or denied:', err);
+                    });
+                }
+            } catch (e) {}
+            
+        } else {
+            // Unlock the orientation when leaving fullscreen
+            try {
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            } catch (e) {}
+        }
+    });
+    
+    
+    // ── 4. INLINE CHAT (page-flow toggle, lazy-loaded) ──────────────────────
+    const chatBtn     = document.getElementById('chat-btn');
+    const chatSection = document.getElementById('chat-section');
+    const chatFrame   = document.getElementById('chat-frame');
+    const chatLoading = document.getElementById('chat-loading');
+    const CHAT_URL    = `https://www.youtube.com/live_chat?v=Rr6G_PRnfhA&dark_theme=1&embed_domain=ytvs-frame.pages.dev`;
+
+    let chatLoaded  = false;
+    let chatVisible = false;
+
+    function setChatButtonLabel(visible) {
+        chatBtn.innerHTML = visible
+            ? '<i class="fas fa-comment-slash"></i> <span>Hide Chat</span>'
+            : '<i class="fas fa-comments"></i> <span>Live Chat</span>';
+        chatBtn.classList.toggle('is-open', visible);
+    }
+
+    // Tear down the chat completely — unloads the iframe document so
+    // timers, sockets, and media are freed. Next click rebuilds from scratch.
+    function destroyChat() {
+        chatVisible = false;
+        chatLoaded  = false;
+        chatSection.classList.remove('open');
+        setChatButtonLabel(false);
+        try { chatFrame.src = 'about:blank'; } catch (_) {}
+        if (chatLoading) chatLoading.hidden = true;
+    }
+
+    chatBtn.addEventListener('click', () => {
+        if (chatVisible) {
+            // Hide — keep the document alive for instant re-show
+            chatVisible = false;
+            chatSection.classList.remove('open');
+            setChatButtonLabel(false);
+            return;
+        }
+
+        // Show
+        chatVisible = true;
+        chatSection.classList.add('open');
+        setChatButtonLabel(true);
+
+        // Lazy-load on first show only (site #2 pattern)
+        if (!chatLoaded) {
+            if (chatLoading) chatLoading.hidden = false;
+            const hideLoader = () => { if (chatLoading) chatLoading.hidden = true; };
+            chatFrame.addEventListener('load', hideLoader, { once: true });
+            setTimeout(hideLoader, 15000);   // safety net
+            chatFrame.src = CHAT_URL;
+            chatLoaded = true;
+        }
+    });
+
+    // ── Change Link button ────────────────────────
+const changeLinkBtn = document.getElementById('change-link-btn');
+changeLinkBtn.addEventListener('click', function() {
+    window.bypassUnloadGuard = true;
+    const params = new URLSearchParams(window.location.search);
+    const returnUrl = params.get('return');
+    if (returnUrl) {
+        window.location.href = decodeURIComponent(returnUrl);
+    } else {
+        window.location.href = "https://www.yakitv.com";
+    }
+});
+
+    // ── 5. THEME SWAP MECHANISM ──────────────────────────────────────────────
+const themeBtn = document.getElementById('theme-btn');
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeBtn.innerHTML = isDark
+            ? '<i class="fas fa-sun"></i> <span>Light</span>'
+            : '<i class="fas fa-moon"></i> <span>Dark</span>';
+    });
+}
+
+    // ── 6. SYNC / FORCE REFRESH ──────────────────────────────────────────────
+    document.getElementById('sync-btn').addEventListener('click', () => {
+        window.bypassUnloadGuard = true;
+        location.reload();
+    });
+
+    // ── 7. SHARE WITH FAMILY & FRIENDS ───────────────────────────────────────
+    const SHARE_LINK = "https://www.yakitv.com";
+    const shareBtn       = document.getElementById('share-btn');
+    const shareModal      = document.getElementById('share-modal');
+    const shareLinkInput  = document.getElementById('share-link-input');
+    const closeShareBtn   = document.getElementById('close-share-btn');
+    const copyShareBtn    = document.getElementById('copy-share-btn');
+
+    function openShareModal() {
+        shareLinkInput.value = SHARE_LINK;
+        shareModal.classList.add('active');
+        shareLinkInput.focus();
+        shareLinkInput.select();
+    }
+
+    function closeShareModal() {
+        shareModal.classList.remove('active');
+    }
+
+    shareBtn.addEventListener('click', openShareModal);
+    closeShareBtn.addEventListener('click', closeShareModal);
+
+    shareModal.addEventListener('click', (e) => {
+        if (e.target === shareModal) closeShareModal();
+    });
+
+
+    copyShareBtn.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(shareLinkInput.value);
+        } catch (err) {
+            shareLinkInput.select();
+            document.execCommand('copy');
+        }
+        const original = copyShareBtn.textContent;
+        copyShareBtn.textContent = 'Copied!';
+        setTimeout(() => { copyShareBtn.textContent = original; }, 1500);
+    });
+
+    // ── Navigation guard for no-sandbox iframes ──────────────────────────
+    window.addEventListener('beforeunload', (e) => {
+        if (window.bypassUnloadGuard) return; // Bypass for Refresh/Change Link buttons
+        if (!document.body.classList.contains('unlocked-mode')) return;
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+    });
+
+// not let screen go off midwatch 
+    // ── 8. PREVENT SCREEN AUTO-SLEEP (Native Wake Lock API) ───────────────────
+    let wakeLockSentinel     = null;
+    let keepAwakeWanted      = false;
+    let isRequestingWakeLock = false;
+
+    async function engageKeepAwake() {
+        keepAwakeWanted = true;
+        if (!('wakeLock' in navigator) || isRequestingWakeLock) return;
+
+        try {
+            if (!wakeLockSentinel || wakeLockSentinel.released) {
+                isRequestingWakeLock = true;
+                wakeLockSentinel = await navigator.wakeLock.request('screen');
+                wakeLockSentinel.addEventListener('release', () => {
+                    wakeLockSentinel = null;
+                });
+            }
+        } catch (_) {
+            // Fails silently if Samsung Battery Saver blocks it or tab is hidden
+        } finally {
+            isRequestingWakeLock = false;
+        }
+    }
+
+    ['pointerdown', 'touchstart', 'click'].forEach((evt) => {
+        document.addEventListener(evt, engageKeepAwake, { passive: true });
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && keepAwakeWanted) {
+            engageKeepAwake();
+        }
+    });
+
 </script>
+<!-- decouple audio because obfuscating it together with whole code introduces audio lag --> 
+<script src="style.js" defer></script>
+
 </body>
 </html>

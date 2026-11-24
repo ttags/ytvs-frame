@@ -100,7 +100,7 @@
             border: 1px solid var(--border-color);
             color: var(--text-main);
             padding: 10px 12px;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
@@ -337,10 +337,10 @@
         .chat-skeleton {
             flex: 1;
             min-height: 0;
-            padding: 14px 16px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
             overflow: hidden;
         }
         .sk-msg { display: flex; gap: 10px; align-items: flex-start; }
@@ -349,7 +349,7 @@
             border-radius: 50%;
             background: var(--border-color);
             flex-shrink: 0;
-            animation: sk-pulse 1.4s ease-in-out infinite;
+            animation: sk-pulse 1s ease-in-out infinite;
         }
         .sk-bubble {
             height: 14px;
@@ -358,20 +358,16 @@
             background: var(--border-color);
             flex: 1;
             max-width: 70%;
-            animation: sk-pulse 1.4s ease-in-out infinite;
+            animation: sk-pulse 1s ease-in-out infinite;
         }
         .sk-short { max-width: 45%; }
         .sk-medium { max-width: 58%; }
         .sk-msg:nth-child(2) .sk-avatar,
-        .sk-msg:nth-child(2) .sk-bubble { animation-delay: 0.2s; }
+        .sk-msg:nth-child(2) .sk-bubble { animation-delay: 0.15s; }
         .sk-msg:nth-child(3) .sk-avatar,
-        .sk-msg:nth-child(3) .sk-bubble { animation-delay: 0.4s; }
+        .sk-msg:nth-child(3) .sk-bubble { animation-delay: 0.3s; }
         .sk-msg:nth-child(4) .sk-avatar,
-        .sk-msg:nth-child(4) .sk-bubble { animation-delay: 0.6s; }
-        .sk-msg:nth-child(5) .sk-avatar,
-        .sk-msg:nth-child(5) .sk-bubble { animation-delay: 0.8s; }
-        .sk-msg:nth-child(6) .sk-avatar,
-        .sk-msg:nth-child(6) .sk-bubble { animation-delay: 1.0s; }
+        .sk-msg:nth-child(4) .sk-bubble { animation-delay: 0.45s; }
         @keyframes sk-pulse {
             0%, 100% { opacity: 0.35; }
             50%      { opacity: 0.85; }
@@ -382,12 +378,11 @@
 
         /* Compact status bar at the bottom — spinner shrinks, text stays visible */
         .chat-loading-status {
-            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 11px 14px;
+            padding: 14px;
             border-top: 1px solid var(--border-color);
             font-size: 13px;
             font-weight: 500;
@@ -873,8 +868,6 @@
                 <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble sk-short"></div></div>
                 <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble sk-medium"></div></div>
                 <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble"></div></div>
-                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble sk-medium"></div></div>
-                <div class="sk-msg"><div class="sk-avatar"></div><div class="sk-bubble sk-short"></div></div>
             </div>
             <div class="chat-loading-status">
                 <div class="spinner"></div>

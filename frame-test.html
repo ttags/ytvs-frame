@@ -90,12 +90,14 @@
 
         .toolbar {
             display: grid;
-            grid-template-columns: 1.25fr 1fr 0.9fr;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 8px;
             margin: 0 0 10px;
         }
 
         .btn-utility {
+        width: 100%;
+            min-width: 0;
             background: #283548;
             border: 1px solid var(--border-color);
             color: var(--text-main);
@@ -785,7 +787,7 @@
 
     <div class="toolbar">
         <button class="btn-utility btn-change-link" id="change-link-btn" type="button">
-            <i class="fas fa-right-left"></i> <span>Change Link</span>
+            <i class="fas fa-right-left"></i> <span>Server</span>
         </button>
         <button class="btn-utility" id="sync-btn" type="button">
             <i class="fas fa-sync-alt"></i> <span>Refresh</span>

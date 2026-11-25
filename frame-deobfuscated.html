@@ -1618,8 +1618,9 @@ window.addEventListener('blur', () => {
     const chatLoading = document.getElementById('chat-loading');
     const CHAT_URL    = `https://www.youtube.com/live_chat?v=Rr6G_PRnfhA&dark_theme=1&embed_domain=ytvs-frame.pages.dev`;
 
-    let chatLoaded  = false;
-    let chatVisible = false;
+    let chatLoaded     = false;
+    let chatVisible    = false;
+    let unstickingChat = false;
 
     function setChatButtonLabel(visible) {
         chatBtn.innerHTML = visible
@@ -1628,12 +1629,44 @@ window.addEventListener('blur', () => {
         chatBtn.classList.toggle('is-open', visible);
     }
 
+    // Sometimes YT does not let you send a message immediately after sending one;
+    // toggling display resets the iframe's touch/IME input bridge.
+    function unstickChatFrame() {
+        if (!chatVisible || unstickingChat || !chatFrame) return;
+
+        unstickingChat = true;
+        window.focus();
+        chatFrame.style.display = 'none';
+
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                chatFrame.style.display = 'block';
+                unstickingChat = false;
+            }, 40);
+        });
+    }
+
+    if (window.visualViewport) {
+        let lastVvHeight = window.visualViewport.height;
+        window.visualViewport.addEventListener('resize', () => {
+            const vv = window.visualViewport;
+            const keyboardClosed = vv.height > lastVvHeight + 50;
+            lastVvHeight = vv.height;
+
+            if (chatVisible && keyboardClosed) {
+                unstickChatFrame();
+            }
+        });
+    }
+
     // Tear down the chat completely — unloads the iframe document so
     // timers, sockets, and media are freed. Next click rebuilds from scratch.
     function destroyChat() {
-        chatVisible = false;
-        chatLoaded  = false;
+        chatVisible    = false;
+        chatLoaded     = false;
+        unstickingChat = false;
         chatSection.classList.remove('open');
+        chatFrame.style.display = 'block';
         setChatButtonLabel(false);
         try { chatFrame.src = 'about:blank'; } catch (_) {}
         if (chatLoading) chatLoading.hidden = true;
